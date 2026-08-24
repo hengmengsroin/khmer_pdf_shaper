@@ -90,7 +90,16 @@ class TrueTypeGidSubsetter {
     void addGlyph(int gid) {
       if (glyphsMap.containsKey(gid)) return;
       if (gid >= ttf.glyphOffsets.length) return;
-      final glyph = ttf.readGlyph(gid).copy();
+      final start = ttf.glyphOffsets[gid];
+      final end = (gid + 1 < ttf.glyphOffsets.length)
+          ? ttf.glyphOffsets[gid + 1]
+          : (ttf.tableSize[TtfParser.glyf_table] ?? start);
+      final TtfGlyphInfo glyph;
+      if (start == end) {
+        glyph = TtfGlyphInfo(gid, Uint8List(0), const <int>[]);
+      } else {
+        glyph = ttf.readGlyph(gid).copy();
+      }
       glyphsMap[gid] = glyph;
       for (final compGid in glyph.compounds) {
         compounds[compGid] = -1;

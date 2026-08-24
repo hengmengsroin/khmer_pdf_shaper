@@ -70,5 +70,17 @@ void main() {
       expect(parsed.unitsPerEm, equals(2048));
       expect(parsed.glyphOffsets.length, equals(requested.length + 1)); // +1 for GID 0
     });
+
+    test('Correctly preserves zero-length spacing glyphs (GID 121, 259) without ghost contours', () {
+      // GID 121 (uni17B6.space) and GID 259 (space) have 0-byte glyph data in glyf
+      final result = subsetter.subsetGlyphs([121, 259]);
+      final subGid121 = result.originalToSubset[121]!;
+      final subGid259 = result.originalToSubset[259]!;
+
+      final parsed = TtfParser(result.fontBytes.buffer.asByteData());
+      expect(parsed.readGlyph(subGid121).data.lengthInBytes, equals(0));
+      expect(parsed.readGlyph(subGid259).data.lengthInBytes, equals(0));
+    });
   });
 }
+
