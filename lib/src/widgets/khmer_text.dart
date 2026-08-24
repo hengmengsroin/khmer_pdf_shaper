@@ -51,6 +51,7 @@ class KhmerText extends pw.Widget {
   KhmerTextLayout? _layout;
   late pw.TextStyle _effectiveStyle;
   late BattambangShaper _effectiveShaper;
+  PdfFont? _effectiveLatinFont;
 
   @override
   void layout(
@@ -63,6 +64,7 @@ class KhmerText extends pw.Widget {
     final fontSize = _effectiveStyle.fontSize ?? 12.0;
 
     _effectiveShaper = _resolveShaper();
+    _effectiveLatinFont = _resolveLatinFont(context);
 
     final maxWidth = constraints.hasBoundedWidth
         ? constraints.maxWidth
@@ -73,6 +75,7 @@ class KhmerText extends pw.Widget {
       text: text,
       shaper: _effectiveShaper,
       fontSize: fontSize,
+      latinFont: _effectiveLatinFont,
       maxWidth: maxWidth,
       lineHeightFactor: lineHeightFactor ?? _effectiveStyle.height,
     );
@@ -88,7 +91,8 @@ class KhmerText extends pw.Widget {
     final layout = _layout;
     if (layout == null || layout.lines.isEmpty) return;
 
-    final effectiveFont = _resolveFont(context.page.pdfDocument);
+    final effectiveKhmerFont = _resolveFont(context.page.pdfDocument);
+    final latinFont = _effectiveLatinFont ?? PdfFont.helvetica(context.page.pdfDocument);
 
     if (_effectiveStyle.color != null) {
       context.canvas.setFillColor(_effectiveStyle.color!);
@@ -103,16 +107,33 @@ class KhmerText extends pw.Widget {
       final lineX = _calculateLineX(line.visualWidth);
       final lineY = box!.top - (i * layout.lineHeight) - layout.baselineOffset;
 
-      final lineRun = line.toShapedRun(unitsPerEm);
-      if (lineRun.glyphs.isNotEmpty) {
-        effectiveFont.drawShapedRun(
-          context.page,
-          context.canvas,
-          lineRun,
-          x: lineX,
-          y: lineY,
-          fontSize: layout.fontSize,
-        );
+      final visualRuns = line.getVisualRuns(unitsPerEm, latinFont: latinFont);
+      double currentX = lineX;
+
+      for (final run in visualRuns) {
+        if (run.kind == KhmerVisualRunKind.khmer) {
+          if (run.shapedRun != null && run.shapedRun!.glyphs.isNotEmpty) {
+            effectiveKhmerFont.drawShapedRun(
+              context.page,
+              context.canvas,
+              run.shapedRun!,
+              x: currentX,
+              y: lineY,
+              fontSize: layout.fontSize,
+            );
+          }
+        } else {
+          if (run.text.isNotEmpty) {
+            context.canvas.drawString(
+              latinFont,
+              layout.fontSize,
+              run.text,
+              currentX,
+              lineY,
+            );
+          }
+        }
+        currentX += run.width;
       }
     }
   }
@@ -139,6 +160,13 @@ class KhmerText extends pw.Widget {
         }
         return box!.left + (diff > 0 ? diff : 0.0);
     }
+  }
+
+  PdfFont? _resolveLatinFont(pw.Context context) {
+    if (_effectiveStyle.font != null) {
+      return _effectiveStyle.font!.getFont(context);
+    }
+    return PdfFont.helvetica(context.page.pdfDocument);
   }
 
   BattambangShaper _resolveShaper() {

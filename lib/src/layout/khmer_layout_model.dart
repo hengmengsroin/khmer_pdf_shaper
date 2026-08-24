@@ -1,6 +1,62 @@
+import 'package:pdf/pdf.dart';
 import '../shaper/positioned_glyph.dart';
 import '../shaper/shaped_run.dart';
 import 'khmer_layout_token.dart';
+
+/// Kind of visual run on a layout line.
+enum KhmerVisualRunKind {
+  /// Latin / Digits / Punctuation / Space run rendered via normal `PdfFont` drawing path.
+  latin,
+
+  /// Khmer script text run shaped via Battambang and rendered via `KhmerPdfFont.drawShapedRun`.
+  khmer,
+}
+
+/// A contiguous visual run of a single script family on a line.
+class KhmerLayoutVisualRun {
+  /// Script kind (latin or khmer).
+  final KhmerVisualRunKind kind;
+
+  /// Text content of this visual run.
+  final String text;
+
+  /// Visual advance width in PDF points.
+  final double width;
+
+  /// Advance width in font design units.
+  final double advanceFontUnits;
+
+  /// ShapedRun for Khmer runs (null for Latin).
+  final ShapedRun? shapedRun;
+
+  /// Latin font used for measurement/painting (null for Khmer).
+  final PdfFont? latinFont;
+
+  /// UTF-16 start offset in original source string.
+  final int sourceStart;
+
+  /// UTF-16 end offset (exclusive) in original source string.
+  final int sourceEnd;
+
+  /// Clusters comprising this visual run.
+  final List<KhmerLayoutCluster> clusters;
+
+  const KhmerLayoutVisualRun({
+    required this.kind,
+    required this.text,
+    required this.width,
+    this.advanceFontUnits = 0.0,
+    this.shapedRun,
+    this.latinFont,
+    required this.sourceStart,
+    required this.sourceEnd,
+    required this.clusters,
+  });
+
+  @override
+  String toString() =>
+      'KhmerLayoutVisualRun($kind, "$text", w: ${width.toStringAsFixed(2)}, src: $sourceStart..$sourceEnd)';
+}
 
 /// Atomic layout unit representing a shaped cluster, a Latin token, or a layout token.
 class KhmerLayoutCluster {
@@ -65,7 +121,6 @@ class KhmerLayoutCluster {
     final end = sourceOffset + cluster.sourceEnd;
     final clusterText = originalText.substring(cluster.sourceStart, cluster.sourceEnd);
 
-    // Adjust positioned glyph source offsets to match document offset
     final adjustedGlyphs = cluster.glyphs.map((g) {
       return PositionedGlyph(
         glyphId: g.glyphId,
@@ -238,6 +293,75 @@ class KhmerLayoutLine {
     required this.sourceStart,
     required this.sourceEnd,
   });
+
+  /// Groups clusters into contiguous [KhmerLayoutVisualRun]s separated by script kind.
+  List<KhmerLayoutVisualRun> getVisualRuns(int unitsPerEm, {PdfFont? latinFont}) {
+    final runs = <KhmerLayoutVisualRun>[];
+    if (clusters.isEmpty) return runs;
+
+    var currentClusters = <KhmerLayoutCluster>[];
+    KhmerVisualRunKind? currentKind;
+
+    void flushRun() {
+      if (currentClusters.isEmpty || currentKind == null) return;
+      final text = currentClusters.map((c) => c.text).join();
+      final width = currentClusters.fold(0.0, (sum, c) => sum + c.width);
+      final adv = currentClusters.fold(0.0, (sum, c) => sum + c.advanceFontUnits);
+      final start = currentClusters.first.sourceStart;
+      final end = currentClusters.last.sourceEnd;
+
+      if (currentKind == KhmerVisualRunKind.khmer) {
+        final lineTemp = KhmerLayoutLine(
+          clusters: currentClusters,
+          visualWidth: width,
+          totalWidth: width,
+          height: height,
+          baseline: baseline,
+          sourceStart: start,
+          sourceEnd: end,
+        );
+        runs.add(KhmerLayoutVisualRun(
+          kind: KhmerVisualRunKind.khmer,
+          text: text,
+          width: width,
+          advanceFontUnits: adv,
+          shapedRun: lineTemp.toShapedRun(unitsPerEm),
+          sourceStart: start,
+          sourceEnd: end,
+          clusters: List.of(currentClusters),
+        ));
+      } else {
+        runs.add(KhmerLayoutVisualRun(
+          kind: KhmerVisualRunKind.latin,
+          text: text,
+          width: width,
+          advanceFontUnits: adv,
+          latinFont: latinFont,
+          sourceStart: start,
+          sourceEnd: end,
+          clusters: List.of(currentClusters),
+        ));
+      }
+      currentClusters = [];
+    }
+
+    for (final c in clusters) {
+      if (!c.isVisible) continue; // Skip invisible ZWSP in visual runs
+
+      final kind = (c.type == KhmerLayoutTokenType.khmer)
+          ? KhmerVisualRunKind.khmer
+          : KhmerVisualRunKind.latin;
+
+      if (currentKind != null && currentKind != kind) {
+        flushRun();
+      }
+      currentKind = kind;
+      currentClusters.add(c);
+    }
+    flushRun();
+
+    return runs;
+  }
 
   /// Constructs a [ShapedRun] representation of all glyphs on this line
   /// for rendering via `KhmerPdfFont.drawShapedRun`.

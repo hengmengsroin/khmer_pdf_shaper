@@ -1,3 +1,4 @@
+import 'package:pdf/pdf.dart';
 import '../shaper/battambang_shaper.dart';
 import '../shaper/positioned_glyph.dart';
 import 'khmer_layout_model.dart';
@@ -18,15 +19,24 @@ class KhmerLineBreaker {
     required String text,
     required BattambangShaper shaper,
     required double fontSize,
+    PdfFont? latinFont,
     double maxWidth = double.infinity,
     double? lineHeightFactor,
   }) {
     final unitsPerEm = shaper.metrics.unitsPerEm;
-    final naturalLineHeight = lineMetrics.calculateNaturalLineHeight(fontSize);
-    final lineHeight = lineMetrics.calculateLineHeight(fontSize, lineHeightFactor);
-    final ascent = lineMetrics.calculateAscent(fontSize);
-    final descent = lineMetrics.calculateDescent(fontSize);
-    final baselineOffset = lineMetrics.calculateBaselineOffset(fontSize, lineHeightFactor);
+    final naturalLineHeight = lineMetrics.calculateMixedNaturalLineHeight(fontSize, latinFont);
+    final lineHeight = lineMetrics.calculateMixedLineHeight(
+      fontSize,
+      latinFont: latinFont,
+      lineHeightFactor: lineHeightFactor,
+    );
+    final ascent = lineMetrics.calculateLineAscent(fontSize, latinFont);
+    final descent = lineMetrics.calculateLineDescent(fontSize, latinFont);
+    final baselineOffset = lineMetrics.calculateMixedBaselineOffset(
+      fontSize,
+      latinFont: latinFont,
+      lineHeightFactor: lineHeightFactor,
+    );
 
     if (text.isEmpty) {
       return KhmerTextLayout(
@@ -64,7 +74,6 @@ class KhmerLineBreaker {
           sourceStart: currentSourceOffset,
           sourceEnd: currentSourceOffset,
         ));
-        // Account for the newline character in source offset
         currentSourceOffset += 1;
         continue;
       }
@@ -87,44 +96,66 @@ class KhmerLineBreaker {
             break;
 
           case KhmerLayoutTokenType.latin:
-            final glyphs = <PositionedGlyph>[];
-            double totalAdv = 0.0;
-            final runes = token.text.runes.toList();
-            int charOffset = token.sourceStart;
+            if (latinFont != null) {
+              final metrics = latinFont.stringMetrics(token.text);
+              final widthPts = metrics.advanceWidth * fontSize;
+              final advUnits = widthPts * unitsPerEm / fontSize;
 
-            for (final cp in runes) {
-              final gid = shaper.cmap.glyphIdForCodePoint(cp);
-              final adv = shaper.metrics.advanceWidthForGlyph(gid).toDouble();
-              final charLen = cp > 0xFFFF ? 2 : 1;
-              totalAdv += adv;
-
-              glyphs.add(PositionedGlyph(
-                glyphId: gid,
-                xAdvance: adv,
-                cluster: 0,
-                sourceStart: charOffset,
-                sourceEnd: charOffset + charLen,
+              paragraphClusters.add(KhmerLayoutCluster.latin(
+                glyphs: const [],
+                text: token.text,
+                advanceFontUnits: advUnits,
+                fontSize: fontSize,
+                unitsPerEm: unitsPerEm,
+                sourceStart: token.sourceStart,
+                sourceEnd: token.sourceEnd,
               ));
-              charOffset += charLen;
-            }
+            } else {
+              final glyphs = <PositionedGlyph>[];
+              double totalAdv = 0.0;
+              final runes = token.text.runes.toList();
+              int charOffset = token.sourceStart;
 
-            paragraphClusters.add(KhmerLayoutCluster.latin(
-              glyphs: glyphs,
-              text: token.text,
-              advanceFontUnits: totalAdv,
-              fontSize: fontSize,
-              unitsPerEm: unitsPerEm,
-              sourceStart: token.sourceStart,
-              sourceEnd: token.sourceEnd,
-            ));
+              for (final cp in runes) {
+                final gid = shaper.cmap.glyphIdForCodePoint(cp);
+                final adv = shaper.metrics.advanceWidthForGlyph(gid).toDouble();
+                final charLen = cp > 0xFFFF ? 2 : 1;
+                totalAdv += adv;
+
+                glyphs.add(PositionedGlyph(
+                  glyphId: gid,
+                  xAdvance: adv,
+                  cluster: 0,
+                  sourceStart: charOffset,
+                  sourceEnd: charOffset + charLen,
+                ));
+                charOffset += charLen;
+              }
+
+              paragraphClusters.add(KhmerLayoutCluster.latin(
+                glyphs: glyphs,
+                text: token.text,
+                advanceFontUnits: totalAdv,
+                fontSize: fontSize,
+                unitsPerEm: unitsPerEm,
+                sourceStart: token.sourceStart,
+                sourceEnd: token.sourceEnd,
+              ));
+            }
             break;
 
           case KhmerLayoutTokenType.space:
-            final spaceGid = shaper.spaceGlyphId;
-            final adv = shaper.metrics.advanceWidthForGlyph(spaceGid).toDouble();
+            double advUnits;
+            if (latinFont != null) {
+              final spaceMetrics = latinFont.stringMetrics(' ');
+              final widthPts = spaceMetrics.advanceWidth * fontSize;
+              advUnits = widthPts * unitsPerEm / fontSize;
+            } else {
+              advUnits = shaper.metrics.advanceWidthForGlyph(shaper.spaceGlyphId).toDouble();
+            }
             paragraphClusters.add(KhmerLayoutCluster.space(
-              spaceGlyphId: spaceGid,
-              advanceFontUnits: adv,
+              spaceGlyphId: shaper.spaceGlyphId,
+              advanceFontUnits: advUnits,
               fontSize: fontSize,
               unitsPerEm: unitsPerEm,
               sourceStart: token.sourceStart,
@@ -133,12 +164,19 @@ class KhmerLineBreaker {
             break;
 
           case KhmerLayoutTokenType.nbsp:
-            final nbspGid = shaper.cmap.glyphIdForCodePoint(0x00A0);
-            final effectiveGid = (nbspGid != 0) ? nbspGid : shaper.spaceGlyphId;
-            final adv = shaper.metrics.advanceWidthForGlyph(effectiveGid).toDouble();
+            double advUnits;
+            if (latinFont != null) {
+              final spaceMetrics = latinFont.stringMetrics(' ');
+              final widthPts = spaceMetrics.advanceWidth * fontSize;
+              advUnits = widthPts * unitsPerEm / fontSize;
+            } else {
+              final nbspGid = shaper.cmap.glyphIdForCodePoint(0x00A0);
+              final effectiveGid = (nbspGid != 0) ? nbspGid : shaper.spaceGlyphId;
+              advUnits = shaper.metrics.advanceWidthForGlyph(effectiveGid).toDouble();
+            }
             paragraphClusters.add(KhmerLayoutCluster.nbsp(
-              spaceGlyphId: effectiveGid,
-              advanceFontUnits: adv,
+              spaceGlyphId: shaper.spaceGlyphId,
+              advanceFontUnits: advUnits,
               fontSize: fontSize,
               unitsPerEm: unitsPerEm,
               sourceStart: token.sourceStart,
@@ -164,7 +202,6 @@ class KhmerLineBreaker {
       );
       allLines.addAll(wrappedLines);
 
-      // Account for paragraph length plus newline separator
       currentSourceOffset += paragraph.length + 1;
     }
 
@@ -200,7 +237,6 @@ class KhmerLineBreaker {
     }
 
     if (!maxWidth.isFinite) {
-      // Unconstrained width -> single line
       return [_createLine(clusters, lineHeight, baselineOffset)];
     }
 
@@ -215,7 +251,6 @@ class KhmerLineBreaker {
       if (currentLineClusters.isNotEmpty &&
           (currentLineWidth + cluster.width > maxWidth)) {
         if (lastBreakOpportunityIndex >= 0) {
-          // 1. Break at last whitespace opportunity
           final lineItems = currentLineClusters.sublist(
             0,
             lastBreakOpportunityIndex + 1,
@@ -231,7 +266,6 @@ class KhmerLineBreaker {
           lastBreakOpportunityIndex = _findLastBreakOpportunity(currentLineClusters);
           continue;
         } else {
-          // 2. Cluster-safe fallback wrapping: break between adjacent shaping clusters
           lines.add(_createLine(currentLineClusters, lineHeight, baselineOffset));
           currentLineClusters = [cluster];
           currentLineWidth = cluster.width;
@@ -289,7 +323,6 @@ class KhmerLineBreaker {
       totalWidth += c.width;
     }
 
-    // Trailing whitespace is excluded from visual width
     int lastVisibleIndex = clusters.length - 1;
     while (lastVisibleIndex >= 0 && clusters[lastVisibleIndex].isWhitespace) {
       lastVisibleIndex--;
