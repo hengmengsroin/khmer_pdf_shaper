@@ -5,15 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project follows [Semantic Versioning](https://semver.org/).
 
-## [0.1.0] - 2026-08-24
+## [1.0.0] - 2026-08-24
 
 ### Added
-* Pure Dart complex text shaping engine for Khmer Unicode script.
-* Full OpenType GSUB layout engine with Type 1 (Single), Type 4 (Ligature), and Type 6 (Chaining Context) substitution support.
-* Syllable decomposition, cluster classification, and reordering matching the HarfBuzz Khmer shaping model.
-* Broken-cluster handling with dotted circle (`U+25CC`) insertion.
-* Mixed Khmer and Latin / numeric run segmentation and dynamic baseline alignment.
-* Cluster-safe multi-line wrapping supporting Space (`U+0020`), Zero-Width Space (`U+200B`), and fallback cluster boundaries.
-* PDF CID/GID encoding, TrueType glyph subsetting, and `ToUnicode` CMap generation for fully searchable and copyable PDF output.
-* Zero-configuration `KhmerText` PDF widget with bundled Battambang-Regular font.
-* Seamless cross-platform support: Flutter Mobile (iOS/Android), Flutter Desktop (macOS/Windows/Linux), Flutter Web, and Dart CLI.
+* Initial stable release of `khmer_pdf_shaper`.
+* Zero-configuration `KhmerText` widget for `package:pdf` with bundled `Battambang-Regular.ttf` font.
+* Pure Dart OpenType GSUB complex text shaping engine supporting Khmer syllable reordering, subscripts (*Coeng* / ជើង), split matras, and above/below mark positioning.
+* Differential shaping verified with 100% exact parity against HarfBuzz 14.2.1 across all 206 golden fixtures and 805 stress cases.
+* Document-scoped CID/ToUnicode PDF encoding with TrueType glyph subsetting, ensuring fully searchable, copyable, and extractable PDF text.
+* Semantic text extraction verified with 100% exact character equality on Apple macOS PDFKit.
+* Mixed Khmer and Latin / numeric text segmentation with unified baseline metric alignment.
+* Cluster-safe multi-line text wrapping with support for `SPACE`, `NBSP`, `ZWSP`, and explicit newlines (`\n`).
+* Pure Dart cross-platform compatibility: Flutter (iOS, Android, macOS, Windows, Linux, Web) and standalone Dart VM / CLI server backends.

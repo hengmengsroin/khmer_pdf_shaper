@@ -1,0 +1,9 @@
+# Pub packaging ignore file
+# Excludes development-only tools, CI configs, build artifacts, and internal test traces
+
+.github/
+tool/
+doc/api/
+test/fixtures/
+example/build/
+example/.dart_tool/

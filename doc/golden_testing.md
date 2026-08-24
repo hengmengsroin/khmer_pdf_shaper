@@ -10,9 +10,13 @@ This package maintains two distinct fixture corpuses:
 2. **805 Generated Differential Stress Cases** (`test/fixtures/khmer_stress_corpus.json`):
    - Broad generated differential stress coverage testing complex syllable permutations against HarfBuzz.
 
+---
+
 ## 2. Oracle Provenance & Font Binding
 
-- **HarfBuzz Version**: `hb-shape (HarfBuzz) 14.2.1`
+- **Original Generator Version**: `hb-shape (HarfBuzz) 14.2.1` via `tool/generate_fixtures.py`
+- **Validation Oracle Version**: `HarfBuzz 14.2.1` (verified with system `hb-shape` and native differential harness)
+- **Experimental FFI Reference**: `HarfBuzz 14.2.1` (dylib FFI spike used in Phase 3 differential validation)
 - **Font File**: `Battambang-Regular.ttf`
 - **Exact Font SHA-256**:
   `c7d867c7d4e8371f23678bd12cd1700cab1e4e37ec2860eb439766142b240bd9`

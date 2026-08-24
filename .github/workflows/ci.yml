@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  portable-gates:
+    name: Portable Release Gates (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install system & Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libharfbuzz-bin
+          pip install fonttools pypdf pdfplumber
+
+      - name: Install Dart/Flutter dependencies
+        run: |
+          flutter pub get
+          (cd example && flutter pub get)
+
+      - name: Verify code formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Run static analysis
+        run: flutter analyze
+
+      - name: Run test suite
+        run: flutter test
+
+      - name: Execute release check runner
+        run: ./tool/release_check.sh
+
+      - name: Pub publish dry-run validation
+        run: dart pub publish --dry-run
+
+  macos-native-gates:
+    name: Native PDFKit Gates (macOS)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          brew install harfbuzz
+          pip install fonttools pypdf pdfplumber
+
+      - name: Install Dart/Flutter dependencies
+        run: |
+          flutter pub get
+          (cd example && flutter pub get)
+
+      - name: Execute full release check runner (including PDFKit)
+        run: ./tool/release_check.sh

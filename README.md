@@ -25,7 +25,7 @@ Add `khmer_pdf_shaper` and `pdf` to your `pubspec.yaml`:
 ```yaml
 dependencies:
   pdf: ^3.11.3
-  khmer_pdf_shaper: ^0.1.0
+  khmer_pdf_shaper: ^1.0.0
 ```
 
 Use `KhmerText` directly in place of `pw.Text`:
@@ -168,14 +168,19 @@ When rendering `សួស្តី` (`U+179F U+17BD U+179F U+17D2 U+178F U+17B8`
 
 ---
 
-## ⚠️ Known Limitations & Roadmap
+## ⚠️ Scope & Limitations (v1.0.0)
 
-- **Font Support in v1:** Core v1 is optimized for the bundled **Battambang-Regular** font. Arbitrary custom Khmer fonts are not supported in the pure-Dart v1 core. Generic OpenType/HarfBuzz font support is planned for future extension packages.
-- **Text Direction:** Only Left-to-Right (LTR) reading direction is supported in v1. RTL text direction is not supported.
-- **Cross-Page Spanning:** A single `KhmerText` widget does not split across multiple pages. For long multi-page documents, break content into paragraphs inside `pw.MultiPage`.
+- **Bundled Font Contract:** v1 is strictly bound to the bundled `Battambang-Regular.ttf` font. Arbitrary custom Khmer fonts are not supported in v1.
+- **Font Selection Semantics:** `style.font` applies to non-Khmer text runs only (Latin, numbers, punctuation); it does not alter the Khmer shaping font.
+- **Text Direction:** Only Left-to-Right (LTR) reading direction is supported. Bidirectional (bidi) and Right-to-Left (RTL) text are not supported.
+- **Layout & Typography:** No text justification (`textAlign: justify` falls back to left alignment), no rich inline spans (`pw.RichText`), and no `maxLines`/`overflow: ellipsis`.
+- **Word Segmentation:** Cluster-safe wrapping breaks between legal layout units (`SPACE`, `NBSP`, `ZWSP`) or between valid shaping clusters when unspaced. It does not perform dictionary-based Khmer word segmentation.
+- **Cross-Page Spanning:** A single `KhmerText` widget instance renders within its box constraints and does not break across page boundaries. In `pw.MultiPage` documents, structure long content across separate paragraph widgets.
+- **Unsupported Characters:** Unsupported non-Khmer characters (e.g. emojis, Cyrillic, Arabic) deterministically fall back to `'?'` under the default Latin Type1 font. For non-Latin scripts, supply a Unicode-capable `PdfFont` in `style.font`.
 
 ---
 
-## 📜 License
+## 📜 Licensing & Attribution
 
-This project is licensed under the MIT License.
+- **Software**: `khmer_pdf_shaper` is released under the [MIT License](LICENSE).
+- **Battambang Font**: Bundled `Battambang-Regular.ttf` is licensed under the [SIL Open Font License, Version 1.1](THIRD_PARTY_NOTICES.md) (Copyright 2019 The Battambang Khmer Project Authors, designed by Danh Hong). See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for full license terms.

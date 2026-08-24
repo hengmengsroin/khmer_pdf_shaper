@@ -9,11 +9,33 @@ import '../pdf/khmer_font_cache.dart';
 import '../pdf/khmer_pdf_font.dart';
 import '../shaper/battambang_shaper.dart';
 
-/// A `package:pdf` widget that lays out and renders shaped Khmer, Latin, and mixed text.
+/// A `package:pdf` widget that lays out and renders correctly shaped Khmer,
+/// Latin, and mixed-script text in PDF documents.
 ///
-/// Khmer text is shaped using the bundled Battambang-Regular OpenType shaping engine
-/// and embedded using document-scoped CID/ToUnicode PDF structures for correct
-/// visual rendering, searchability, and text copy-paste.
+/// ### Font Contract & Shaping
+/// Khmer text runs are shaped using the bundled `Battambang-Regular.ttf`
+/// OpenType shaping engine and embedded with document-scoped CID/ToUnicode
+/// structures ensuring visual rendering fidelity, copy-paste extraction,
+/// and PDF searchability.
+///
+/// Non-Khmer text runs (Latin, numbers, symbols) are rendered using [pw.TextStyle.font]
+/// when supplied by the caller, or the default `package:pdf` Latin font (Helvetica).
+/// Note: `style.font` does NOT replace the Khmer shaping font in v1.
+///
+/// ### Line Breaking & Layout
+/// Text wraps at natural space boundaries (`SPACE`, `NBSP`, `ZWSP`) and falls back
+/// to cluster-safe boundaries. The layout engine guarantees that line breaks
+/// NEVER occur inside a complex shaping syllable cluster.
+///
+/// ### MultiPage Behavior
+/// [KhmerText] can be used inside `pw.MultiPage` documents (e.g. as children of
+/// columns or containers), but a single [KhmerText] widget instance renders within
+/// its allocated box and does not span across multiple pages.
+///
+/// ### Non-Khmer Fallback
+/// Non-Khmer characters that cannot be encoded by the default Latin Type1 font
+/// (e.g., emojis, Cyrillic, Arabic) deterministically fall back to `'?'`.
+/// To render non-Latin scripts alongside Khmer, supply a Unicode `PdfFont` in [style].
 class KhmerText extends pw.Widget {
   /// Text string to render.
   final String text;

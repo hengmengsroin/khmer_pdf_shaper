@@ -1,6 +1,6 @@
 name: khmer_pdf_shaper
-description: A pure Dart package for rendering complex Khmer Unicode text correctly in PDF documents using OpenType GSUB shaping, cluster-safe wrapping, and CID/ToUnicode font embedding.
-version: 0.1.0
+description: A pure Dart package for rendering correctly shaped, searchable Khmer Unicode text in PDF documents with bundled Battambang font and cluster-safe wrapping.
+version: 1.0.0
 homepage: https://github.com/hengmengsroin/khmer_pdf_shaper
 repository: https://github.com/hengmengsroin/khmer_pdf_shaper
 issue_tracker: https://github.com/hengmengsroin/khmer_pdf_shaper/issues
