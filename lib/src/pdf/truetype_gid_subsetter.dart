@@ -95,6 +95,11 @@ class TrueTypeGidSubsetter {
           ? ttf.glyphOffsets[gid + 1]
           : (ttf.tableSize[TtfParser.glyf_table] ?? start);
       final TtfGlyphInfo glyph;
+      // Defensive Workaround: package:pdf's TtfParser.readGlyph() does not check
+      // whether loca[gid] == loca[gid + 1]. For zero-length glyph entries (such as
+      // ASCII Space, NBSP, or Khmer zero-contour spacing marks like uni17B6.space),
+      // readGlyph() would erroneously parse the bytes of glyph (gid + 1) and inject
+      // visible ghost outlines. We explicitly emit an empty Uint8List(0) when start == end.
       if (start == end) {
         glyph = TtfGlyphInfo(gid, Uint8List(0), const <int>[]);
       } else {

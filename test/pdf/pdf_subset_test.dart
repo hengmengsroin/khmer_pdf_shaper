@@ -71,15 +71,64 @@ void main() {
       expect(parsed.glyphOffsets.length, equals(requested.length + 1)); // +1 for GID 0
     });
 
-    test('Correctly preserves zero-length spacing glyphs (GID 121, 259) without ghost contours', () {
-      // GID 121 (uni17B6.space) and GID 259 (space) have 0-byte glyph data in glyf
-      final result = subsetter.subsetGlyphs([121, 259]);
-      final subGid121 = result.originalToSubset[121]!;
-      final subGid259 = result.originalToSubset[259]!;
+    test('Correctly preserves zero-length spacing glyphs (GID 105, 106, 121, 259, 260) without ghost contours', () {
+      const zeroLengthGids = [105, 106, 121, 259, 260];
+      const expectedAdvances = {
+        105: 1204,
+        106: 1204,
+        121: 610,
+        259: 700,
+        260: 700,
+      };
 
-      final parsed = TtfParser(result.fontBytes.buffer.asByteData());
-      expect(parsed.readGlyph(subGid121).data.lengthInBytes, equals(0));
-      expect(parsed.readGlyph(subGid259).data.lengthInBytes, equals(0));
+      // 1. Test each zero-length glyph individually
+      for (final gid in zeroLengthGids) {
+        final result = subsetter.subsetGlyphs([gid]);
+        final subsetGid = result.originalToSubset[gid]!;
+        final parsed = TtfParser(result.fontBytes.buffer.asByteData());
+
+        // In the subset font's loca table, glyph length must be 0
+        final start = parsed.glyphOffsets[subsetGid];
+        final end = (subsetGid + 1 < parsed.glyphOffsets.length)
+            ? parsed.glyphOffsets[subsetGid + 1]
+            : parsed.tableSize[TtfParser.glyf_table]!;
+        expect(end - start, equals(0),
+            reason: 'GID $gid must have zero length in loca table');
+
+        // Must preserve hmtx advance width and LSB
+        final hmtxOffset = parsed.tableOffsets[TtfParser.hmtx_table]!;
+        final hmtxData = parsed.bytes.buffer.asByteData(
+          hmtxOffset,
+          parsed.tableSize[TtfParser.hmtx_table]!,
+        );
+        final adv = hmtxData.getUint16(subsetGid * 4);
+        final lsb = hmtxData.getInt16(subsetGid * 4 + 2);
+        expect(adv, equals(expectedAdvances[gid]),
+            reason: 'GID $gid advance width mismatch');
+        expect(lsb, equals(0), reason: 'GID $gid LSB mismatch');
+      }
+
+      // 2. Test all zero-length glyphs together with normal and compound glyphs
+      final allTogether = subsetter.subsetGlyphs([...zeroLengthGids, 53, 332]);
+      final parsedAll = TtfParser(allTogether.fontBytes.buffer.asByteData());
+
+      for (final gid in zeroLengthGids) {
+        final subsetGid = allTogether.originalToSubset[gid]!;
+        final start = parsedAll.glyphOffsets[subsetGid];
+        final end = (subsetGid + 1 < parsedAll.glyphOffsets.length)
+            ? parsedAll.glyphOffsets[subsetGid + 1]
+            : parsedAll.tableSize[TtfParser.glyf_table]!;
+        expect(end - start, equals(0),
+            reason: 'Collective subset: GID $gid must have zero length in loca table');
+
+        final hmtxOffset = parsedAll.tableOffsets[TtfParser.hmtx_table]!;
+        final hmtxData = parsedAll.bytes.buffer.asByteData(
+          hmtxOffset,
+          parsedAll.tableSize[TtfParser.hmtx_table]!,
+        );
+        final adv = hmtxData.getUint16(subsetGid * 4);
+        expect(adv, equals(expectedAdvances[gid]));
+      }
     });
   });
 }

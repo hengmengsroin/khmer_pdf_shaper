@@ -17,8 +17,6 @@ environment:
 dependencies:
   # Standard pdf package for PDF document generation
   pdf: ^3.11.3
-  # Grapheme cluster utilities
-  characters: ^1.4.0
   # SHA-256 font binary integrity verification
   crypto: ^3.0.3
   # Annotations such as @internal
