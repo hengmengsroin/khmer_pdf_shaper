@@ -26,7 +26,9 @@ for (i, line) in extractedLines.enumerated() {
 let expected = [
     "Invoice សួស្តី 123",
     "Price: $10 កម្ពុជា",
-    "ABCកម្ពុជា123"
+    "ABCកម្ពុជា123",
+    "កម្ពុជា@example.com",
+    "https://example.com/ខ្មែរ"
 ]
 
 var passed = true

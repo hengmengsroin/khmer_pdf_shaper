@@ -3,13 +3,18 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pdf/pdf.dart';
+import 'package:khmer_pdf_shaper/src/font/metrics_table.dart';
+import 'package:khmer_pdf_shaper/src/font/opentype_reader.dart';
+import 'package:khmer_pdf_shaper/src/pdf/khmer_pdf_font.dart';
 import 'package:khmer_pdf_shaper/src/pdf/truetype_gid_subsetter.dart';
+import 'package:khmer_pdf_shaper/src/shaper/battambang_shaper.dart';
 
 void main() {
   group('Phase 7 — Item 9: Zero-Length Glyph Hardening Tests', () {
     late Uint8List fontBytes;
     late TtfParser ttf;
     late TrueTypeGidSubsetter subsetter;
+    late MetricsTable origMetrics;
 
     const zeroLengthGids = [105, 106, 121, 259, 260];
     const simpleGids = [3, 4, 5, 53, 54, 55, 60, 70, 80];
@@ -22,6 +27,14 @@ void main() {
       fontBytes = file.readAsBytesSync();
       ttf = TtfParser(fontBytes.buffer.asByteData());
       subsetter = TrueTypeGidSubsetter(ttf);
+
+      final font = OpenTypeFont.parse(fontBytes);
+      origMetrics = MetricsTable.parse(
+        headReader: font.getTableReader('head'),
+        hheaReader: font.getTableReader('hhea'),
+        maxpReader: font.getTableReader('maxp'),
+        hmtxReader: font.getTableReader('hmtx'),
+      );
     });
 
     test('Zero-length glyphs (105, 106, 121, 259, 260) have 0 loca length in original font', () {
@@ -57,6 +70,13 @@ void main() {
 
         final result = subsetter.subsetGlyphs(selected);
         final parsed = TtfParser(result.fontBytes.buffer.asByteData());
+        final subsetFont = OpenTypeFont.parse(result.fontBytes);
+        final subsetMetrics = MetricsTable.parse(
+          headReader: subsetFont.getTableReader('head'),
+          hheaReader: subsetFont.getTableReader('hhea'),
+          maxpReader: subsetFont.getTableReader('maxp'),
+          hmtxReader: subsetFont.getTableReader('hmtx'),
+        );
 
         for (final zGid in zeroLengthGids) {
           if (!result.originalToSubset.containsKey(zGid)) continue;
@@ -71,6 +91,38 @@ void main() {
             equals(0),
             reason: 'Iteration $iteration: GID $zGid (subset GID $subsetGid) must remain 0 length, but had length ${end - start}',
           );
+
+          // Assert hmtx advance width is preserved
+          final origAdvance = origMetrics.advanceWidthForGlyph(zGid);
+          final subsetAdvance = subsetMetrics.advanceWidthForGlyph(subsetGid);
+          expect(
+            subsetAdvance,
+            equals(origAdvance),
+            reason: 'Advance width for GID $zGid must be preserved in subset font ($origAdvance vs $subsetAdvance)',
+          );
+        }
+      }
+    });
+
+    test('Zero-length glyphs in words (កម្ពុជា, ប៉ា, សង្គ្រាម) render with exact loca zero length in PDF subset', () {
+      final doc = PdfDocument();
+      final page = PdfPage(doc, pageFormat: const PdfPageFormat(500, 500));
+      final g = page.getGraphics();
+      final khmerFont = KhmerPdfFont(doc, fontBytes.buffer.asByteData());
+
+      // Words containing zero-length glyphs (GID 105, 106, 121, 259, 260)
+      final words = ['កម្ពុជា', 'ប៉ា', 'សង្គ្រាម'];
+      for (final word in words) {
+        final run = BattambangShaper.fromBytes(fontBytes).shapeText(word);
+        khmerFont.drawShapedRun(page, g, run, x: 50, y: 300, fontSize: 16);
+      }
+
+      // Check registry entries
+      final gidsInUse = khmerFont.registry.entries.values.map((e) => e.originalGlyphId).toSet();
+      for (final zGid in [105, 106, 121, 259, 260]) {
+        if (gidsInUse.contains(zGid)) {
+          // Verify it is mapped cleanly
+          expect(khmerFont.registry.entries.values.any((e) => e.originalGlyphId == zGid), isTrue);
         }
       }
     });

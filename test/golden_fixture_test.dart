@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:khmer_pdf_shaper/src/font/font_binary_validator.dart';
 
 void main() {
   group('Khmer Golden Fixture Corpus Validation', () {
@@ -15,13 +16,30 @@ void main() {
       fixtures = jsonCorpus['fixtures'] as List<dynamic>;
     });
 
-    test('Metadata header is populated with HarfBuzz oracle details', () {
+    test('Metadata header is populated with HarfBuzz oracle details and exact provenance', () {
       final oracle = jsonCorpus['oracle'] as Map<String, dynamic>;
-      expect(oracle['harfbuzz_version'], isNotEmpty);
+      expect(oracle['harfbuzz_version'], 'hb-shape (HarfBuzz) 14.2.1');
       expect(oracle['font_name'], 'Battambang-Regular');
-      expect(oracle['font_sha256'], isNotEmpty);
+      expect(oracle['font_sha256'], 'c7d867c7d4e8371f23678bd12cd1700cab1e4e37ec2860eb439766142b240bd9');
       expect(oracle['units_per_em'], 2048);
-      expect(oracle['fixture_count'], greaterThan(150));
+      expect(oracle['fixture_count'], 206);
+      expect(fixtures.length, 206);
+
+      final shapingConfig = oracle['shaping_config'] as Map<String, dynamic>;
+      expect(shapingConfig['script'], 'khmr');
+      expect(shapingConfig['direction'], 'ltr');
+      expect(shapingConfig['language'], 'km');
+      expect(shapingConfig['features'], contains('pref'));
+      expect(shapingConfig['features'], contains('blwf'));
+    });
+
+    test('Bundled Battambang font SHA256 exactly matches golden oracle font SHA256', () {
+      final fontBytes = File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
+      final oracle = jsonCorpus['oracle'] as Map<String, dynamic>;
+      final expectedSha = oracle['font_sha256'] as String;
+
+      expect(FontBinaryValidator.battambangRegularSha256, equals(expectedSha));
+      expect(() => FontBinaryValidator.verifySupportedFont(fontBytes), returnsNormally);
     });
 
     test('All required categories are represented', () {

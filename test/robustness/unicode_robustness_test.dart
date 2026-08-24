@@ -41,5 +41,59 @@ void main() {
         expect(bytes, isNotEmpty);
       });
     }
+
+    test('Unsupported non-Khmer characters deterministically fall back to "?" without crash under default Latin font', () async {
+      // NOTE: Original Unicode semantics for emojis and non-Latin scripts are NOT preserved
+      // when falling back to standard Type1 Latin fonts (Helvetica). Fallback to '?' is deterministic.
+      final textWithUnsupported = 'សួស្តី 😀🎉 Привет 123';
+
+      final pdf1 = pw.Document();
+      pdf1.addPage(
+        pw.Page(
+          pageFormat: PdfPageFormat.a4,
+          build: (context) => KhmerText(textWithUnsupported),
+        ),
+      );
+      final bytes1 = await pdf1.save();
+
+      final pdf2 = pw.Document();
+      pdf2.addPage(
+        pw.Page(
+          pageFormat: PdfPageFormat.a4,
+          build: (context) => KhmerText(textWithUnsupported),
+        ),
+      );
+      final bytes2 = await pdf2.save();
+
+      expect(bytes1, isNotEmpty);
+      expect(bytes2, isNotEmpty);
+      expect(bytes1.length, equals(bytes2.length), reason: 'Output must be deterministic');
+
+      // The fallback produces '?' in the Latin stream
+      final pdfString = String.fromCharCodes(bytes1);
+      expect(pdfString, contains('?'), reason: 'PDF content stream reflects "?" for unsupported glyphs');
+    });
+
+    test('Caller-supplied Unicode font is accepted and used for non-Khmer text runs', () async {
+      final doc = pw.Document();
+      // Use standard font or custom font if provided
+      doc.addPage(
+        pw.Page(
+          pageFormat: PdfPageFormat.a4,
+          build: (context) => KhmerText(
+            'សួស្តី Hello 123',
+            style: pw.TextStyle(
+              font: pw.Font.courier(),
+              fontSize: 14,
+            ),
+          ),
+        ),
+      );
+
+      final bytes = await doc.save();
+      expect(bytes, isNotEmpty);
+      final pdfString = String.fromCharCodes(bytes);
+      expect(pdfString, contains('/Courier'));
+    });
   });
 }

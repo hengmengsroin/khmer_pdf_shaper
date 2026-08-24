@@ -8,40 +8,57 @@ import 'package:pdf/widgets.dart' as pw;
 
 void main() {
   group('Phase 7 — Item 16 & 17 & 18: Resource Lifecycle, Memory & Benchmarks', () {
-    test('Interleaved PdfDocuments maintain completely isolated CID registries and fonts', () async {
-      final doc1 = pw.Document();
-      final doc2 = pw.Document();
+    test('Interleaved Document A, B, C maintain isolated CID registries, fonts, and reused instances within document', () async {
+      final docA = pw.Document();
+      final docB = pw.Document();
+      final docC = pw.Document();
 
-      doc1.addPage(
+      // Interleaved page additions
+      docA.addPage(
         pw.Page(
           pageFormat: PdfPageFormat.a4,
-          build: (context) => KhmerText('ឯកសារទីមួយ ផ្តាច់មុខ (Doc 1 Only)'),
+          build: (context) => KhmerText('ឯកសារទីមួយ ផ្តាច់មុខ (Doc A Only)'),
         ),
       );
 
-      doc2.addPage(
+      docB.addPage(
         pw.Page(
           pageFormat: PdfPageFormat.a4,
-          build: (context) => KhmerText('ឯកសារទីពីរ ផ្តាច់មុខ (Doc 2 Only)'),
+          build: (context) => KhmerText('ឯកសារទីពីរ ផ្តាច់មុខ (Doc B Only)'),
         ),
       );
 
-      final font1 = KhmerFontCache.getOrCreateFont(doc1.document);
-      final font2 = KhmerFontCache.getOrCreateFont(doc2.document);
+      docC.addPage(
+        pw.Page(
+          pageFormat: PdfPageFormat.a4,
+          build: (context) => KhmerText('ឯកសារទីបី ផ្តាច់មុខ (Doc C Only)'),
+        ),
+      );
 
-      expect(identical(font1, font2), isFalse, reason: 'Each PdfDocument must have an isolated KhmerPdfFont');
+      final fontA1 = KhmerFontCache.getOrCreateFont(docA.document);
+      final fontA2 = KhmerFontCache.getOrCreateFont(docA.document);
+      final fontB = KhmerFontCache.getOrCreateFont(docB.document);
+      final fontC = KhmerFontCache.getOrCreateFont(docC.document);
 
-      final bytes1 = await doc1.save();
-      final bytes2 = await doc2.save();
+      // Invariant 1: Font resource reused within one document
+      expect(identical(fontA1, fontA2), isTrue, reason: 'Font instance must be reused within same document');
 
-      expect(font1.registry.count, greaterThan(1));
-      expect(font2.registry.count, greaterThan(1));
+      // Invariant 2: A != B != C
+      expect(identical(fontA1, fontB), isFalse);
+      expect(identical(fontB, fontC), isFalse);
+      expect(identical(fontA1, fontC), isFalse);
 
-      expect(bytes1, isNotEmpty);
-      expect(bytes2, isNotEmpty);
+      final bytesA = await docA.save();
+      final bytesB = await docB.save();
+      final bytesC = await docC.save();
 
-      expect(bytes1, isNotEmpty);
-      expect(bytes2, isNotEmpty);
+      expect(fontA1.registry.count, greaterThan(1));
+      expect(fontB.registry.count, greaterThan(1));
+      expect(fontC.registry.count, greaterThan(1));
+
+      expect(bytesA, isNotEmpty);
+      expect(bytesB, isNotEmpty);
+      expect(bytesC, isNotEmpty);
     });
 
     test('100 sequential Document save cycles complete without memory leak or state contamination', () async {

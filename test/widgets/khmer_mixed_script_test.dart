@@ -145,6 +145,10 @@ void main() {
                 KhmerText.internal('Price: \$10 កម្ពុជា', font: khmerFont),
                 pw.SizedBox(height: 10),
                 KhmerText.internal('ABCកម្ពុជា123', font: khmerFont),
+                pw.SizedBox(height: 10),
+                KhmerText.internal('កម្ពុជា@example.com', font: khmerFont),
+                pw.SizedBox(height: 10),
+                KhmerText.internal('https://example.com/ខ្មែរ', font: khmerFont),
               ],
             );
           },

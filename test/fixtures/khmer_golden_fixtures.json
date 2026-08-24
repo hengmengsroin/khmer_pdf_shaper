@@ -6,7 +6,15 @@
     "font_file": "Battambang-Regular.ttf",
     "units_per_em": 2048,
     "fixture_count": 206,
-    "fixture_version": "1.0.0"
+    "fixture_version": "1.0.0",
+    "shaping_config": {
+      "script": "khmr",
+      "direction": "ltr",
+      "language": "km",
+      "features": ["locl", "ccmp", "pref", "blwf", "abvf", "pstf", "pres", "blws", "abvs", "psts", "clig", "kern"]
+    },
+    "generator": "tool/generate_fixtures.py",
+    "generator_command": "python3 tool/generate_fixtures.py"
   },
   "fixtures": [
     {

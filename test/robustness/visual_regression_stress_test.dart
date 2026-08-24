@@ -19,7 +19,7 @@ void main() {
     test('Generates comprehensive golden visual document with 206 fixtures, extremes, mixed scripts and layouts', () async {
       final pdf = pw.Document();
 
-      // Page 1: Title, alignment, extremes, and mixed script
+      // Page 1: Permanent visual regression suite covering all 22 representative categories
       pdf.addPage(
         pw.Page(
           pageFormat: PdfPageFormat.a4,
@@ -27,42 +27,59 @@ void main() {
             crossAxisAlignment: pw.CrossAxisAlignment.stretch,
             children: [
               KhmerText(
-                'ព្រះរាជាណាចក្រកម្ពុជា',
-                style: const pw.TextStyle(fontSize: 24, color: PdfColors.indigo900),
+                'ព្រះរាជាណាចក្រកម្ពុជា — Visual Regression Suite',
+                style: const pw.TextStyle(fontSize: 18, color: PdfColors.indigo900),
                 textAlign: pw.TextAlign.center,
               ),
-              pw.SizedBox(height: 8),
+              pw.SizedBox(height: 4),
               KhmerText(
                 'ជាតិ សាសនា ព្រះមហាក្សត្រ',
-                style: const pw.TextStyle(fontSize: 16),
+                style: const pw.TextStyle(fontSize: 13),
                 textAlign: pw.TextAlign.center,
               ),
-              pw.Divider(thickness: 1.5),
-              pw.SizedBox(height: 8),
+              pw.Divider(thickness: 1.0),
 
-              // Alignments
-              KhmerText('តម្រឹមឆ្វេង (Left Aligned)', textAlign: pw.TextAlign.left),
-              KhmerText('តម្រឹមកណ្តាល (Center Aligned)', textAlign: pw.TextAlign.center),
-              KhmerText('តម្រឹមស្តាំ (Right Aligned)', textAlign: pw.TextAlign.right),
-              pw.SizedBox(height: 8),
+              // 1. Permanent core words & zero-length glyph cases
+              KhmerText(
+                'Permanent Core Words: សួស្តី | កម្ពុជា | ខ្ញុំ | សង្គ្រាម | ក្រ | ក្ក | គ្រែ | ប៉ា',
+                style: const pw.TextStyle(fontSize: 11, color: PdfColors.blueGrey800),
+              ),
+              pw.SizedBox(height: 4),
 
-              // Mixed script cases
-              KhmerText('Invoice សួស្តី 123 | Total: \$100.00 រៀល'),
-              KhmerText('Price: \$10.50 កម្ពុជា | Email: info@ខ្មែរ.com'),
-              pw.SizedBox(height: 8),
+              // 2. Representative categories
+              KhmerText('1. Basic & Pre-base: ក ខ គ | គេ តែ កៃ កៅ', style: const pw.TextStyle(fontSize: 10)),
+              KhmerText('2. Above & Below Marks: កី កឹ កឺ | គុ គូ គួ', style: const pw.TextStyle(fontSize: 10)),
+              KhmerText('3. Split Matras & Robat: កោះ កាំ កុំ | ធម៌ ពណ៌', style: const pw.TextStyle(fontSize: 10)),
+              KhmerText('4. Subscripts & COENG RO: ក្ក ក្ខ | ក្រ គ្រ ស្រ', style: const pw.TextStyle(fontSize: 10)),
+              KhmerText('5. Stacked Marks & Clusters: ក្ដាំង សង្គ្រាម កញ្ឆា', style: const pw.TextStyle(fontSize: 10)),
+              KhmerText('6. Broken Cluster & Dotted Circle: \u25CC\u17B6 | \u17D2\u1780 | \u25CC\u17C1\u1780', style: const pw.TextStyle(fontSize: 10)),
+              KhmerText('7. Joiners (ZWJ / ZWNJ): ក\u200D្\u200Dក | ក\u200C្\u200Cក | ឥ\u200Dក', style: const pw.TextStyle(fontSize: 10)),
+              KhmerText('8. Spaces (SPACE / NBSP / ZWSP): [ក ខ] | [ក\u00A0ខ] | [ក\u200Bខ]', style: const pw.TextStyle(fontSize: 10)),
+              KhmerText('9. Mixed Script: Invoice សួស្តី 123 | \$10 កម្ពុជា | info@ខ្មែរ.com', style: const pw.TextStyle(fontSize: 10)),
+              pw.SizedBox(height: 4),
 
-              // Whitespace & Special Spaces
-              KhmerText('ចន្លោះធម្មតា: [ក ខ គ] | NBSP: [ក\u00A0ខ\u00A0គ] | ZWSP: [ក\u200Bខ\u200Bគ]'),
-              pw.SizedBox(height: 8),
+              // 3. Alignments
+              KhmerText('Left Aligned: តម្រឹមឆ្វេង សួស្តី', textAlign: pw.TextAlign.left, style: const pw.TextStyle(fontSize: 10)),
+              KhmerText('Center Aligned: តម្រឹមកណ្តាល សួស្តី', textAlign: pw.TextAlign.center, style: const pw.TextStyle(fontSize: 10)),
+              KhmerText('Right Aligned: តម្រឹមស្តាំ សួស្តី', textAlign: pw.TextAlign.right, style: const pw.TextStyle(fontSize: 10)),
+              pw.SizedBox(height: 4),
 
-              // Font sizes
+              // 4. Wrapping & Font Sizes
+              pw.Container(
+                width: 250,
+                child: KhmerText(
+                  'Wrapping Check: ភាសាខ្មែរគឺជាភាសាផ្លូវការនៃព្រះរាជាណាចក្រកម្ពុជា។',
+                  style: const pw.TextStyle(fontSize: 9),
+                ),
+              ),
+              pw.SizedBox(height: 4),
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                 children: [
                   KhmerText('8pt អក្សរ', style: const pw.TextStyle(fontSize: 8)),
-                  KhmerText('12pt អក្សរ', style: const pw.TextStyle(fontSize: 12)),
-                  KhmerText('16pt អក្សរ', style: const pw.TextStyle(fontSize: 16)),
-                  KhmerText('20pt អក្សរ', style: const pw.TextStyle(fontSize: 20)),
+                  KhmerText('10pt អក្សរ', style: const pw.TextStyle(fontSize: 10)),
+                  KhmerText('14pt អក្សរ', style: const pw.TextStyle(fontSize: 14)),
+                  KhmerText('18pt អក្សរ', style: const pw.TextStyle(fontSize: 18)),
                 ],
               ),
             ],
@@ -123,7 +140,7 @@ void main() {
       final bytes = await pdf.save();
       expect(bytes, isNotEmpty);
 
-      final visualFile = File('build/khmer_phase7_visual_golden.pdf');
+      final visualFile = File('build/khmer_phase8_visual_golden.pdf');
       visualFile.parent.createSync(recursive: true);
       visualFile.writeAsBytesSync(bytes);
       expect(visualFile.existsSync(), isTrue);
