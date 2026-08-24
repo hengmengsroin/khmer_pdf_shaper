@@ -23,6 +23,17 @@ class KhmerLineBreaker {
     double maxWidth = double.infinity,
     double? lineHeightFactor,
   }) {
+    if (fontSize <= 0 || !fontSize.isFinite) {
+      throw ArgumentError.value(fontSize, 'fontSize', 'Font size must be positive and finite.');
+    }
+    if (lineHeightFactor != null && (lineHeightFactor <= 0 || !lineHeightFactor.isFinite)) {
+      throw ArgumentError.value(
+        lineHeightFactor,
+        'lineHeightFactor',
+        'Line height factor must be positive and finite.',
+      );
+    }
+
     final unitsPerEm = shaper.metrics.unitsPerEm;
     final naturalLineHeight = lineMetrics.calculateMixedNaturalLineHeight(fontSize, latinFont);
     final lineHeight = lineMetrics.calculateMixedLineHeight(
@@ -97,13 +108,25 @@ class KhmerLineBreaker {
 
           case KhmerLayoutTokenType.latin:
             if (latinFont != null) {
-              final metrics = latinFont.stringMetrics(token.text);
-              final widthPts = metrics.advanceWidth * fontSize;
-              final advUnits = widthPts * unitsPerEm / fontSize;
+              final supportedBuffer = StringBuffer();
+              double totalWidthPts = 0.0;
+              for (final cp in token.text.runes) {
+                if (latinFont.isRuneSupported(cp)) {
+                  supportedBuffer.writeCharCode(cp);
+                  final metrics = latinFont.glyphMetrics(cp);
+                  totalWidthPts += metrics.advanceWidth * fontSize;
+                } else {
+                  supportedBuffer.write('?');
+                  final fallbackCp = latinFont.isRuneSupported(0x3F) ? 0x3F : 0x20;
+                  final metrics = latinFont.glyphMetrics(fallbackCp);
+                  totalWidthPts += metrics.advanceWidth * fontSize;
+                }
+              }
+              final advUnits = totalWidthPts * unitsPerEm / fontSize;
 
               paragraphClusters.add(KhmerLayoutCluster.latin(
                 glyphs: const [],
-                text: token.text,
+                text: supportedBuffer.toString(),
                 advanceFontUnits: advUnits,
                 fontSize: fontSize,
                 unitsPerEm: unitsPerEm,

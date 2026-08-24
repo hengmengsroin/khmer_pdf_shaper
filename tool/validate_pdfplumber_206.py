@@ -1,7 +1,7 @@
 import json
 import pdfplumber
 
-pdf_path = "/Users/hengmengsroin/.gemini/antigravity-ide/brain/124ef2f0-1d61-4b71-b0d3-671001f9375b/scratch/khmer_golden_206_fixtures.pdf"
+pdf_path = "build/khmer_golden_206_fixtures.pdf"
 fixtures_path = "test/fixtures/khmer_golden_fixtures.json"
 
 with open(fixtures_path, "r", encoding="utf-8") as f:

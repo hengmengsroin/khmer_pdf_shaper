@@ -53,7 +53,8 @@ void main() {
       expect(font.registry.count, greaterThan(100));
 
       // Save artifact PDF for visual inspection
-      final artifactFile = File('/Users/hengmengsroin/.gemini/antigravity-ide/brain/124ef2f0-1d61-4b71-b0d3-671001f9375b/scratch/khmer_golden_206_fixtures.pdf');
+      final artifactFile = File('build/khmer_golden_206_fixtures.pdf');
+      artifactFile.parent.createSync(recursive: true);
       await artifactFile.writeAsBytes(pdfBytes);
       expect(artifactFile.existsSync(), isTrue);
     });

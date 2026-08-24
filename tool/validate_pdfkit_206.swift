@@ -1,7 +1,7 @@
 import Foundation
 import PDFKit
 
-let pdfUrl = URL(fileURLWithPath: "/Users/hengmengsroin/.gemini/antigravity-ide/brain/124ef2f0-1d61-4b71-b0d3-671001f9375b/scratch/khmer_golden_206_fixtures.pdf")
+let pdfUrl = URL(fileURLWithPath: "build/khmer_golden_206_fixtures.pdf")
 guard let document = PDFDocument(url: pdfUrl) else {
     print("Failed to open PDF")
     exit(1)

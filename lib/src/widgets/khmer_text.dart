@@ -82,8 +82,17 @@ class KhmerText extends pw.Widget {
     final defaultStyle = pw.Theme.of(context).defaultTextStyle;
     _effectiveStyle = defaultStyle.merge(style);
     final fontSize = _effectiveStyle.fontSize ?? 12.0;
-    if (fontSize <= 0) {
-      throw ArgumentError.value(fontSize, 'fontSize', 'Font size must be positive.');
+    if (fontSize <= 0 || !fontSize.isFinite) {
+      throw ArgumentError.value(fontSize, 'fontSize', 'Font size must be positive and finite.');
+    }
+
+    final effectiveHeightFactor = lineHeightFactor ?? _effectiveStyle.height;
+    if (effectiveHeightFactor != null && (effectiveHeightFactor <= 0 || !effectiveHeightFactor.isFinite)) {
+      throw ArgumentError.value(
+        effectiveHeightFactor,
+        'lineHeightFactor',
+        'Line height factor must be positive and finite.',
+      );
     }
 
     _effectiveShaper = _resolveShaper();
