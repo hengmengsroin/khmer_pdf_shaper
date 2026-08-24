@@ -5,11 +5,13 @@ import 'package:khmer_pdf_shaper/src/pdf/khmer_tounicode_cmap.dart';
 
 void main() {
   group('KhmerToUnicodeCmap Tests', () {
-    test('Generates valid Adobe ToUnicode CMap with multi-character UTF-16 hex values and empty mappings', () {
+    test(
+        'Generates valid Adobe ToUnicode CMap with multi-character UTF-16 hex values and empty mappings',
+        () {
       final doc = PdfDocument();
       final mapping = <int, String>{
         1: 'ក្រ', // U+1780 U+17D2 U+179A
-        2: '',   // Secondary glyph -> explicit empty mapping <>
+        2: '', // Secondary glyph -> explicit empty mapping <>
         3: 'ក្ក', // U+1780 U+17D2 U+1780
       };
 
@@ -32,7 +34,9 @@ void main() {
       expect(output, contains('endcmap'));
     });
 
-    test('Splits entries into multiple blocks of <= 100 entries per CMap specification', () {
+    test(
+        'Splits entries into multiple blocks of <= 100 entries per CMap specification',
+        () {
       final doc = PdfDocument();
       final mapping = <int, String>{};
 

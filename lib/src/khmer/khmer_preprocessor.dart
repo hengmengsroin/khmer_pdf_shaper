@@ -35,15 +35,21 @@ class PreprocessedKhmerRun {
 
     buffer.writeln('INPUT');
     for (final c in inputChars) {
-      final hex = 'U+${c.codePoint.toRadixString(16).toUpperCase().padLeft(4, '0')}';
-      buffer.writeln('  $hex (src: ${c.sourceStart}..${c.sourceEnd}) [${c.category.shortName}]');
+      final hex =
+          'U+${c.codePoint.toRadixString(16).toUpperCase().padLeft(4, '0')}';
+      buffer.writeln(
+          '  $hex (src: ${c.sourceStart}..${c.sourceEnd}) [${c.category.shortName}]');
     }
 
     buffer.writeln('\nNORMALIZED');
     for (final c in normalizedChars) {
-      final hex = 'U+${c.codePoint.toRadixString(16).toUpperCase().padLeft(4, '0')}';
-      final synth = c.isSynthetic ? ' (synthetic from U+${c.originalCodePoints.map((x) => x.toRadixString(16).toUpperCase()).join(',')})' : '';
-      buffer.writeln('  $hex (src: ${c.sourceStart}..${c.sourceEnd}) [${c.category.shortName}]$synth');
+      final hex =
+          'U+${c.codePoint.toRadixString(16).toUpperCase().padLeft(4, '0')}';
+      final synth = c.isSynthetic
+          ? ' (synthetic from U+${c.originalCodePoints.map((x) => x.toRadixString(16).toUpperCase()).join(',')})'
+          : '';
+      buffer.writeln(
+          '  $hex (src: ${c.sourceStart}..${c.sourceEnd}) [${c.category.shortName}]$synth');
     }
 
     buffer.writeln('\nSYLLABLES');
@@ -53,16 +59,19 @@ class PreprocessedKhmerRun {
 
     buffer.writeln('\nREORDERED');
     for (final c in reorderedChars) {
-      final hex = 'U+${c.codePoint.toRadixString(16).toUpperCase().padLeft(4, '0')}';
+      final hex =
+          'U+${c.codePoint.toRadixString(16).toUpperCase().padLeft(4, '0')}';
       final featStr = c.features.toString();
-      buffer.writeln('  $hex (src: ${c.sourceStart}..${c.sourceEnd}, cluster: ${c.cluster}, feats: $featStr) [${c.category.shortName}]');
+      buffer.writeln(
+          '  $hex (src: ${c.sourceStart}..${c.sourceEnd}, cluster: ${c.cluster}, feats: $featStr) [${c.category.shortName}]');
     }
 
     return buffer.toString();
   }
 
   @override
-  String toString() => 'PreprocessedKhmerRun("${originalText.replaceAll('\n', '\\n')}", ${reorderedChars.length} chars, ${syllables.length} syllables)';
+  String toString() =>
+      'PreprocessedKhmerRun("${originalText.replaceAll('\n', '\\n')}", ${reorderedChars.length} chars, ${syllables.length} syllables)';
 }
 
 /// Main entry point for the Khmer script preprocessing pipeline.

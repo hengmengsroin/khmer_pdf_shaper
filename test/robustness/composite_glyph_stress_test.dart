@@ -34,7 +34,9 @@ void main() {
       }
     });
 
-    test('Identifies all compound glyphs in Battambang font and tests independent subsetting', () {
+    test(
+        'Identifies all compound glyphs in Battambang font and tests independent subsetting',
+        () {
       expect(compoundGids, isNotEmpty);
 
       for (final compGid in compoundGids) {
@@ -48,7 +50,8 @@ void main() {
         expect(result.originalToSubset.containsKey(compGid), isTrue);
         for (final dep in origDependencies) {
           expect(result.originalToSubset.containsKey(dep), isTrue,
-              reason: 'Compound GID $compGid dependency $dep must be pulled into subset');
+              reason:
+                  'Compound GID $compGid dependency $dep must be pulled into subset');
         }
 
         // 2. Parse subset font and verify compound glyph structure
@@ -57,13 +60,17 @@ void main() {
         final parsedCompGlyph = parsed.readGlyph(subsetCompGid);
 
         // Verify that parsed dependencies match remapped GIDs
-        final expectedRemappedDeps = origDependencies.map((d) => result.originalToSubset[d]!).toList();
+        final expectedRemappedDeps =
+            origDependencies.map((d) => result.originalToSubset[d]!).toList();
         expect(parsedCompGlyph.compounds, equals(expectedRemappedDeps),
-            reason: 'Remapped dependencies of GID $compGid in subset font must match');
+            reason:
+                'Remapped dependencies of GID $compGid in subset font must match');
       }
     });
 
-    test('Subsets all compound glyphs collectively with simple and GSUB glyphs and validates with fontTools', () {
+    test(
+        'Subsets all compound glyphs collectively with simple and GSUB glyphs and validates with fontTools',
+        () {
       final result = subsetter.subsetGlyphs([...compoundGids, 53, 54, 55, 150]);
       final parsed = TtfParser(result.fontBytes.buffer.asByteData());
 
@@ -72,7 +79,9 @@ void main() {
         final subsetCompGid = result.originalToSubset[compGid]!;
         final parsedCompGlyph = parsed.readGlyph(subsetCompGid);
 
-        final expectedRemappedDeps = origGlyph.compounds.map((d) => result.originalToSubset[d]!).toList();
+        final expectedRemappedDeps = origGlyph.compounds
+            .map((d) => result.originalToSubset[d]!)
+            .toList();
         expect(parsedCompGlyph.compounds, equals(expectedRemappedDeps));
       }
 

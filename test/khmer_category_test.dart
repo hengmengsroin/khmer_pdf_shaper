@@ -7,7 +7,8 @@ void main() {
       // 0x1780..0x1799 -> Consonant
       for (int cp = 0x1780; cp <= 0x1799; cp++) {
         expect(getKhmerCategory(cp), KhmerCategory.consonant,
-            reason: 'U+${cp.toRadixString(16).toUpperCase()} must be consonant');
+            reason:
+                'U+${cp.toRadixString(16).toUpperCase()} must be consonant');
       }
 
       // 0x179A -> Ra
@@ -16,7 +17,8 @@ void main() {
       // 0x179B..0x17A0, 0x17A2 -> Consonant
       for (int cp = 0x179B; cp <= 0x17A0; cp++) {
         expect(getKhmerCategory(cp), KhmerCategory.consonant,
-            reason: 'U+${cp.toRadixString(16).toUpperCase()} must be consonant');
+            reason:
+                'U+${cp.toRadixString(16).toUpperCase()} must be consonant');
       }
       expect(getKhmerCategory(0x17A1), KhmerCategory.placeholder,
           reason: 'U+17A1 (LA) is base-only consonant matching HarfBuzz OT_GB');
@@ -27,7 +29,8 @@ void main() {
     test('All Khmer independent vowels match HarfBuzz category', () {
       for (int cp = 0x17A3; cp <= 0x17B3; cp++) {
         expect(getKhmerCategory(cp), KhmerCategory.independentVowel,
-            reason: 'U+${cp.toRadixString(16).toUpperCase()} must be independent vowel');
+            reason:
+                'U+${cp.toRadixString(16).toUpperCase()} must be independent vowel');
       }
     });
 
@@ -38,13 +41,15 @@ void main() {
       // Above vowels I, II, Y, YY
       for (int cp = 0x17B7; cp <= 0x17BA; cp++) {
         expect(getKhmerCategory(cp), KhmerCategory.vowelAbove,
-            reason: 'U+${cp.toRadixString(16).toUpperCase()} must be vowelAbove');
+            reason:
+                'U+${cp.toRadixString(16).toUpperCase()} must be vowelAbove');
       }
 
       // Below vowels U, UU, UA
       for (int cp = 0x17BB; cp <= 0x17BD; cp++) {
         expect(getKhmerCategory(cp), KhmerCategory.vowelBelow,
-            reason: 'U+${cp.toRadixString(16).toUpperCase()} must be vowelBelow');
+            reason:
+                'U+${cp.toRadixString(16).toUpperCase()} must be vowelBelow');
       }
 
       // Pre-base vowels E, AE, AI
@@ -107,7 +112,8 @@ void main() {
       // Khmer digits 0..9 -> PLACEHOLDER
       for (int cp = 0x17E0; cp <= 0x17E9; cp++) {
         expect(getKhmerCategory(cp), KhmerCategory.placeholder,
-            reason: 'U+${cp.toRadixString(16).toUpperCase()} must be placeholder');
+            reason:
+                'U+${cp.toRadixString(16).toUpperCase()} must be placeholder');
       }
 
       // Phnaek Muan (0x17D9)

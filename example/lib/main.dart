@@ -122,7 +122,8 @@ class KhmerPdfExample extends StatelessWidget {
                 pw.Divider(),
                 KhmerText(
                   'Generated with pure Dart khmer_pdf_shaper',
-                  style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
+                  style: const pw.TextStyle(
+                      fontSize: 10, color: PdfColors.grey600),
                 ),
               ],
             ),

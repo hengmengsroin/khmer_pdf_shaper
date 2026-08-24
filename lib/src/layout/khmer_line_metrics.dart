@@ -83,14 +83,16 @@ class KhmerLineMetrics {
   }
 
   /// Calculates natural line height accommodating both Khmer and Latin fonts.
-  double calculateMixedNaturalLineHeight(double fontSize, [PdfFont? latinFont]) {
+  double calculateMixedNaturalLineHeight(double fontSize,
+      [PdfFont? latinFont]) {
     final lineAsc = calculateLineAscent(fontSize, latinFont);
     final lineDesc = calculateLineDescent(fontSize, latinFont);
     return lineAsc + lineDesc;
   }
 
   /// Calculates effective line height for mixed fonts.
-  double calculateMixedLineHeight(double fontSize, {PdfFont? latinFont, double? lineHeightFactor}) {
+  double calculateMixedLineHeight(double fontSize,
+      {PdfFont? latinFont, double? lineHeightFactor}) {
     final natural = calculateMixedNaturalLineHeight(fontSize, latinFont);
     if (lineHeightFactor != null && lineHeightFactor > 0) {
       return natural * lineHeightFactor;
@@ -99,9 +101,11 @@ class KhmerLineMetrics {
   }
 
   /// Calculates baseline offset for mixed fonts.
-  double calculateMixedBaselineOffset(double fontSize, {PdfFont? latinFont, double? lineHeightFactor}) {
+  double calculateMixedBaselineOffset(double fontSize,
+      {PdfFont? latinFont, double? lineHeightFactor}) {
     final natural = calculateMixedNaturalLineHeight(fontSize, latinFont);
-    final effective = calculateMixedLineHeight(fontSize, latinFont: latinFont, lineHeightFactor: lineHeightFactor);
+    final effective = calculateMixedLineHeight(fontSize,
+        latinFont: latinFont, lineHeightFactor: lineHeightFactor);
     final lineAsc = calculateLineAscent(fontSize, latinFont);
     return lineAsc + (effective - natural) / 2.0;
   }

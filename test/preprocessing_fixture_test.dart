@@ -10,7 +10,8 @@ void main() {
 
     setUpAll(() {
       final file = File('test/fixtures/khmer_preprocessing_fixtures.json');
-      expect(file.existsSync(), isTrue, reason: 'Preprocessing fixture file must exist');
+      expect(file.existsSync(), isTrue,
+          reason: 'Preprocessing fixture file must exist');
       final content = file.readAsStringSync();
       jsonCorpus = jsonDecode(content) as Map<String, dynamic>;
       fixtures = jsonCorpus['fixtures'] as List<dynamic>;
@@ -73,7 +74,8 @@ void main() {
 
           // Cluster monotonicity (monotone non-decreasing)
           expect(c.cluster, greaterThanOrEqualTo(lastCluster),
-              reason: 'Fixture $id cluster values must be monotone non-decreasing');
+              reason:
+                  'Fixture $id cluster values must be monotone non-decreasing');
           lastCluster = c.cluster;
 
           expect(c.hasFeature(KhmerFeature.pref), exp['pref']);

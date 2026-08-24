@@ -82,7 +82,8 @@ class KhmerRunSegmenter {
         }
 
         final runEnd = baseOffset + utf16Offset;
-        tokens.add(KhmerLayoutToken.khmer(runBuffer.toString(), runStart, runEnd));
+        tokens.add(
+            KhmerLayoutToken.khmer(runBuffer.toString(), runStart, runEnd));
       } else {
         // Latin / Digits / Punctuation run
         final runBuffer = StringBuffer();
@@ -103,7 +104,8 @@ class KhmerRunSegmenter {
         }
 
         final runEnd = baseOffset + utf16Offset;
-        tokens.add(KhmerLayoutToken.latin(runBuffer.toString(), runStart, runEnd));
+        tokens.add(
+            KhmerLayoutToken.latin(runBuffer.toString(), runStart, runEnd));
       }
     }
 

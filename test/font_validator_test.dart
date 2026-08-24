@@ -9,7 +9,8 @@ void main() {
 
     setUpAll(() {
       final file = File('assets/fonts/Battambang-Regular.ttf');
-      expect(file.existsSync(), isTrue, reason: 'Battambang font file must exist');
+      expect(file.existsSync(), isTrue,
+          reason: 'Battambang font file must exist');
       validFontBytes = file.readAsBytesSync();
     });
 
@@ -37,7 +38,8 @@ void main() {
     });
 
     test('Rejects arbitrary non-Battambang font bytes', () {
-      final nonBattambang = Uint8List.fromList(List.generate(1000, (i) => i % 256));
+      final nonBattambang =
+          Uint8List.fromList(List.generate(1000, (i) => i % 256));
       expect(
         () => FontBinaryValidator.verifySupportedFont(nonBattambang),
         throwsA(isA<UnsupportedFontException>()),

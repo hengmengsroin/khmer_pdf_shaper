@@ -15,7 +15,9 @@ void main() {
     ];
 
     for (final s in testStrings) {
-      test('Mixed-script case "$s" renders and saves with deterministic font segmentation', () async {
+      test(
+          'Mixed-script case "$s" renders and saves with deterministic font segmentation',
+          () async {
         final pdf = pw.Document();
         pdf.addPage(
           pw.Page(
@@ -41,7 +43,8 @@ void main() {
       });
     }
 
-    test('Complex mixed document containing all requested cases saves cleanly', () async {
+    test('Complex mixed document containing all requested cases saves cleanly',
+        () async {
       final pdf = pw.Document();
       pdf.addPage(
         pw.Page(
@@ -51,7 +54,8 @@ void main() {
             children: testStrings
                 .map((str) => pw.Padding(
                       padding: const pw.EdgeInsets.symmetric(vertical: 4),
-                      child: KhmerText(str, style: const pw.TextStyle(fontSize: 12)),
+                      child: KhmerText(str,
+                          style: const pw.TextStyle(fontSize: 12)),
                     ))
                 .toList(),
           ),

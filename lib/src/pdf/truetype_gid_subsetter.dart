@@ -122,7 +122,9 @@ class TrueTypeGidSubsetter {
     final originalToSubset = <int, int>{};
     final subsetToOriginal = <int, int>{};
 
-    for (int subsetGid = 0; subsetGid < sortedOriginalGids.length; subsetGid++) {
+    for (int subsetGid = 0;
+        subsetGid < sortedOriginalGids.length;
+        subsetGid++) {
       final origGid = sortedOriginalGids[subsetGid];
       glyphsInfo.add(glyphsMap[origGid]!);
       originalToSubset[origGid] = subsetGid;
@@ -144,7 +146,8 @@ class TrueTypeGidSubsetter {
     // 1. glyf table
     var glyphsTableLength = 0;
     for (final glyph in glyphsInfo) {
-      glyphsTableLength = _wordAlign(glyphsTableLength + glyph.data.lengthInBytes);
+      glyphsTableLength =
+          _wordAlign(glyphsTableLength + glyph.data.lengthInBytes);
     }
     var offset = 0;
     final glyphsTable = Uint8List(_wordAlign(glyphsTableLength));
@@ -190,7 +193,8 @@ class TrueTypeGidSubsetter {
       final start = ttf.tableOffsets[tn];
       if (start == null) continue;
       final len = ttf.tableSize[tn]!;
-      final data = Uint8List.fromList(ttf.bytes.buffer.asUint8List(start, _wordAlign(len)));
+      final data = Uint8List.fromList(
+          ttf.bytes.buffer.asUint8List(start, _wordAlign(len)));
       tables[tn] = data;
       tablesLength[tn] = len;
     }
@@ -204,7 +208,8 @@ class TrueTypeGidSubsetter {
     {
       final start = ttf.tableOffsets[TtfParser.post_table]!;
       const len = 32;
-      final data = Uint8List.fromList(ttf.bytes.buffer.asUint8List(start, _wordAlign(len)));
+      final data = Uint8List.fromList(
+          ttf.bytes.buffer.asUint8List(start, _wordAlign(len)));
       data.buffer.asByteData().setUint32(0, 0x00030000);
       tables[TtfParser.post_table] = data;
       tablesLength[TtfParser.post_table] = len;
@@ -216,7 +221,8 @@ class TrueTypeGidSubsetter {
       final hmtx = Uint8List(_wordAlign(len));
       final hmtxOffset = ttf.tableOffsets[TtfParser.hmtx_table]!;
       final hmtxData = hmtx.buffer.asByteData();
-      final origHmtx = ttf.bytes.buffer.asByteData(hmtxOffset, ttf.tableSize[TtfParser.hmtx_table]!);
+      final origHmtx = ttf.bytes.buffer
+          .asByteData(hmtxOffset, ttf.tableSize[TtfParser.hmtx_table]!);
       final numLongMetrics = ttf.numOfLongHorMetrics;
 
       for (int subsetGid = 0; subsetGid < numGlyphs; subsetGid++) {
@@ -306,7 +312,8 @@ class TrueTypeGidSubsetter {
       for (int i = 0; i < 4; i++) {
         outData.setUint8(dirIndex + i, tagChars[i]);
       }
-      outData.setUint32(dirIndex + 4, _calcTableChecksum(tableBytes.buffer.asByteData()));
+      outData.setUint32(
+          dirIndex + 4, _calcTableChecksum(tableBytes.buffer.asByteData()));
       outData.setUint32(dirIndex + 8, tableOffset);
       outData.setUint32(dirIndex + 12, actualLen);
       dirIndex += 16;

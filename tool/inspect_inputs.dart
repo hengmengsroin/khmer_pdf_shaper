@@ -82,7 +82,8 @@ class DiagnosticFullKhmerPdfFont extends PdfFont {
   int nominalDesignWidth(int origGid) {
     if (origGid >= font.glyphOffsets.length) return 0;
     final hmtxOffset = font.tableOffsets[TtfParser.hmtx_table]!;
-    final origHmtx = font.bytes.buffer.asByteData(hmtxOffset, font.tableSize[TtfParser.hmtx_table]!);
+    final origHmtx = font.bytes.buffer
+        .asByteData(hmtxOffset, font.tableSize[TtfParser.hmtx_table]!);
     final numLongMetrics = font.numOfLongHorMetrics;
     if (origGid < numLongMetrics) {
       return origHmtx.getUint16(origGid * 4);
@@ -92,7 +93,8 @@ class DiagnosticFullKhmerPdfFont extends PdfFont {
   }
 
   @override
-  PdfFontMetrics glyphMetrics(int charCode) => font.glyphInfoMap[charCode] ?? PdfFontMetrics.zero;
+  PdfFontMetrics glyphMetrics(int charCode) =>
+      font.glyphInfoMap[charCode] ?? PdfFontMetrics.zero;
   @override
   bool isRuneSupported(int charCode) => true;
 
@@ -109,7 +111,8 @@ class DiagnosticFullKhmerPdfFont extends PdfFont {
 
     final cids = <int>[];
     for (final cluster in run.clusters) {
-      final clusterText = run.originalText.substring(cluster.sourceStart, cluster.sourceEnd);
+      final clusterText =
+          run.originalText.substring(cluster.sourceStart, cluster.sourceEnd);
       for (int i = 0; i < cluster.glyphs.length; i++) {
         final g = run.glyphs[i];
         _usedOriginalGids.add(g.glyphId);
@@ -152,14 +155,16 @@ class DiagnosticFullKhmerPdfFont extends PdfFont {
   @override
   void prepare() {
     super.prepare();
-    final fullBytes = _rawBytes.buffer.asUint8List(_rawBytes.offsetInBytes, _rawBytes.lengthInBytes);
+    final fullBytes = _rawBytes.buffer
+        .asUint8List(_rawBytes.offsetInBytes, _rawBytes.lengthInBytes);
     _file.buf.putBytes(fullBytes);
     _file.params['/Length1'] = PdfNum(fullBytes.length);
 
     _widthsObject.params.values.clear();
     for (int cid = 0; cid < _nextCid; cid++) {
       final origGid = _cidToSubsetGid[cid] ?? 0;
-      final nomWidth = (nominalDesignWidth(origGid) * 1000.0 / unitsPerEm).round();
+      final nomWidth =
+          (nominalDesignWidth(origGid) * 1000.0 / unitsPerEm).round();
       _widthsObject.params.add(PdfNum(nomWidth));
     }
 
@@ -215,7 +220,8 @@ void main() async {
     'Generated with pure Dart khmer_pdf_shaper',
   ];
 
-  final scratchDir = Directory('/Users/hengmengsroin/.gemini/antigravity-ide/brain/5006973f-44c1-4e4b-919a-7d35886193a5/scratch');
+  final scratchDir = Directory(
+      '/Users/hengmengsroin/.gemini/antigravity-ide/brain/5006973f-44c1-4e4b-919a-7d35886193a5/scratch');
   if (!scratchDir.existsSync()) {
     scratchDir.createSync(recursive: true);
   }
@@ -224,7 +230,9 @@ void main() async {
   print('=== SECTION 1: CODEPOINTS & UTF-16 LENGTHS ===');
   final allStrings = [...testWords, ...exampleStrings];
   for (final s in allStrings) {
-    final codepoints = s.runes.map((r) => 'U+${r.toRadixString(16).toUpperCase().padLeft(4, '0')}').toList();
+    final codepoints = s.runes
+        .map((r) => 'U+${r.toRadixString(16).toUpperCase().padLeft(4, '0')}')
+        .toList();
     print('---');
     print('text: "$s"');
     print('codepoints: [${codepoints.join(', ')}]');
@@ -277,7 +285,8 @@ void main() async {
   }
 
   final jsonFile = File('${scratchDir.path}/dart_shaped_runs.json');
-  await jsonFile.writeAsString(const JsonEncoder.withIndent('  ').convert(shapedOutput));
+  await jsonFile
+      .writeAsString(const JsonEncoder.withIndent('  ').convert(shapedOutput));
   print('Saved shaped runs to ${jsonFile.path}');
 
   // --- SECTION 8 & 9: SUBSET FONT FIDELITY ---
@@ -307,7 +316,8 @@ void main() async {
 
     // Read subset hmtx
     final hmtxOff = subsetTtf.tableOffsets[TtfParser.hmtx_table]!;
-    final subHmtx = subsetTtf.bytes.buffer.asByteData(hmtxOff, subsetTtf.tableSize[TtfParser.hmtx_table]!);
+    final subHmtx = subsetTtf.bytes.buffer
+        .asByteData(hmtxOff, subsetTtf.tableSize[TtfParser.hmtx_table]!);
     final subAdv = subHmtx.getUint16(subsetGid * 4);
     final subLsb = subHmtx.getInt16(subsetGid * 4 + 2);
 
@@ -317,14 +327,26 @@ void main() async {
     List<int> subBbox = [0, 0, 0, 0];
 
     if (origGlyph.data.lengthInBytes >= 10) {
-      final origBd = origGlyph.data.buffer.asByteData(origGlyph.data.offsetInBytes, origGlyph.data.lengthInBytes);
+      final origBd = origGlyph.data.buffer.asByteData(
+          origGlyph.data.offsetInBytes, origGlyph.data.lengthInBytes);
       origContours = origBd.getInt16(0);
-      origBbox = [origBd.getInt16(2), origBd.getInt16(4), origBd.getInt16(6), origBd.getInt16(8)];
+      origBbox = [
+        origBd.getInt16(2),
+        origBd.getInt16(4),
+        origBd.getInt16(6),
+        origBd.getInt16(8)
+      ];
     }
     if (subGlyph.data.lengthInBytes >= 10) {
-      final subBd = subGlyph.data.buffer.asByteData(subGlyph.data.offsetInBytes, subGlyph.data.lengthInBytes);
+      final subBd = subGlyph.data.buffer
+          .asByteData(subGlyph.data.offsetInBytes, subGlyph.data.lengthInBytes);
       subContours = subBd.getInt16(0);
-      subBbox = [subBd.getInt16(2), subBd.getInt16(4), subBd.getInt16(6), subBd.getInt16(8)];
+      subBbox = [
+        subBd.getInt16(2),
+        subBd.getInt16(4),
+        subBd.getInt16(6),
+        subBd.getInt16(8)
+      ];
     }
 
     final matchesBbox = origBbox[0] == subBbox[0] &&
@@ -347,7 +369,8 @@ void main() async {
     });
   }
   final fidelityFile = File('${scratchDir.path}/subset_fidelity.json');
-  await fidelityFile.writeAsString(const JsonEncoder.withIndent('  ').convert(fidelityResults));
+  await fidelityFile.writeAsString(
+      const JsonEncoder.withIndent('  ').convert(fidelityResults));
   print('Saved subset fidelity report to ${fidelityFile.path}');
 
   // --- SECTION 10, 11, 12: GENERATE DIAGNOSTIC PDFS ---
@@ -369,7 +392,8 @@ void main() async {
         ),
       );
       final pdfBytes = await doc.save();
-      final file = File('${scratchDir.path}/word_${word}_${size.toInt()}pt_khmertext.pdf');
+      final file = File(
+          '${scratchDir.path}/word_${word}_${size.toInt()}pt_khmertext.pdf');
       await file.writeAsBytes(pdfBytes);
     }
   }
@@ -398,7 +422,8 @@ void main() async {
         ),
       ),
     );
-    await File('${scratchDir.path}/word_${word}_48pt_phase4.pdf').writeAsBytes(await docP4.save());
+    await File('${scratchDir.path}/word_${word}_48pt_phase4.pdf')
+        .writeAsBytes(await docP4.save());
 
     // Phase 4 Direct with Full Font (Path B)
     final docFull = pw.Document();
@@ -421,7 +446,8 @@ void main() async {
         ),
       ),
     );
-    await File('${scratchDir.path}/word_${word}_48pt_fullfont.pdf').writeAsBytes(await docFull.save());
+    await File('${scratchDir.path}/word_${word}_48pt_fullfont.pdf')
+        .writeAsBytes(await docFull.save());
   }
 
   // 3. Generate the exact example document PDF
@@ -505,7 +531,8 @@ void main() async {
               pw.Divider(),
               KhmerText(
                 'Generated with pure Dart khmer_pdf_shaper',
-                style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
+                style:
+                    const pw.TextStyle(fontSize: 10, color: PdfColors.grey600),
               ),
             ],
           ),
@@ -513,7 +540,8 @@ void main() async {
       },
     ),
   );
-  await File('${scratchDir.path}/example_page.pdf').writeAsBytes(await exampleDoc.save());
+  await File('${scratchDir.path}/example_page.pdf')
+      .writeAsBytes(await exampleDoc.save());
 
   print('All diagnostic PDFs generated successfully.');
 }

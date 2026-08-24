@@ -8,7 +8,9 @@ void main() {
     final validFontSizes = [1.0, 4.0, 8.0, 12.0, 48.0, 72.0, 144.0, 300.0];
 
     for (final size in validFontSizes) {
-      test('Font size $size pt renders without arithmetic overflow or TJ errors', () async {
+      test(
+          'Font size $size pt renders without arithmetic overflow or TJ errors',
+          () async {
         final pdf = pw.Document();
         pdf.addPage(
           pw.Page(

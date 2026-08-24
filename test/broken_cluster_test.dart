@@ -3,7 +3,8 @@ import 'package:khmer_pdf_shaper/src/khmer/khmer_internal.dart';
 
 void main() {
   group('Part 7: Broken-Cluster Dotted Circle Tests', () {
-    test('Isolated combining mark produces broken cluster and inserts U+25CC', () {
+    test('Isolated combining mark produces broken cluster and inserts U+25CC',
+        () {
       final run = KhmerPreprocessor.preprocess('ា');
       expect(run.syllables.length, 1);
       expect(run.syllables[0].type, KhmerSyllableType.brokenCluster);
@@ -36,7 +37,9 @@ void main() {
       expect(run.reorderedChars[1].sourceEnd, 1);
     });
 
-    test('Leading COENG + Consonant (្ក) produces broken cluster with subscript', () {
+    test(
+        'Leading COENG + Consonant (្ក) produces broken cluster with subscript',
+        () {
       final run = KhmerPreprocessor.preprocess('្ក');
       expect(run.syllables.length, 1);
       expect(run.syllables[0].type, KhmerSyllableType.brokenCluster);
@@ -53,7 +56,9 @@ void main() {
       expect(run.reorderedChars[2].hasFeature(KhmerFeature.blwf), isTrue);
     });
 
-    test('Leading COENG + RO (្រ) produces broken cluster with PREF reordering before U+25CC', () {
+    test(
+        'Leading COENG + RO (្រ) produces broken cluster with PREF reordering before U+25CC',
+        () {
       final run = KhmerPreprocessor.preprocess('្រ');
       expect(run.syllables.length, 1);
       expect(run.syllables[0].type, KhmerSyllableType.brokenCluster);
@@ -70,7 +75,9 @@ void main() {
       expect(run.reorderedChars[2].category, KhmerCategory.dottedCircle);
     });
 
-    test('Trailing COENG on consonant (ក្) is a consonant syllable (no dotted circle)', () {
+    test(
+        'Trailing COENG on consonant (ក្) is a consonant syllable (no dotted circle)',
+        () {
       final run = KhmerPreprocessor.preprocess('ក្');
       expect(run.syllables.length, 1);
       expect(run.syllables[0].type, KhmerSyllableType.consonantSyllable);

@@ -105,11 +105,13 @@ class KhmerText extends pw.Widget {
     _effectiveStyle = defaultStyle.merge(style);
     final fontSize = _effectiveStyle.fontSize ?? 12.0;
     if (fontSize <= 0 || !fontSize.isFinite) {
-      throw ArgumentError.value(fontSize, 'fontSize', 'Font size must be positive and finite.');
+      throw ArgumentError.value(
+          fontSize, 'fontSize', 'Font size must be positive and finite.');
     }
 
     final effectiveHeightFactor = lineHeightFactor ?? _effectiveStyle.height;
-    if (effectiveHeightFactor != null && (effectiveHeightFactor <= 0 || !effectiveHeightFactor.isFinite)) {
+    if (effectiveHeightFactor != null &&
+        (effectiveHeightFactor <= 0 || !effectiveHeightFactor.isFinite)) {
       throw ArgumentError.value(
         effectiveHeightFactor,
         'lineHeightFactor',
@@ -120,9 +122,8 @@ class KhmerText extends pw.Widget {
     _effectiveShaper = _resolveShaper();
     _effectiveLatinFont = _resolveLatinFont(context);
 
-    final maxWidth = constraints.hasBoundedWidth
-        ? constraints.maxWidth
-        : double.infinity;
+    final maxWidth =
+        constraints.hasBoundedWidth ? constraints.maxWidth : double.infinity;
 
     final breaker = const KhmerLineBreaker();
     final layoutResult = breaker.layout(
@@ -146,7 +147,8 @@ class KhmerText extends pw.Widget {
     if (layout == null || layout.lines.isEmpty) return;
 
     final effectiveKhmerFont = _resolveFont(context.page.pdfDocument);
-    final latinFont = _effectiveLatinFont ?? PdfFont.helvetica(context.page.pdfDocument);
+    final latinFont =
+        _effectiveLatinFont ?? PdfFont.helvetica(context.page.pdfDocument);
 
     if (_effectiveStyle.color != null) {
       context.canvas.setFillColor(_effectiveStyle.color!);

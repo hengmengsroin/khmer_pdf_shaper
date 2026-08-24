@@ -119,7 +119,8 @@ class KhmerLayoutCluster {
     final widthPts = adv * fontSize / unitsPerEm;
     final start = sourceOffset + cluster.sourceStart;
     final end = sourceOffset + cluster.sourceEnd;
-    final clusterText = originalText.substring(cluster.sourceStart, cluster.sourceEnd);
+    final clusterText =
+        originalText.substring(cluster.sourceStart, cluster.sourceEnd);
 
     final adjustedGlyphs = cluster.glyphs.map((g) {
       return PositionedGlyph(
@@ -295,7 +296,8 @@ class KhmerLayoutLine {
   });
 
   /// Groups clusters into contiguous [KhmerLayoutVisualRun]s separated by script kind.
-  List<KhmerLayoutVisualRun> getVisualRuns(int unitsPerEm, {PdfFont? latinFont}) {
+  List<KhmerLayoutVisualRun> getVisualRuns(int unitsPerEm,
+      {PdfFont? latinFont}) {
     final runs = <KhmerLayoutVisualRun>[];
     if (clusters.isEmpty) return runs;
 
@@ -306,7 +308,8 @@ class KhmerLayoutLine {
       if (currentClusters.isEmpty || currentKind == null) return;
       final text = currentClusters.map((c) => c.text).join();
       final width = currentClusters.fold(0.0, (sum, c) => sum + c.width);
-      final adv = currentClusters.fold(0.0, (sum, c) => sum + c.advanceFontUnits);
+      final adv =
+          currentClusters.fold(0.0, (sum, c) => sum + c.advanceFontUnits);
       final start = currentClusters.first.sourceStart;
       final end = currentClusters.last.sourceEnd;
 

@@ -37,17 +37,22 @@ void main() {
       );
     });
 
-    test('Zero-length glyphs (105, 106, 121, 259, 260) have 0 loca length in original font', () {
+    test(
+        'Zero-length glyphs (105, 106, 121, 259, 260) have 0 loca length in original font',
+        () {
       for (final gid in zeroLengthGids) {
         final start = ttf.glyphOffsets[gid];
         final end = (gid + 1 < ttf.glyphOffsets.length)
             ? ttf.glyphOffsets[gid + 1]
             : ttf.tableSize[TtfParser.glyf_table]!;
-        expect(end - start, equals(0), reason: 'GID $gid must be zero-length in original font');
+        expect(end - start, equals(0),
+            reason: 'GID $gid must be zero-length in original font');
       }
     });
 
-    test('Randomized subset combinations preserving zero length across 50 permutations', () {
+    test(
+        'Randomized subset combinations preserving zero length across 50 permutations',
+        () {
       final rng = Random(42);
 
       for (int iteration = 0; iteration < 50; iteration++) {
@@ -56,7 +61,9 @@ void main() {
         for (final z in zeroLengthGids) {
           if (rng.nextBool()) selected.add(z);
         }
-        if (selected.isEmpty) selected.add(zeroLengthGids[iteration % zeroLengthGids.length]);
+        if (selected.isEmpty) {
+          selected.add(zeroLengthGids[iteration % zeroLengthGids.length]);
+        }
 
         for (final s in simpleGids) {
           if (rng.nextBool()) selected.add(s);
@@ -89,7 +96,8 @@ void main() {
           expect(
             end - start,
             equals(0),
-            reason: 'Iteration $iteration: GID $zGid (subset GID $subsetGid) must remain 0 length, but had length ${end - start}',
+            reason:
+                'Iteration $iteration: GID $zGid (subset GID $subsetGid) must remain 0 length, but had length ${end - start}',
           );
 
           // Assert hmtx advance width is preserved
@@ -98,13 +106,16 @@ void main() {
           expect(
             subsetAdvance,
             equals(origAdvance),
-            reason: 'Advance width for GID $zGid must be preserved in subset font ($origAdvance vs $subsetAdvance)',
+            reason:
+                'Advance width for GID $zGid must be preserved in subset font ($origAdvance vs $subsetAdvance)',
           );
         }
       }
     });
 
-    test('Zero-length glyphs in words (កម្ពុជា, ប៉ា, សង្គ្រាម) render with exact loca zero length in PDF subset', () {
+    test(
+        'Zero-length glyphs in words (កម្ពុជា, ប៉ា, សង្គ្រាម) render with exact loca zero length in PDF subset',
+        () {
       final doc = PdfDocument();
       final page = PdfPage(doc, pageFormat: const PdfPageFormat(500, 500));
       final g = page.getGraphics();
@@ -118,11 +129,16 @@ void main() {
       }
 
       // Check registry entries
-      final gidsInUse = khmerFont.registry.entries.values.map((e) => e.originalGlyphId).toSet();
+      final gidsInUse = khmerFont.registry.entries.values
+          .map((e) => e.originalGlyphId)
+          .toSet();
       for (final zGid in [105, 106, 121, 259, 260]) {
         if (gidsInUse.contains(zGid)) {
           // Verify it is mapped cleanly
-          expect(khmerFont.registry.entries.values.any((e) => e.originalGlyphId == zGid), isTrue);
+          expect(
+              khmerFont.registry.entries.values
+                  .any((e) => e.originalGlyphId == zGid),
+              isTrue);
         }
       }
     });

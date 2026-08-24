@@ -23,7 +23,9 @@ void main() {
       breaker = const KhmerLineBreaker();
     });
 
-    test('Visual runs separate Latin and Khmer into distinct paint paths for "Invoice សួស្តី 123"', () {
+    test(
+        'Visual runs separate Latin and Khmer into distinct paint paths for "Invoice សួស្តី 123"',
+        () {
       const text = 'Invoice សួស្តី 123';
       const fontSize = 14.0;
       final dummyDoc = PdfDocument();
@@ -38,7 +40,8 @@ void main() {
 
       expect(layout.lines.length, 1);
       final line = layout.lines.first;
-      final visualRuns = line.getVisualRuns(shaper.metrics.unitsPerEm, latinFont: latinFont);
+      final visualRuns =
+          line.getVisualRuns(shaper.metrics.unitsPerEm, latinFont: latinFont);
 
       // Must produce exactly 3 visual runs:
       // Run 0: "Invoice " (kind: latin, rendered via canvas.drawString)
@@ -74,7 +77,8 @@ void main() {
         fontSize: 14.0,
         latinFont: latinFont,
       );
-      final priceRuns = layoutPrice.lines.first.getVisualRuns(shaper.metrics.unitsPerEm, latinFont: latinFont);
+      final priceRuns = layoutPrice.lines.first
+          .getVisualRuns(shaper.metrics.unitsPerEm, latinFont: latinFont);
       expect(priceRuns.length, 2);
       expect(priceRuns[0].kind, KhmerVisualRunKind.latin);
       expect(priceRuns[0].text, 'Price: \$10 ');
@@ -88,7 +92,8 @@ void main() {
         fontSize: 14.0,
         latinFont: latinFont,
       );
-      final abcRuns = layoutABC.lines.first.getVisualRuns(shaper.metrics.unitsPerEm, latinFont: latinFont);
+      final abcRuns = layoutABC.lines.first
+          .getVisualRuns(shaper.metrics.unitsPerEm, latinFont: latinFont);
       expect(abcRuns.length, 3);
       expect(abcRuns[0].kind, KhmerVisualRunKind.latin);
       expect(abcRuns[0].text, 'ABC');
@@ -98,7 +103,9 @@ void main() {
       expect(abcRuns[2].text, '123');
     });
 
-    test('Mixed-font baseline math accommodates both Khmer and Latin font metrics', () {
+    test(
+        'Mixed-font baseline math accommodates both Khmer and Latin font metrics',
+        () {
       final dummyDoc = PdfDocument();
       final latinFont = PdfFont.helvetica(dummyDoc);
       const fontSize = 16.0;
@@ -113,13 +120,15 @@ void main() {
       // Line ascent = max(khmerAscent, latinAscent)
       final khmerAscent = 2500.0 * fontSize / 2048.0;
       final latinAscent = latinFont.ascent * fontSize;
-      final expectedAscent = khmerAscent > latinAscent ? khmerAscent : latinAscent;
+      final expectedAscent =
+          khmerAscent > latinAscent ? khmerAscent : latinAscent;
       expect(layout.ascent, closeTo(expectedAscent, 0.001));
 
       // Line descent = max(khmerDescent, latinDescent)
       final khmerDescent = 1200.0 * fontSize / 2048.0;
       final latinDescent = latinFont.descent.abs() * fontSize;
-      final expectedDescent = khmerDescent > latinDescent ? khmerDescent : latinDescent;
+      final expectedDescent =
+          khmerDescent > latinDescent ? khmerDescent : latinDescent;
       expect(layout.descent, closeTo(expectedDescent, 0.001));
 
       // Total height = ascent + descent
@@ -131,7 +140,8 @@ void main() {
 
     test('Renders mixed script documents end-to-end to PDF binary', () async {
       final doc = pw.Document();
-      final khmerFont = KhmerPdfFont(doc.document, fontBytes.buffer.asByteData());
+      final khmerFont =
+          KhmerPdfFont(doc.document, fontBytes.buffer.asByteData());
 
       doc.addPage(
         pw.Page(
@@ -148,7 +158,8 @@ void main() {
                 pw.SizedBox(height: 10),
                 KhmerText.internal('កម្ពុជា@example.com', font: khmerFont),
                 pw.SizedBox(height: 10),
-                KhmerText.internal('https://example.com/ខ្មែរ', font: khmerFont),
+                KhmerText.internal('https://example.com/ខ្មែរ',
+                    font: khmerFont),
               ],
             );
           },

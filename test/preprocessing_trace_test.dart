@@ -13,13 +13,17 @@ void main() {
       expect(trace.contains('REORDERED'), isTrue);
 
       // Verify reordered sequence contains U+17C2, U+17D2, U+179A, U+1782
-      expect(run.reorderedChars.map((c) => 'U+${c.codePoint.toRadixString(16).toUpperCase()}').toList(),
+      expect(
+          run.reorderedChars
+              .map((c) => 'U+${c.codePoint.toRadixString(16).toUpperCase()}')
+              .toList(),
           ['U+17C2', 'U+17D2', 'U+179A', 'U+1782']);
     });
 
     test('Exit Case: ក្រ', () {
       final run = KhmerPreprocessor.preprocess('ក្រ');
-      expect(run.reorderedChars.map((c) => c.codePoint).toList(), [0x17D2, 0x179A, 0x1780]);
+      expect(run.reorderedChars.map((c) => c.codePoint).toList(),
+          [0x17D2, 0x179A, 0x1780]);
       expect(run.reorderedChars[0].hasFeature(KhmerFeature.pref), isTrue);
       expect(run.reorderedChars[1].hasFeature(KhmerFeature.pref), isTrue);
       expect(run.reorderedChars[2].hasFeature(KhmerFeature.pref), isFalse);
@@ -27,7 +31,8 @@ void main() {
 
     test('Exit Case: ក្ក', () {
       final run = KhmerPreprocessor.preprocess('ក្ក');
-      expect(run.reorderedChars.map((c) => c.codePoint).toList(), [0x1780, 0x17D2, 0x1780]);
+      expect(run.reorderedChars.map((c) => c.codePoint).toList(),
+          [0x1780, 0x17D2, 0x1780]);
       expect(run.reorderedChars[1].hasFeature(KhmerFeature.blwf), isTrue);
       expect(run.reorderedChars[2].hasFeature(KhmerFeature.blwf), isTrue);
     });
@@ -35,7 +40,8 @@ void main() {
     test('Exit Case: កោ', () {
       final run = KhmerPreprocessor.preprocess('កោ');
       // Decomposed U+17C4 -> U+17C1 + U+17C4, reordered -> U+17C1, U+1780, U+17C4
-      expect(run.reorderedChars.map((c) => c.codePoint).toList(), [0x17C1, 0x1780, 0x17C4]);
+      expect(run.reorderedChars.map((c) => c.codePoint).toList(),
+          [0x17C1, 0x1780, 0x17C4]);
     });
 
     test('Exit Case: ខ្ញុំ', () {

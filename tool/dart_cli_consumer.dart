@@ -48,5 +48,6 @@ void main() async {
   final outFile = File('${outDir.path}/cli_khmer_demo.pdf');
   outFile.writeAsBytesSync(bytes);
 
-  print('Successfully generated ${bytes.length} bytes PDF via Dart CLI: ${outFile.path}');
+  print(
+      'Successfully generated ${bytes.length} bytes PDF via Dart CLI: ${outFile.path}');
 }

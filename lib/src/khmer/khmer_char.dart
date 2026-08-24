@@ -70,7 +70,8 @@ class KhmerChar {
 
   @override
   String toString() {
-    final hexCp = 'U+${codePoint.toRadixString(16).toUpperCase().padLeft(4, '0')}';
+    final hexCp =
+        'U+${codePoint.toRadixString(16).toUpperCase().padLeft(4, '0')}';
     final featStr = features.toString();
     return 'KhmerChar($hexCp, src: $sourceStart..$sourceEnd, cluster: $cluster, cat: ${category.shortName}, feats: $featStr${isSynthetic ? ", synth" : ""})';
   }

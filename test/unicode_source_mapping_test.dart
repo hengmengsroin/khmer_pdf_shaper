@@ -3,7 +3,8 @@ import 'package:khmer_pdf_shaper/src/khmer/khmer_internal.dart';
 
 void main() {
   group('Part 2: UTF-16 Source Mapping Tests', () {
-    test('Decodes basic ASCII and BMP Khmer characters with 1-unit offsets', () {
+    test('Decodes basic ASCII and BMP Khmer characters with 1-unit offsets',
+        () {
       final chars = KhmerCharStream.fromText('Aក');
       expect(chars.length, 2);
 
@@ -22,7 +23,9 @@ void main() {
       expect(chars[1].category, KhmerCategory.consonant);
     });
 
-    test('Decodes SMP supplementary plane characters (surrogate pairs) correctly', () {
+    test(
+        'Decodes SMP supplementary plane characters (surrogate pairs) correctly',
+        () {
       // '😀' is U+1F600, taking 2 UTF-16 code units (0..2)
       // 'ក' is U+1780, taking 1 UTF-16 code unit (2..3)
       final chars = KhmerCharStream.fromText('😀ក');

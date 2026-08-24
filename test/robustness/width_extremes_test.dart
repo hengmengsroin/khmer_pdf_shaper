@@ -5,7 +5,9 @@ import 'package:pdf/widgets.dart' as pw;
 
 void main() {
   group('Phase 7 — Item 5: Width Extremes Tests', () {
-    test('Unconstrained width (double.infinity) measures natural single-line bounding box', () async {
+    test(
+        'Unconstrained width (double.infinity) measures natural single-line bounding box',
+        () async {
       final pdf = pw.Document();
       pdf.addPage(
         pw.Page(
@@ -24,7 +26,8 @@ void main() {
       expect(bytes, isNotEmpty);
     });
 
-    test('Exact-fit width and width just below exact fit wrap gracefully', () async {
+    test('Exact-fit width and width just below exact fit wrap gracefully',
+        () async {
       final pdf = pw.Document();
       const sample = 'សួស្តី កម្ពុជា';
 
@@ -36,12 +39,14 @@ void main() {
               // Exact fit
               pw.Container(
                 width: 80,
-                child: KhmerText(sample, style: const pw.TextStyle(fontSize: 12)),
+                child:
+                    KhmerText(sample, style: const pw.TextStyle(fontSize: 12)),
               ),
               // Just below exact fit (triggers wrap on space/cluster)
               pw.Container(
                 width: 70,
-                child: KhmerText(sample, style: const pw.TextStyle(fontSize: 12)),
+                child:
+                    KhmerText(sample, style: const pw.TextStyle(fontSize: 12)),
               ),
             ],
           ),
@@ -52,7 +57,9 @@ void main() {
       expect(bytes, isNotEmpty);
     });
 
-    test('Narrow width and width < single cluster wraps per cluster without infinite loop', () async {
+    test(
+        'Narrow width and width < single cluster wraps per cluster without infinite loop',
+        () async {
       final pdf = pw.Document();
       pdf.addPage(
         pw.Page(

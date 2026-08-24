@@ -10,17 +10,21 @@ void main() {
 
     setUpAll(() {
       final file = File('test/fixtures/khmer_golden_fixtures.json');
-      expect(file.existsSync(), isTrue, reason: 'Golden fixture file must exist');
+      expect(file.existsSync(), isTrue,
+          reason: 'Golden fixture file must exist');
       final content = file.readAsStringSync();
       jsonCorpus = jsonDecode(content) as Map<String, dynamic>;
       fixtures = jsonCorpus['fixtures'] as List<dynamic>;
     });
 
-    test('Metadata header is populated with HarfBuzz oracle details and exact provenance', () {
+    test(
+        'Metadata header is populated with HarfBuzz oracle details and exact provenance',
+        () {
       final oracle = jsonCorpus['oracle'] as Map<String, dynamic>;
       expect(oracle['harfbuzz_version'], 'hb-shape (HarfBuzz) 14.2.1');
       expect(oracle['font_name'], 'Battambang-Regular');
-      expect(oracle['font_sha256'], 'c7d867c7d4e8371f23678bd12cd1700cab1e4e37ec2860eb439766142b240bd9');
+      expect(oracle['font_sha256'],
+          'c7d867c7d4e8371f23678bd12cd1700cab1e4e37ec2860eb439766142b240bd9');
       expect(oracle['units_per_em'], 2048);
       expect(oracle['fixture_count'], 206);
       expect(fixtures.length, 206);
@@ -33,13 +37,17 @@ void main() {
       expect(shapingConfig['features'], contains('blwf'));
     });
 
-    test('Bundled Battambang font SHA256 exactly matches golden oracle font SHA256', () {
-      final fontBytes = File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
+    test(
+        'Bundled Battambang font SHA256 exactly matches golden oracle font SHA256',
+        () {
+      final fontBytes =
+          File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
       final oracle = jsonCorpus['oracle'] as Map<String, dynamic>;
       final expectedSha = oracle['font_sha256'] as String;
 
       expect(FontBinaryValidator.battambangRegularSha256, equals(expectedSha));
-      expect(() => FontBinaryValidator.verifySupportedFont(fontBytes), returnsNormally);
+      expect(() => FontBinaryValidator.verifySupportedFont(fontBytes),
+          returnsNormally);
     });
 
     test('All required categories are represented', () {
@@ -68,7 +76,8 @@ void main() {
       };
 
       for (final cat in requiredCategories) {
-        expect(categories.contains(cat), isTrue, reason: 'Category $cat must be present');
+        expect(categories.contains(cat), isTrue,
+            reason: 'Category $cat must be present');
       }
     });
 
@@ -76,7 +85,8 @@ void main() {
       for (final f in fixtures) {
         final id = f['id'] as String;
         final glyphs = f['harfbuzz']['glyphs'] as List<dynamic>;
-        expect(glyphs, isNotEmpty, reason: 'Fixture $id must have shaped glyphs');
+        expect(glyphs, isNotEmpty,
+            reason: 'Fixture $id must have shaped glyphs');
 
         for (final g in glyphs) {
           final gid = g['glyph_id'] as int;
@@ -86,9 +96,12 @@ void main() {
           final xOff = (g['x_offset'] as num).toDouble();
           final yOff = (g['y_offset'] as num).toDouble();
 
-          expect(gid, greaterThanOrEqualTo(0), reason: 'Glyph ID in $id must be non-negative');
-          expect(cluster, greaterThanOrEqualTo(0), reason: 'Cluster in $id must be non-negative');
-          expect(xAdv, greaterThanOrEqualTo(0.0), reason: 'X-advance in $id must be non-negative');
+          expect(gid, greaterThanOrEqualTo(0),
+              reason: 'Glyph ID in $id must be non-negative');
+          expect(cluster, greaterThanOrEqualTo(0),
+              reason: 'Cluster in $id must be non-negative');
+          expect(xAdv, greaterThanOrEqualTo(0.0),
+              reason: 'X-advance in $id must be non-negative');
           expect(yAdv, 0.0, reason: 'Y-advance in Battambang must be 0');
           expect(xOff, 0.0, reason: 'X-offset in Battambang must be 0');
           expect(yOff, 0.0, reason: 'Y-offset in Battambang must be 0');

@@ -38,7 +38,8 @@ class MetricsTable {
     // 1. Parse head table
     headReader.seek(0);
     headReader.skip(4); // headMajor (2), headMinor (2)
-    headReader.skip(14); // fontRevision (4), checkSumAdjustment (4), magicNumber (4), flags (2)
+    headReader.skip(
+        14); // fontRevision (4), checkSumAdjustment (4), magicNumber (4), flags (2)
     final unitsPerEm = headReader.readUint16();
 
     // 2. Parse maxp table

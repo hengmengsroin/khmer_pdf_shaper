@@ -4,10 +4,17 @@ import 'package:khmer_pdf_shaper/src/gsub/gsub_tables.dart';
 
 void main() {
   group('Part 9: GSUB Type 6 Format 3 ChainContextSubst Tests', () {
-    test('Matches backtrack, input, and lookahead coverage sequences correctly', () {
-      final backtrackCov = [CoverageFormat1([10])];
-      final inputCov = [CoverageFormat1([20])];
-      final lookaheadCov = [CoverageFormat1([30])];
+    test('Matches backtrack, input, and lookahead coverage sequences correctly',
+        () {
+      final backtrackCov = [
+        CoverageFormat1([10])
+      ];
+      final inputCov = [
+        CoverageFormat1([20])
+      ];
+      final lookaheadCov = [
+        CoverageFormat1([30])
+      ];
 
       final chain = ChainContextSubstFormat3(
         backtrackCoverages: backtrackCov,

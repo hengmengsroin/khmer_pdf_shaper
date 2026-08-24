@@ -42,7 +42,9 @@ void main() {
       expect(line1.sourceEnd, 14);
     });
 
-    test('Normalizes \\r\\n to single forced line break for "សួស្តី\\r\\nកម្ពុជា"', () {
+    test(
+        'Normalizes \\r\\n to single forced line break for "សួស្តី\\r\\nកម្ពុជា"',
+        () {
       const text = 'សួស្តី\r\nកម្ពុជា';
       final layout = breaker.layout(
         text: text,

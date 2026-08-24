@@ -5,7 +5,8 @@ import 'package:pdf/widgets.dart' as pw;
 
 void main() {
   group('Phase 7 — Item 2: Multi-Page Document Stress Tests', () {
-    test('10-page document with repeated headers, footers, and wrapped blocks', () async {
+    test('10-page document with repeated headers, footers, and wrapped blocks',
+        () async {
       final pdf = pw.Document();
 
       for (int pageNum = 1; pageNum <= 10; pageNum++) {
@@ -22,11 +23,13 @@ void main() {
                     children: [
                       KhmerText(
                         'ព្រះរាជាណាចក្រកម្ពុជា - ក្រសួងព័ត៌មាន',
-                        style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey700),
+                        style: const pw.TextStyle(
+                            fontSize: 10, color: PdfColors.grey700),
                       ),
                       KhmerText(
                         'ទំព័រទី $pageNum / 10',
-                        style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey700),
+                        style: const pw.TextStyle(
+                            fontSize: 10, color: PdfColors.grey700),
                       ),
                     ],
                   ),
@@ -36,14 +39,16 @@ void main() {
                   // Section Title
                   KhmerText(
                     'ជំពូកទី $pageNum ៖ ការវិវត្តនៃបច្ចេកវិទ្យាព័ត៌មានវិទ្យានៅកម្ពុជា',
-                    style: const pw.TextStyle(fontSize: 16, color: PdfColors.blue900),
+                    style: const pw.TextStyle(
+                        fontSize: 16, color: PdfColors.blue900),
                   ),
                   pw.SizedBox(height: 8),
 
                   // Mixed-script block
                   KhmerText(
                     'របាយការណ៍បច្ចេកទេស #KH-$pageNum-2026 | Status: បានអនុម័ត (Approved)',
-                    style: const pw.TextStyle(fontSize: 12, color: PdfColors.green800),
+                    style: const pw.TextStyle(
+                        fontSize: 12, color: PdfColors.green800),
                   ),
                   pw.SizedBox(height: 12),
 
@@ -63,7 +68,8 @@ void main() {
                   pw.Divider(thickness: 0.5),
                   KhmerText(
                     'រក្សាសិទ្ធិគ្រប់យ៉ាង © 2026 ក្រសួងព័ត៌មាន',
-                    style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey600),
+                    style: const pw.TextStyle(
+                        fontSize: 9, color: PdfColors.grey600),
                   ),
                 ],
               );
@@ -77,7 +83,8 @@ void main() {
       expect(bytes.length, greaterThan(5000));
     });
 
-    test('100-page document stress generation with single shared font', () async {
+    test('100-page document stress generation with single shared font',
+        () async {
       final pdf = pw.Document();
       final stopwatch = Stopwatch()..start();
 

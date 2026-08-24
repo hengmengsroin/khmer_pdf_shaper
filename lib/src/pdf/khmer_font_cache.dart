@@ -24,7 +24,8 @@ class KhmerFontCache {
   }
 
   /// Returns or creates a document-scoped [KhmerPdfFont] strictly tied to [document].
-  static KhmerPdfFont getOrCreateFont(PdfDocument document, [ByteData? fontBytes]) {
+  static KhmerPdfFont getOrCreateFont(PdfDocument document,
+      [ByteData? fontBytes]) {
     var font = _documentFonts[document];
     if (font == null) {
       final bytes = fontBytes ?? ByteData.sublistView(bundledFontBytes);

@@ -17,7 +17,8 @@ void main() {
       shaper = BattambangShaper.fromBytes(fontBytes);
     });
 
-    test('Preserves ZWJ (U+200D) in /ToUnicode semantic cluster mapping', () async {
+    test('Preserves ZWJ (U+200D) in /ToUnicode semantic cluster mapping',
+        () async {
       const textWithZwj = 'ក\u200Dខ';
       final run = shaper.shapeText(textWithZwj);
 
@@ -31,11 +32,13 @@ void main() {
       expect(pdfBytes, isNotEmpty);
 
       // Verify that the joiner cluster is preserved with U+200D
-      final allTexts = font.registry.entries.values.map((e) => e.unicodeText).toList();
+      final allTexts =
+          font.registry.entries.values.map((e) => e.unicodeText).toList();
       expect(allTexts, contains('\u200D'));
     });
 
-    test('Preserves ZWNJ (U+200C) in /ToUnicode semantic cluster mapping', () async {
+    test('Preserves ZWNJ (U+200C) in /ToUnicode semantic cluster mapping',
+        () async {
       const textWithZwnj = 'ក\u200Cខ';
       final run = shaper.shapeText(textWithZwnj);
 
@@ -48,7 +51,8 @@ void main() {
       final pdfBytes = await doc.save();
       expect(pdfBytes, isNotEmpty);
 
-      final allTexts = font.registry.entries.values.map((e) => e.unicodeText).toList();
+      final allTexts =
+          font.registry.entries.values.map((e) => e.unicodeText).toList();
       expect(allTexts, contains('\u200C'));
     });
   });

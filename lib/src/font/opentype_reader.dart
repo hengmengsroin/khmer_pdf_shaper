@@ -88,7 +88,8 @@ class OpenTypeFont {
   ByteReader getTableReader(String tag) {
     final record = tables[tag];
     if (record == null) {
-      throw FontParseException('Required OpenType table "$tag" not found in font.');
+      throw FontParseException(
+          'Required OpenType table "$tag" not found in font.');
     }
     return ByteReader(
       Uint8List.sublistView(
@@ -103,7 +104,8 @@ class OpenTypeFont {
   Uint8List getTableBytes(String tag) {
     final record = tables[tag];
     if (record == null) {
-      throw FontParseException('Required OpenType table "$tag" not found in font.');
+      throw FontParseException(
+          'Required OpenType table "$tag" not found in font.');
     }
     return Uint8List.sublistView(
       fontBytes,

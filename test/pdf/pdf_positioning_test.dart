@@ -20,7 +20,9 @@ void main() {
       shaper = BattambangShaper.fromBytes(fontBytes);
     });
 
-    test('Decouples nominal font metrics in /W from shaped advance adjustments in TJ', () {
+    test(
+        'Decouples nominal font metrics in /W from shaped advance adjustments in TJ',
+        () {
       final doc = PdfDocument();
       final page = PdfPage(doc);
       final g = page.getGraphics();
@@ -46,12 +48,15 @@ void main() {
       expect(contentStr, contains('ET'));
     });
 
-    test('Total run advance width in PDF points matches shaped design scale exactly', () {
+    test(
+        'Total run advance width in PDF points matches shaped design scale exactly',
+        () {
       const fontSize = 16.0;
       final run = shaper.shapeText('សួស្តី');
 
       // Expected PDF width in points = totalAdvanceWidth * fontSize / unitsPerEm
-      final expectedPdfWidth = run.totalAdvanceWidth * fontSize / run.unitsPerEm;
+      final expectedPdfWidth =
+          run.totalAdvanceWidth * fontSize / run.unitsPerEm;
       expect(expectedPdfWidth, greaterThan(0));
 
       // Each cluster advance matches

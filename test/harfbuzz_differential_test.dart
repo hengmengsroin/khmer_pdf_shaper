@@ -24,7 +24,8 @@ class DiagnosticTraceLogger implements GsubTraceLogger {
   ) {
     final beforeGids = bufferBefore.map((g) => g.glyphId).toList();
     final afterGids = bufferAfter.map((g) => g.glyphId).toList();
-    lookupLogs.add('Lookup $lookupIndex ($featureTag) @ $position: $beforeGids -> $afterGids');
+    lookupLogs.add(
+        'Lookup $lookupIndex ($featureTag) @ $position: $beforeGids -> $afterGids');
   }
 }
 
@@ -35,17 +36,21 @@ void main() {
     late List<dynamic> fixtures;
 
     setUpAll(() {
-      final fontBytes = File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
+      final fontBytes =
+          File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
       shaper = BattambangShaper.fromBytes(fontBytes);
 
       final file = File('test/fixtures/khmer_golden_fixtures.json');
-      expect(file.existsSync(), isTrue, reason: 'Golden fixture file must exist');
+      expect(file.existsSync(), isTrue,
+          reason: 'Golden fixture file must exist');
       final content = file.readAsStringSync();
       jsonCorpus = jsonDecode(content) as Map<String, dynamic>;
       fixtures = jsonCorpus['fixtures'] as List<dynamic>;
     });
 
-    test('All 206 golden fixtures match HarfBuzz in glyph count, IDs, order, clusters, and full 2D metrics', () {
+    test(
+        'All 206 golden fixtures match HarfBuzz in glyph count, IDs, order, clusters, and full 2D metrics',
+        () {
       int passed = 0;
       final failures = <String>[];
 
@@ -90,7 +95,9 @@ void main() {
             }
 
             // 4. xAdvance check
-            if ((actual.xAdvance - (expected['x_advance'] as num).toDouble()).abs() > 0.001) {
+            if ((actual.xAdvance - (expected['x_advance'] as num).toDouble())
+                    .abs() >
+                0.001) {
               matches = false;
               failureReasons.add(
                 'Glyph $i xAdvance mismatch: actual ${actual.xAdvance} != expected ${expected['x_advance']}',
@@ -102,7 +109,8 @@ void main() {
                 actual.xOffset != (expected['x_offset'] as num).toDouble() ||
                 actual.yOffset != (expected['y_offset'] as num).toDouble()) {
               matches = false;
-              failureReasons.add('2D placement offset or yAdvance mismatch at glyph $i');
+              failureReasons
+                  .add('2D placement offset or yAdvance mismatch at glyph $i');
             }
           }
         }
@@ -110,18 +118,21 @@ void main() {
         if (matches) {
           passed++;
         } else {
-          failures.add('Fixture "$id" ("$text"):\n  ${failureReasons.join('\n  ')}');
+          failures.add(
+              'Fixture "$id" ("$text"):\n  ${failureReasons.join('\n  ')}');
         }
       }
 
       if (failures.isNotEmpty) {
-        fail('Failures (${failures.length} / ${fixtures.length}):\n${failures.join('\n\n')}');
+        fail(
+            'Failures (${failures.length} / ${fixtures.length}):\n${failures.join('\n\n')}');
       }
 
       expect(
         passed,
         fixtures.length,
-        reason: 'All ${fixtures.length} fixtures must match HarfBuzz across all 8 fields',
+        reason:
+            'All ${fixtures.length} fixtures must match HarfBuzz across all 8 fields',
       );
     });
 
@@ -136,13 +147,15 @@ void main() {
       final r2 = shaper.shapeText('ក្\u200dក');
       expect(r2.glyphs.map((g) => g.glyphId).toList(), [53, 294, 259, 53]);
       expect(r2.glyphs.map((g) => g.cluster).toList(), [0, 0, 0, 3]);
-      expect(r2.glyphs.map((g) => g.xAdvance).toList(), [1221.0, 0.0, 0.0, 1221.0]);
+      expect(r2.glyphs.map((g) => g.xAdvance).toList(),
+          [1221.0, 0.0, 0.0, 1221.0]);
 
       // 3. ក‌េ (joiner_base_zwnj_vowel)
       final r3 = shaper.shapeText('ក\u200cេ');
       expect(r3.glyphs.map((g) => g.glyphId).toList(), [53, 259, 110, 272]);
       expect(r3.glyphs.map((g) => g.cluster).toList(), [0, 1, 1, 1]);
-      expect(r3.glyphs.map((g) => g.xAdvance).toList(), [1221.0, 0.0, 610.0, 1217.0]);
+      expect(r3.glyphs.map((g) => g.xAdvance).toList(),
+          [1221.0, 0.0, 610.0, 1217.0]);
 
       // 4. ឥ‍ក (joiner_indep_vowel_zwj)
       final r4 = shaper.shapeText('ឥ\u200dក');
@@ -152,9 +165,11 @@ void main() {
 
       // 5. ក្‌្ក (invalid_coeng_zwnj_coeng)
       final r5 = shaper.shapeText('ក្\u200c្ក');
-      expect(r5.glyphs.map((g) => g.glyphId).toList(), [53, 294, 259, 272, 295]);
+      expect(
+          r5.glyphs.map((g) => g.glyphId).toList(), [53, 294, 259, 272, 295]);
       expect(r5.glyphs.map((g) => g.cluster).toList(), [0, 0, 2, 2, 2]);
-      expect(r5.glyphs.map((g) => g.xAdvance).toList(), [1221.0, 0.0, 0.0, 1217.0, 0.0]);
+      expect(r5.glyphs.map((g) => g.xAdvance).toList(),
+          [1221.0, 0.0, 0.0, 1217.0, 0.0]);
     });
 
     test('Stage-by-stage tracing captures intermediate layout transitions', () {

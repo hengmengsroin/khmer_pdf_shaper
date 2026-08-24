@@ -17,9 +17,11 @@ void main() {
       fontBytes = file.readAsBytesSync();
     });
 
-    test('KhmerText renders inside Column, Row, Container, Padding, Expanded', () async {
+    test('KhmerText renders inside Column, Row, Container, Padding, Expanded',
+        () async {
       final doc = pw.Document();
-      final khmerFont = KhmerPdfFont(doc.document, fontBytes.buffer.asByteData());
+      final khmerFont =
+          KhmerPdfFont(doc.document, fontBytes.buffer.asByteData());
 
       doc.addPage(
         pw.Page(
@@ -28,7 +30,8 @@ void main() {
             return pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Text('English Header', style: const pw.TextStyle(fontSize: 16)),
+                pw.Text('English Header',
+                    style: const pw.TextStyle(fontSize: 16)),
                 pw.SizedBox(height: 10),
                 KhmerText.internal(
                   'សួស្តី ព្រះរាជាណាចក្រកម្ពុជា',
@@ -42,7 +45,8 @@ void main() {
                   child: KhmerText.internal(
                     'ខ្ញុំស្រឡាញ់ភាសាខ្មែរ',
                     font: khmerFont,
-                    style: const pw.TextStyle(fontSize: 16, color: PdfColors.blue),
+                    style:
+                        const pw.TextStyle(fontSize: 16, color: PdfColors.blue),
                   ),
                 ),
                 pw.SizedBox(height: 10),
@@ -57,7 +61,8 @@ void main() {
                           style: const pw.TextStyle(fontSize: 14),
                         ),
                       ),
-                      pw.Container(width: 40, height: 20, color: PdfColors.amber),
+                      pw.Container(
+                          width: 40, height: 20, color: PdfColors.amber),
                     ],
                   ),
                 ),
@@ -74,7 +79,8 @@ void main() {
 
     test('KhmerText renders inside MultiPage document', () async {
       final doc = pw.Document();
-      final khmerFont = KhmerPdfFont(doc.document, fontBytes.buffer.asByteData());
+      final khmerFont =
+          KhmerPdfFont(doc.document, fontBytes.buffer.asByteData());
 
       doc.addPage(
         pw.MultiPage(
@@ -104,7 +110,8 @@ void main() {
 
     test('Supports left, center, right alignment', () async {
       final doc = pw.Document();
-      final khmerFont = KhmerPdfFont(doc.document, fontBytes.buffer.asByteData());
+      final khmerFont =
+          KhmerPdfFont(doc.document, fontBytes.buffer.asByteData());
 
       doc.addPage(
         pw.Page(
@@ -151,13 +158,17 @@ void main() {
       expect(pdfBytes.isNotEmpty, isTrue);
     });
 
-    test('KhmerFontCache manages document-scoped font resolution correctly', () {
+    test('KhmerFontCache manages document-scoped font resolution correctly',
+        () {
       final doc1 = PdfDocument();
       final doc2 = PdfDocument();
 
-      final font1 = KhmerFontCache.getOrCreateFont(doc1, fontBytes.buffer.asByteData());
-      final font1Again = KhmerFontCache.getOrCreateFont(doc1, fontBytes.buffer.asByteData());
-      final font2 = KhmerFontCache.getOrCreateFont(doc2, fontBytes.buffer.asByteData());
+      final font1 =
+          KhmerFontCache.getOrCreateFont(doc1, fontBytes.buffer.asByteData());
+      final font1Again =
+          KhmerFontCache.getOrCreateFont(doc1, fontBytes.buffer.asByteData());
+      final font2 =
+          KhmerFontCache.getOrCreateFont(doc2, fontBytes.buffer.asByteData());
 
       // Same document reuses the exact same font instance
       expect(identical(font1, font1Again), isTrue);

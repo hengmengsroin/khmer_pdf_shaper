@@ -20,11 +20,15 @@ void main() {
 
       final fixtureFile = File('test/fixtures/khmer_golden_fixtures.json');
       expect(fixtureFile.existsSync(), isTrue);
-      final jsonMap = jsonDecode(fixtureFile.readAsStringSync()) as Map<String, dynamic>;
-      fixtures = (jsonMap['fixtures'] as List<dynamic>).cast<Map<String, dynamic>>();
+      final jsonMap =
+          jsonDecode(fixtureFile.readAsStringSync()) as Map<String, dynamic>;
+      fixtures =
+          (jsonMap['fixtures'] as List<dynamic>).cast<Map<String, dynamic>>();
     });
 
-    test('Renders all 206 golden fixtures across multiple PDF pages with single font reuse', () async {
+    test(
+        'Renders all 206 golden fixtures across multiple PDF pages with single font reuse',
+        () async {
       final doc = PdfDocument();
       final font = KhmerPdfFont(doc, fontBytes.buffer.asByteData());
 
@@ -42,7 +46,8 @@ void main() {
 
         final word = fixtures[i]['text'] as String;
         final run = shaper.shapeText(word);
-        font.drawShapedRun(currentPage!, currentGraphics!, run, x: 50, y: y, fontSize: 14);
+        font.drawShapedRun(currentPage!, currentGraphics!, run,
+            x: 50, y: y, fontSize: 14);
         y -= 24;
       }
 

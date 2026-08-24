@@ -83,7 +83,8 @@ class KhmerPdfFont extends PdfFont {
   int nominalDesignWidth(int origGid) {
     if (origGid >= font.glyphOffsets.length) return 0;
     final hmtxOffset = font.tableOffsets[TtfParser.hmtx_table]!;
-    final origHmtx = font.bytes.buffer.asByteData(hmtxOffset, font.tableSize[TtfParser.hmtx_table]!);
+    final origHmtx = font.bytes.buffer
+        .asByteData(hmtxOffset, font.tableSize[TtfParser.hmtx_table]!);
     final numLongMetrics = font.numOfLongHorMetrics;
     if (origGid < numLongMetrics) {
       return origHmtx.getUint16(origGid * 4);
@@ -115,7 +116,8 @@ class KhmerPdfFont extends PdfFont {
     // 1. Semantic cluster analysis & CID allocation
     final glyphCodes = <PdfGlyphCode>[];
     for (final cluster in run.clusters) {
-      final clusterText = run.originalText.substring(cluster.sourceStart, cluster.sourceEnd);
+      final clusterText =
+          run.originalText.substring(cluster.sourceStart, cluster.sourceEnd);
       for (int i = 0; i < cluster.glyphs.length; i++) {
         final g = cluster.glyphs[i];
         _usedOriginalGids.add(g.glyphId);
@@ -172,7 +174,8 @@ class KhmerPdfFont extends PdfFont {
     _cidToUnicode.clear();
 
     for (final entry in _registry.entries.values) {
-      final subsetGid = subsetResult.originalToSubset[entry.originalGlyphId] ?? 0;
+      final subsetGid =
+          subsetResult.originalToSubset[entry.originalGlyphId] ?? 0;
       _cidToSubsetGid[entry.cid] = subsetGid;
       _cidToUnicode[entry.cid] = entry.unicodeText;
     }
@@ -181,7 +184,8 @@ class KhmerPdfFont extends PdfFont {
     _widthsObject.params.values.clear();
     for (int cid = 0; cid <= _registry.maxCid; cid++) {
       final origGid = _registry.getByCid(cid)?.originalGlyphId ?? 0;
-      final nomWidth = (nominalDesignWidth(origGid) * 1000.0 / unitsPerEm).round();
+      final nomWidth =
+          (nominalDesignWidth(origGid) * 1000.0 / unitsPerEm).round();
       _widthsObject.params.add(PdfNum(nomWidth));
     }
 

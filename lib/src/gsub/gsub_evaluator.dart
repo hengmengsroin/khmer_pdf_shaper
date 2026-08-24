@@ -46,7 +46,8 @@ class GsubLookup {
   }
 
   /// Attempts to apply any subtable at [position] in [buffer].
-  bool apply(List<ShapingGlyph> buffer, int position, LookupApplier applyLookup) {
+  bool apply(
+      List<ShapingGlyph> buffer, int position, LookupApplier applyLookup) {
     for (final subtable in subtables) {
       if (subtable.apply(buffer, position, applyLookup)) {
         return true;
@@ -70,7 +71,8 @@ class GsubFeature {
 /// Tracer callback for stage-by-stage debugging.
 abstract class GsubTraceLogger {
   void logStage(String stageName, List<ShapingGlyph> buffer);
-  void logLookup(int lookupIndex, String featureTag, int position, List<ShapingGlyph> bufferBefore, List<ShapingGlyph> bufferAfter);
+  void logLookup(int lookupIndex, String featureTag, int position,
+      List<ShapingGlyph> bufferBefore, List<ShapingGlyph> bufferAfter);
 }
 
 /// Main GSUB table parser and layout evaluator for Khmer shaping.
@@ -113,7 +115,8 @@ class GsubTable {
     }
 
     if (khmrScriptOffset == null || khmrDefaultLangSysOffset == null) {
-      throw FontParseException('Script "khmr" with DefaultLangSys not found in GSUB table.');
+      throw FontParseException(
+          'Script "khmr" with DefaultLangSys not found in GSUB table.');
     }
 
     final langSysReader = scriptListReader.slice(khmrDefaultLangSysOffset);
@@ -179,10 +182,12 @@ class GsubTable {
     int depth = 0,
   ]) {
     if (depth > 8) {
-      throw FontParseException('Recursive GSUB lookup limit exceeded at lookup $lookupIndex');
+      throw FontParseException(
+          'Recursive GSUB lookup limit exceeded at lookup $lookupIndex');
     }
     if (lookupIndex < 0 || lookupIndex >= lookups.length) {
-      throw FontParseException('Invalid GSUB lookup index: $lookupIndex (total ${lookups.length})');
+      throw FontParseException(
+          'Invalid GSUB lookup index: $lookupIndex (total ${lookups.length})');
     }
 
     final lookup = lookups[lookupIndex];
@@ -241,7 +246,8 @@ class GsubTable {
           continue;
         }
 
-        final beforeState = tracer != null ? buffer.map((g) => g.clone()).toList() : null;
+        final beforeState =
+            tracer != null ? buffer.map((g) => g.clone()).toList() : null;
         final applied = applyLookup(lookupIndex, buffer, pos);
 
         if (applied && tracer != null && beforeState != null) {

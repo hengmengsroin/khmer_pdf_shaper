@@ -67,7 +67,8 @@ class BattambangShaper {
     final buffer = <ShapingGlyph>[];
     for (final char in run.reorderedChars) {
       final cp = char.codePoint;
-      final isIgnorable = (cp == 0x200C || cp == 0x200D || cp == 0x200B || cp == 0xFEFF);
+      final isIgnorable =
+          (cp == 0x200C || cp == 0x200D || cp == 0x200B || cp == 0xFEFF);
       final initialGid = cmap.glyphIdForCodePoint(cp);
 
       buffer.add(ShapingGlyph(

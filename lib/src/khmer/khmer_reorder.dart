@@ -30,7 +30,8 @@ class KhmerReorderer {
           // If broken cluster is adjacent to a previous syllable/joiner without whitespace,
           // HarfBuzz merge_clusters merges it with the preceding cluster ID.
           int brokenClusterId = result[sylStart].cluster;
-          if (sylStart > 0 && result[sylStart - 1].category != KhmerCategory.other) {
+          if (sylStart > 0 &&
+              result[sylStart - 1].category != KhmerCategory.other) {
             brokenClusterId = result[sylStart - 1].cluster;
           }
 

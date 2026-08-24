@@ -26,7 +26,8 @@ abstract class CoverageTable {
     final format = reader.readUint16();
     if (format == 1) {
       final glyphCount = reader.readUint16();
-      final glyphArray = List<int>.generate(glyphCount, (_) => reader.readUint16());
+      final glyphArray =
+          List<int>.generate(glyphCount, (_) => reader.readUint16());
       return CoverageFormat1(glyphArray);
     } else if (format == 2) {
       final rangeCount = reader.readUint16();

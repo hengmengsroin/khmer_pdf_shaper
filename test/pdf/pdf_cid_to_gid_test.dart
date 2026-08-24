@@ -9,9 +9,9 @@ void main() {
       final doc = PdfDocument();
       final mapping = <int, int>{
         0: 0,
-        1: 5,   // CID 1 -> subset GID 5
-        2: 12,  // CID 2 -> subset GID 12
-        3: 5,   // CID 3 -> subset GID 5 (repeated physical GID)
+        1: 5, // CID 1 -> subset GID 5
+        2: 12, // CID 2 -> subset GID 12
+        3: 5, // CID 3 -> subset GID 5 (repeated physical GID)
       };
 
       final stream = KhmerCidToGidStream(
@@ -26,10 +26,10 @@ void main() {
       expect(bytes.length, equals(8)); // (3 + 1) * 2 = 8 bytes
 
       final byteData = bytes.buffer.asByteData();
-      expect(byteData.getUint16(0), equals(0));   // CID 0 -> GID 0
-      expect(byteData.getUint16(2), equals(5));   // CID 1 -> GID 5
-      expect(byteData.getUint16(4), equals(12));  // CID 2 -> GID 12
-      expect(byteData.getUint16(6), equals(5));   // CID 3 -> GID 5
+      expect(byteData.getUint16(0), equals(0)); // CID 0 -> GID 0
+      expect(byteData.getUint16(2), equals(5)); // CID 1 -> GID 5
+      expect(byteData.getUint16(4), equals(12)); // CID 2 -> GID 12
+      expect(byteData.getUint16(6), equals(5)); // CID 3 -> GID 5
     });
 
     test('Defaults unmapped CIDs up to maxCid to GID 0', () {

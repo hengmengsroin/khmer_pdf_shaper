@@ -28,7 +28,9 @@ void main() {
       expect(parsed.glyphOffsets.length, equals(3)); // GID 0, 53, 205
     });
 
-    test('Recursively resolves compound glyph dependencies (e.g. GID 332 depends on 280)', () {
+    test(
+        'Recursively resolves compound glyph dependencies (e.g. GID 332 depends on 280)',
+        () {
       // Original font GID 332 is a compound glyph referencing GID 280
       final origGlyph332 = ttf.readGlyph(332);
       expect(origGlyph332.compounds, contains(280));
@@ -49,7 +51,8 @@ void main() {
       expect(parsedGlyph332.compounds, contains(subsetGid280));
     });
 
-    test('Resolves multiple compound dependencies (335 -> 329, 347 -> 303)', () {
+    test('Resolves multiple compound dependencies (335 -> 329, 347 -> 303)',
+        () {
       final result = subsetter.subsetGlyphs([335, 347]);
       expect(result.originalToSubset.containsKey(329), isTrue);
       expect(result.originalToSubset.containsKey(303), isTrue);
@@ -58,8 +61,35 @@ void main() {
       expect(parsed.glyphOffsets.length, equals(5)); // 0, 303, 329, 335, 347
     });
 
-    test('Produces valid TrueType font binary parseable by TtfParser with correct metrics', () {
-      final requested = [53, 54, 55, 77, 84, 110, 111, 121, 122, 130, 136, 162, 205, 207, 277, 282, 284, 285, 295, 297, 302, 307, 313, 329];
+    test(
+        'Produces valid TrueType font binary parseable by TtfParser with correct metrics',
+        () {
+      final requested = [
+        53,
+        54,
+        55,
+        77,
+        84,
+        110,
+        111,
+        121,
+        122,
+        130,
+        136,
+        162,
+        205,
+        207,
+        277,
+        282,
+        284,
+        285,
+        295,
+        297,
+        302,
+        307,
+        313,
+        329
+      ];
       final result = subsetter.subsetGlyphs(requested);
 
       expect(result.fontBytes.length, isPositive);
@@ -68,10 +98,13 @@ void main() {
       final parsed = TtfParser(result.fontBytes.buffer.asByteData());
       expect(parsed.fontName, isNotEmpty);
       expect(parsed.unitsPerEm, equals(2048));
-      expect(parsed.glyphOffsets.length, equals(requested.length + 1)); // +1 for GID 0
+      expect(parsed.glyphOffsets.length,
+          equals(requested.length + 1)); // +1 for GID 0
     });
 
-    test('Correctly preserves zero-length spacing glyphs (GID 105, 106, 121, 259, 260) without ghost contours', () {
+    test(
+        'Correctly preserves zero-length spacing glyphs (GID 105, 106, 121, 259, 260) without ghost contours',
+        () {
       const zeroLengthGids = [105, 106, 121, 259, 260];
       const expectedAdvances = {
         105: 1204,
@@ -119,7 +152,8 @@ void main() {
             ? parsedAll.glyphOffsets[subsetGid + 1]
             : parsedAll.tableSize[TtfParser.glyf_table]!;
         expect(end - start, equals(0),
-            reason: 'Collective subset: GID $gid must have zero length in loca table');
+            reason:
+                'Collective subset: GID $gid must have zero length in loca table');
 
         final hmtxOffset = parsedAll.tableOffsets[TtfParser.hmtx_table]!;
         final hmtxData = parsedAll.bytes.buffer.asByteData(
@@ -132,4 +166,3 @@ void main() {
     });
   });
 }
-

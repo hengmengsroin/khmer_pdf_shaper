@@ -7,8 +7,11 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 void main() {
-  group('Phase 7 — Item 16 & 17 & 18: Resource Lifecycle, Memory & Benchmarks', () {
-    test('Interleaved Document A, B, C maintain isolated CID registries, fonts, and reused instances within document', () async {
+  group('Phase 7 — Item 16 & 17 & 18: Resource Lifecycle, Memory & Benchmarks',
+      () {
+    test(
+        'Interleaved Document A, B, C maintain isolated CID registries, fonts, and reused instances within document',
+        () async {
       final docA = pw.Document();
       final docB = pw.Document();
       final docC = pw.Document();
@@ -41,7 +44,8 @@ void main() {
       final fontC = KhmerFontCache.getOrCreateFont(docC.document);
 
       // Invariant 1: Font resource reused within one document
-      expect(identical(fontA1, fontA2), isTrue, reason: 'Font instance must be reused within same document');
+      expect(identical(fontA1, fontA2), isTrue,
+          reason: 'Font instance must be reused within same document');
 
       // Invariant 2: A != B != C
       expect(identical(fontA1, fontB), isFalse);
@@ -61,7 +65,9 @@ void main() {
       expect(bytesC, isNotEmpty);
     });
 
-    test('100 sequential Document save cycles complete without memory leak or state contamination', () async {
+    test(
+        '100 sequential Document save cycles complete without memory leak or state contamination',
+        () async {
       for (int i = 0; i < 100; i++) {
         final pdf = pw.Document();
         pdf.addPage(
@@ -84,8 +90,10 @@ void main() {
           pageFormat: PdfPageFormat.a4,
           build: (context) => pw.Column(
             children: [
-              KhmerText('ព្រះរាជាណាចក្រកម្ពុជា', style: const pw.TextStyle(fontSize: 18)),
-              KhmerText('Invoice សួស្តី 123', style: const pw.TextStyle(fontSize: 12)),
+              KhmerText('ព្រះរាជាណាចក្រកម្ពុជា',
+                  style: const pw.TextStyle(fontSize: 18)),
+              KhmerText('Invoice សួស្តី 123',
+                  style: const pw.TextStyle(fontSize: 12)),
               KhmerText(
                 'ភាសាខ្មែរ គឺជាភាសាផ្លូវការរបស់ប្រទេសកម្ពុជា។',
                 style: const pw.TextStyle(fontSize: 12),
@@ -113,9 +121,12 @@ void main() {
       sw100.stop();
 
       print('=== Performance Baselines ===');
-      print('1-page generation: ${sw1.elapsedMilliseconds} ms (${bytes1.length} bytes)');
-      print('100-page generation: ${sw100.elapsedMilliseconds} ms (${bytes100.length} bytes)');
-      print('Current Process RSS: ${ProcessInfo.currentRss / (1024 * 1024)} MB');
+      print(
+          '1-page generation: ${sw1.elapsedMilliseconds} ms (${bytes1.length} bytes)');
+      print(
+          '100-page generation: ${sw100.elapsedMilliseconds} ms (${bytes100.length} bytes)');
+      print(
+          'Current Process RSS: ${ProcessInfo.currentRss / (1024 * 1024)} MB');
 
       expect(bytes1.length, isPositive);
       expect(bytes100.length, isPositive);

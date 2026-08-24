@@ -34,7 +34,9 @@ void main() {
       expect(registry.count, equals(5001));
     });
 
-    test('Same physical original GID correctly maps from multiple distinct CIDs', () {
+    test(
+        'Same physical original GID correctly maps from multiple distinct CIDs',
+        () {
       final registry = KhmerCidRegistry();
 
       const sharedGid = 53; // Base consonant 'ក'

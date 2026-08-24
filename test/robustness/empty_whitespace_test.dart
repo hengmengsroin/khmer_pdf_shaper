@@ -20,7 +20,8 @@ void main() {
     };
 
     for (final entry in whitespaceInputs.entries) {
-      test('Input "${entry.key}" generates PDF cleanly without errors', () async {
+      test('Input "${entry.key}" generates PDF cleanly without errors',
+          () async {
         final pdf = pw.Document();
         pdf.addPage(
           pw.Page(
@@ -38,7 +39,8 @@ void main() {
       });
     }
 
-    test('ZWSP in KhmerText produces zero visible glyphs in PDF stream', () async {
+    test('ZWSP in KhmerText produces zero visible glyphs in PDF stream',
+        () async {
       final pdf = pw.Document();
       pdf.addPage(
         pw.Page(

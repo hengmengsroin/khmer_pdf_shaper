@@ -40,7 +40,9 @@ void main() {
       expect(layout.lines.first.clusters.first.advanceFontUnits, 1221.0);
     });
 
-    test('Measures shaped width accurately for ក្រ (reordered pre-base subscript)', () {
+    test(
+        'Measures shaped width accurately for ក្រ (reordered pre-base subscript)',
+        () {
       const text = 'ក្រ'; // Base Ka + Coeng Ro
       final run = shaper.shapeText(text);
       expect(run.clusters.length, 1);
@@ -59,7 +61,8 @@ void main() {
       expect(layout.width, closeTo(expectedWidth, 0.001));
     });
 
-    test('Measures shaped width accurately for គ្រែ (vowel + subscript + base)', () {
+    test('Measures shaped width accurately for គ្រែ (vowel + subscript + base)',
+        () {
       const text = 'គ្រែ'; // Base Kho + Coeng Ro + Vowel Ae
       final run = shaper.shapeText(text);
       expect(run.clusters.length, 1);
@@ -78,7 +81,8 @@ void main() {
       expect(layout.width, closeTo(expectedWidth, 0.001));
     });
 
-    test('Measures shaped width accurately for ខ្ញុំ (complex vertical stack)', () {
+    test('Measures shaped width accurately for ខ្ញុំ (complex vertical stack)',
+        () {
       const text = 'ខ្ញុំ'; // Base Kha + Coeng Nyo + Vowel U + Nikahit
       final run = shaper.shapeText(text);
       expect(run.clusters.length, 1);

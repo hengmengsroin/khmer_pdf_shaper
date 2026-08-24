@@ -18,7 +18,9 @@ void main() {
       shaper = BattambangShaper.fromBytes(fontBytes);
     });
 
-    test('Generates valid PDF containing all 9 golden words plus mixed Latin text', () async {
+    test(
+        'Generates valid PDF containing all 9 golden words plus mixed Latin text',
+        () async {
       final doc = PdfDocument();
       final page = PdfPage(doc, pageFormat: const PdfPageFormat(500, 800));
       final g = page.getGraphics();
@@ -59,9 +61,21 @@ void main() {
       expect(pdfString, contains('/Encoding/Identity-H'));
 
       // Verify that all words are present in font registry
-      final registeredTexts = font.registry.entries.values.map((e) => e.unicodeText).toSet();
-      for (final word in ['ក្រ', 'ក្ក', 'គ្រែ', 'កោ', 'ខ្ញុំ', 'សួស្តី', 'កម្ពុជា', 'សង្គ្រាម', 'ប៉ា']) {
-        expect(registeredTexts.any((t) => word.contains(t) && t.isNotEmpty), isTrue);
+      final registeredTexts =
+          font.registry.entries.values.map((e) => e.unicodeText).toSet();
+      for (final word in [
+        'ក្រ',
+        'ក្ក',
+        'គ្រែ',
+        'កោ',
+        'ខ្ញុំ',
+        'សួស្តី',
+        'កម្ពុជា',
+        'សង្គ្រាម',
+        'ប៉ា'
+      ]) {
+        expect(registeredTexts.any((t) => word.contains(t) && t.isNotEmpty),
+            isTrue);
       }
     });
   });

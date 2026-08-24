@@ -43,7 +43,8 @@ void main() {
       expect(ka.hasFeature(KhmerFeature.pref), isFalse);
     });
 
-    test('CFAR mask is assigned to subsequent marks when COENG RO is present', () {
+    test('CFAR mask is assigned to subsequent marks when COENG RO is present',
+        () {
       // U+1784 (Ngo) + U+17D2 + U+179A (Coeng Ro) + U+17D2 + U+1782 (Coeng Ko)
       // When Coeng Ro is reordered, elements following it in the original stream get CFAR
       const text = '\u1784\u17D2\u179A\u17D2\u1782';
@@ -51,7 +52,8 @@ void main() {
       expect(run.reorderedChars.length, 5);
 
       // Subsequent coeng ko should have CFAR
-      final lastSubscript = run.reorderedChars.firstWhere((c) => c.codePoint == 0x1782);
+      final lastSubscript =
+          run.reorderedChars.firstWhere((c) => c.codePoint == 0x1782);
       expect(lastSubscript.hasFeature(KhmerFeature.cfar), isTrue);
     });
   });

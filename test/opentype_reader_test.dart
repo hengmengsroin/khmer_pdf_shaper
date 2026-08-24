@@ -22,7 +22,8 @@ void main() {
       expect(font.hasTable('GSUB'), isTrue);
     });
 
-    test('Table readers return correct non-empty slices with bounds checks', () {
+    test('Table readers return correct non-empty slices with bounds checks',
+        () {
       final font = OpenTypeFont.parse(fontBytes);
       final headReader = font.getTableReader('head');
       expect(headReader.length, 54);

@@ -8,7 +8,8 @@ void main() {
 
   final buffer = StringBuffer();
   buffer.writeln('// GENERATED CODE - DO NOT MODIFY BY HAND');
-  buffer.writeln('// Bundled Battambang-Regular.ttf font binary encoded in pure Dart.');
+  buffer.writeln(
+      '// Bundled Battambang-Regular.ttf font binary encoded in pure Dart.');
   buffer.writeln();
   buffer.writeln("import 'dart:convert';");
   buffer.writeln("import 'dart:typed_data';");
@@ -16,10 +17,13 @@ void main() {
   buffer.writeln();
   buffer.writeln('Uint8List? _cachedBattambangBytes;');
   buffer.writeln();
-  buffer.writeln('/// Returns the bundled Battambang-Regular font bytes as a [Uint8List].');
-  buffer.writeln('/// Decoded on-demand once and cached in memory with SHA-256 validation.');
+  buffer.writeln(
+      '/// Returns the bundled Battambang-Regular font bytes as a [Uint8List].');
+  buffer.writeln(
+      '/// Decoded on-demand once and cached in memory with SHA-256 validation.');
   buffer.writeln('Uint8List getBundledBattambangBytes() {');
-  buffer.writeln('  if (_cachedBattambangBytes != null) return _cachedBattambangBytes!;');
+  buffer.writeln(
+      '  if (_cachedBattambangBytes != null) return _cachedBattambangBytes!;');
   buffer.writeln('  final decoded = base64Decode(_kBattambangBase64);');
   buffer.writeln('  FontBinaryValidator.verifySupportedFont(decoded);');
   buffer.writeln('  _cachedBattambangBytes = decoded;');
@@ -39,6 +43,8 @@ void main() {
     }
   }
 
-  File('lib/src/font/battambang_font_data.dart').writeAsStringSync(buffer.toString());
-  print('Generated lib/src/font/battambang_font_data.dart successfully (${bytes.length} bytes -> ${b64.length} chars).');
+  File('lib/src/font/battambang_font_data.dart')
+      .writeAsStringSync(buffer.toString());
+  print(
+      'Generated lib/src/font/battambang_font_data.dart successfully (${bytes.length} bytes -> ${b64.length} chars).');
 }

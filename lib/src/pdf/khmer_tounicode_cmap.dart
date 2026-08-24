@@ -50,7 +50,8 @@ class KhmerToUnicodeCmap extends PdfObjectStream {
     // Split entries into blocks of at most 100 entries per PDF/CMap specification
     const chunkSize = 100;
     for (int i = 0; i < entries.length; i += chunkSize) {
-      final end = (i + chunkSize < entries.length) ? i + chunkSize : entries.length;
+      final end =
+          (i + chunkSize < entries.length) ? i + chunkSize : entries.length;
       final chunk = entries.sublist(i, end);
 
       buf.putString('${chunk.length} beginbfchar\n');

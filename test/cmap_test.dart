@@ -8,7 +8,8 @@ void main() {
     late CmapTable cmap;
 
     setUpAll(() {
-      final fontBytes = File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
+      final fontBytes =
+          File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
       final font = OpenTypeFont.parse(fontBytes);
       cmap = CmapTable.parse(font.getTableReader('cmap'));
     });
@@ -33,7 +34,7 @@ void main() {
 
     test('Maps standard ASCII characters correctly', () {
       expect(cmap.glyphIdForCodePoint(0x0020), 259); // Space
-      expect(cmap.glyphIdForCodePoint(0x0041), 1);   // 'A'
+      expect(cmap.glyphIdForCodePoint(0x0041), 1); // 'A'
     });
 
     test('Returns 0 (.notdef) for missing or unmapped code points', () {

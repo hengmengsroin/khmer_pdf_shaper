@@ -18,10 +18,14 @@ void main() {
       expect(cov.covers(21), isFalse);
     });
 
-    test('Coverage Format 2 range records binary search and index offset calculation', () {
+    test(
+        'Coverage Format 2 range records binary search and index offset calculation',
+        () {
       final cov = CoverageFormat2([
-        CoverageRangeRecord(startGlyphId: 10, endGlyphId: 15, startCoverageIndex: 0),
-        CoverageRangeRecord(startGlyphId: 30, endGlyphId: 32, startCoverageIndex: 6),
+        CoverageRangeRecord(
+            startGlyphId: 10, endGlyphId: 15, startCoverageIndex: 0),
+        CoverageRangeRecord(
+            startGlyphId: 30, endGlyphId: 32, startCoverageIndex: 6),
       ]);
 
       expect(cov.coverageIndex(10), 0);

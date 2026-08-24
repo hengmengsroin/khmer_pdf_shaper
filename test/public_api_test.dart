@@ -24,7 +24,8 @@ void main() {
       expect(bytes.length, greaterThan(1000));
     });
 
-    test('Mixed Khmer and Latin text renders cleanly ("Invoice សួស្តី 123")', () async {
+    test('Mixed Khmer and Latin text renders cleanly ("Invoice សួស្តី 123")',
+        () async {
       final pdf = pw.Document();
       pdf.addPage(
         pw.Page(
@@ -54,8 +55,7 @@ void main() {
 
     test('Wrapping multi-line Khmer text within bounded constraints', () async {
       final pdf = pw.Document();
-      const longText =
-          'ភាសាខ្មែរ គឺជាភាសាផ្លូវការរបស់ប្រទេសកម្ពុជា '
+      const longText = 'ភាសាខ្មែរ គឺជាភាសាផ្លូវការរបស់ប្រទេសកម្ពុជា '
           'ហើយត្រូវបានប្រើប្រាស់ដោយប្រជាជនខ្មែរទូទាំងពិភពលោក។ '
           'ការបង្កើតឯកសារ PDF ជាភាសាខ្មែរត្រូវតែមានភាពត្រឹមត្រូវ។';
 
@@ -86,7 +86,8 @@ void main() {
             crossAxisAlignment: pw.CrossAxisAlignment.stretch,
             children: [
               KhmerText('Left Aligned សួស្តី', textAlign: pw.TextAlign.left),
-              KhmerText('Center Aligned សួស្តី', textAlign: pw.TextAlign.center),
+              KhmerText('Center Aligned សួស្តី',
+                  textAlign: pw.TextAlign.center),
               KhmerText('Right Aligned សួស្តី', textAlign: pw.TextAlign.right),
               KhmerText('Start Aligned សួស្តី', textAlign: pw.TextAlign.start),
               KhmerText('End Aligned សួស្តី', textAlign: pw.TextAlign.end),

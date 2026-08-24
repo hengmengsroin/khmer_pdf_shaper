@@ -48,13 +48,16 @@ class CmapTable {
     }
 
     if (selectedOffset == null) {
-      throw FontParseException('No suitable Unicode Format 4 cmap subtable found in font.');
+      throw FontParseException(
+          'No suitable Unicode Format 4 cmap subtable found in font.');
     }
 
     final subtableReader = reader.slice(selectedOffset);
     final format = subtableReader.readUint16();
     if (format != 4) {
-      throw FontParseException('Selected cmap subtable is not Format 4 (format: $format)', selectedOffset);
+      throw FontParseException(
+          'Selected cmap subtable is not Format 4 (format: $format)',
+          selectedOffset);
     }
 
     subtableReader.skip(4); // subtableLength (2), language (2)
@@ -62,13 +65,16 @@ class CmapTable {
     final segCount = segCountX2 ~/ 2;
     subtableReader.skip(6); // searchRange, entrySelector, rangeShift
 
-    final endCodes = List<int>.generate(segCount, (_) => subtableReader.readUint16());
+    final endCodes =
+        List<int>.generate(segCount, (_) => subtableReader.readUint16());
     final reservedPad = subtableReader.readUint16();
     if (reservedPad != 0) {
       // Per spec reservedPad should be 0, but continue safely
     }
-    final startCodes = List<int>.generate(segCount, (_) => subtableReader.readUint16());
-    final idDeltas = List<int>.generate(segCount, (_) => subtableReader.readInt16());
+    final startCodes =
+        List<int>.generate(segCount, (_) => subtableReader.readUint16());
+    final idDeltas =
+        List<int>.generate(segCount, (_) => subtableReader.readInt16());
 
     final idRangeOffsets = <int>[];
     final idRangeOffsetByteOffsets = <int>[];

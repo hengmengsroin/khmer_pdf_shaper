@@ -20,7 +20,10 @@ void main() {
     for (final s in run.syllables) {
       print('  syl: ${s.start}..${s.end} (${s.type.name})');
     }
-    final charInfo = run.reorderedChars.map((c) => 'U+${c.codePoint.toRadixString(16).toUpperCase()}:${c.cluster}').join(' ');
+    final charInfo = run.reorderedChars
+        .map((c) =>
+            'U+${c.codePoint.toRadixString(16).toUpperCase()}:${c.cluster}')
+        .join(' ');
     print('  reordered: $charInfo');
   }
 }

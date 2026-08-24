@@ -8,7 +8,8 @@ void main() {
     late MetricsTable metrics;
 
     setUpAll(() {
-      final fontBytes = File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
+      final fontBytes =
+          File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
       final font = OpenTypeFont.parse(fontBytes);
       metrics = MetricsTable.parse(
         headReader: font.getTableReader('head'),
@@ -26,10 +27,12 @@ void main() {
 
     test('Resolves advance width for regular glyphs in font design units', () {
       expect(metrics.advanceWidthForGlyph(53), 1221); // Ka (uni1780)
-      expect(metrics.advanceWidthForGlyph(259), 700);  // Space
+      expect(metrics.advanceWidthForGlyph(259), 700); // Space
     });
 
-    test('Reuses final advance width for glyphs beyond numberOfHMetrics (>= 276)', () {
+    test(
+        'Reuses final advance width for glyphs beyond numberOfHMetrics (>= 276)',
+        () {
       // In Battambang, numberOfHMetrics is 276, last metric at index 275 has advance 0 (combining mark)
       final lastAdvance = metrics.advanceWidthForGlyph(275);
       expect(metrics.advanceWidthForGlyph(276), lastAdvance);

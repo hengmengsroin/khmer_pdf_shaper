@@ -4,7 +4,8 @@ import 'package:khmer_pdf_shaper/src/shaper/battambang_shaper.dart';
 import 'package:khmer_pdf_shaper/src/pdf/khmer_cid_registry.dart';
 
 void main() {
-  final fontBytes = File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
+  final fontBytes =
+      File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
   final shaper = BattambangShaper.fromBytes(fontBytes);
   final words = ['ក្រ', 'គ្រែ', 'ខ្ញុំ', 'សួស្តី'];
 
@@ -15,7 +16,8 @@ void main() {
 
     for (int ci = 0; ci < run.clusters.length; ci++) {
       final cluster = run.clusters[ci];
-      final clusterText = run.originalText.substring(cluster.sourceStart, cluster.sourceEnd);
+      final clusterText =
+          run.originalText.substring(cluster.sourceStart, cluster.sourceEnd);
       print('Cluster $ci:');
       print('  semantic_cluster:');
       print('    source_range: ${cluster.sourceStart}..${cluster.sourceEnd}');

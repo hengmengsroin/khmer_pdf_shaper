@@ -9,17 +9,21 @@ void main() {
     late List<dynamic> stressFixtures;
 
     setUpAll(() {
-      final fontBytes = File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
+      final fontBytes =
+          File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
       shaper = BattambangShaper.fromBytes(fontBytes);
 
       final file = File('test/fixtures/khmer_stress_corpus.json');
-      expect(file.existsSync(), isTrue, reason: 'Stress fixture file must exist');
+      expect(file.existsSync(), isTrue,
+          reason: 'Stress fixture file must exist');
       final content = file.readAsStringSync();
       final jsonMap = jsonDecode(content) as Map<String, dynamic>;
       stressFixtures = jsonMap['fixtures'] as List<dynamic>;
     });
 
-    test('Validates 805 generated differential stress cases against HarfBuzz oracle', () {
+    test(
+        'Validates 805 generated differential stress cases against HarfBuzz oracle',
+        () {
       int passed = 0;
       int failed = 0;
       String? firstFailure;
@@ -40,7 +44,9 @@ void main() {
             final expected = expectedGlyphs[i];
             if (actual.glyphId != expected['glyph_id'] ||
                 actual.cluster != expected['cluster'] ||
-                (actual.xAdvance - (expected['x_advance'] as num).toDouble()).abs() > 0.001 ||
+                (actual.xAdvance - (expected['x_advance'] as num).toDouble())
+                        .abs() >
+                    0.001 ||
                 actual.yAdvance != (expected['y_advance'] as num).toDouble() ||
                 actual.xOffset != (expected['x_offset'] as num).toDouble() ||
                 actual.yOffset != (expected['y_offset'] as num).toDouble()) {

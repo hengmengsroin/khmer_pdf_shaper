@@ -7,7 +7,9 @@ import 'package:pdf/widgets.dart' as pw;
 
 void main() {
   group('Phase 7 — Item 3: Determinism Tests', () {
-    test('Two separate builds of identical document produce identical layout and stream contents', () async {
+    test(
+        'Two separate builds of identical document produce identical layout and stream contents',
+        () async {
       Future<Uint8List> buildPdf() async {
         final pdf = pw.Document();
         pdf.addPage(
@@ -62,7 +64,9 @@ void main() {
           .replaceAll(RegExp(r'/ModDate\s*\([^)]*\)'), '')
           .replaceAll(RegExp(r'/ID\s*\[[^\]]*\]'), '');
 
-      expect(normalized1, equals(normalized2), reason: 'Document streams, subset fonts, and CID mappings must be byte-for-byte deterministic.');
+      expect(normalized1, equals(normalized2),
+          reason:
+              'Document streams, subset fonts, and CID mappings must be byte-for-byte deterministic.');
     });
   });
 }

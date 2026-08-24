@@ -5,7 +5,9 @@ import 'package:pdf/widgets.dart' as pw;
 
 void main() {
   group('Phase 7 — Item 1: Long-Document Stress Tests', () {
-    test('100 KhmerText widgets in a single document save cleanly and measure performance', () async {
+    test(
+        '100 KhmerText widgets in a single document save cleanly and measure performance',
+        () async {
       final pdf = pw.Document();
       final stopwatch = Stopwatch()..start();
 
@@ -32,10 +34,13 @@ void main() {
 
       expect(bytes, isNotEmpty);
       expect(bytes.length, greaterThan(2000));
-      expect(stopwatch.elapsedMilliseconds, lessThan(3000)); // Well under 3s budget
+      expect(stopwatch.elapsedMilliseconds,
+          lessThan(3000)); // Well under 3s budget
     });
 
-    test('1,000 KhmerText widgets save without CID overflow or resource duplication', () async {
+    test(
+        '1,000 KhmerText widgets save without CID overflow or resource duplication',
+        () async {
       final pdf = pw.Document();
       final stopwatch = Stopwatch()..start();
 

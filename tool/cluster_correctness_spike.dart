@@ -35,19 +35,23 @@ typedef HbFaceCreate = ffi.Pointer<ffi.Opaque> Function(
 typedef hb_face_destroy_func = ffi.Void Function(ffi.Pointer<ffi.Opaque> face);
 typedef HbFaceDestroy = void Function(ffi.Pointer<ffi.Opaque> face);
 
-typedef hb_font_create_func = ffi.Pointer<ffi.Opaque> Function(ffi.Pointer<ffi.Opaque> face);
-typedef HbFontCreate = ffi.Pointer<ffi.Opaque> Function(ffi.Pointer<ffi.Opaque> face);
+typedef hb_font_create_func = ffi.Pointer<ffi.Opaque> Function(
+    ffi.Pointer<ffi.Opaque> face);
+typedef HbFontCreate = ffi.Pointer<ffi.Opaque> Function(
+    ffi.Pointer<ffi.Opaque> face);
 
 typedef hb_font_destroy_func = ffi.Void Function(ffi.Pointer<ffi.Opaque> font);
 typedef HbFontDestroy = void Function(ffi.Pointer<ffi.Opaque> font);
 
-typedef hb_ot_font_set_funcs_func = ffi.Void Function(ffi.Pointer<ffi.Opaque> font);
+typedef hb_ot_font_set_funcs_func = ffi.Void Function(
+    ffi.Pointer<ffi.Opaque> font);
 typedef HbOtFontSetFuncs = void Function(ffi.Pointer<ffi.Opaque> font);
 
 typedef hb_buffer_create_func = ffi.Pointer<ffi.Opaque> Function();
 typedef HbBufferCreate = ffi.Pointer<ffi.Opaque> Function();
 
-typedef hb_buffer_destroy_func = ffi.Void Function(ffi.Pointer<ffi.Opaque> buffer);
+typedef hb_buffer_destroy_func = ffi.Void Function(
+    ffi.Pointer<ffi.Opaque> buffer);
 typedef HbBufferDestroy = void Function(ffi.Pointer<ffi.Opaque> buffer);
 
 typedef hb_buffer_add_utf8_func = ffi.Void Function(
@@ -134,8 +138,10 @@ typedef HbBufferSetClusterLevel = void Function(
   int cluster_level,
 );
 
-typedef hb_buffer_guess_segment_properties_func = ffi.Void Function(ffi.Pointer<ffi.Opaque> buffer);
-typedef HbBufferGuessSegmentProperties = void Function(ffi.Pointer<ffi.Opaque> buffer);
+typedef hb_buffer_guess_segment_properties_func = ffi.Void Function(
+    ffi.Pointer<ffi.Opaque> buffer);
+typedef HbBufferGuessSegmentProperties = void Function(
+    ffi.Pointer<ffi.Opaque> buffer);
 
 typedef hb_shape_func = ffi.Void Function(
   ffi.Pointer<ffi.Opaque> font,
@@ -185,7 +191,8 @@ typedef HbBufferGetGlyphInfos = ffi.Pointer<HbGlyphInfo> Function(
   ffi.Pointer<ffi.UnsignedInt> length,
 );
 
-typedef hb_buffer_get_glyph_positions_func = ffi.Pointer<HbGlyphPosition> Function(
+typedef hb_buffer_get_glyph_positions_func = ffi.Pointer<HbGlyphPosition>
+    Function(
   ffi.Pointer<ffi.Opaque> buffer,
   ffi.Pointer<ffi.UnsignedInt> length,
 );
@@ -195,35 +202,72 @@ typedef HbBufferGetGlyphPositions = ffi.Pointer<HbGlyphPosition> Function(
 );
 
 void main() {
-  final dylibPath = '/Users/hengmengsroin/.gemini/antigravity-ide/brain/124ef2f0-1d61-4b71-b0d3-671001f9375b/scratch/libharfbuzz.dylib';
+  final dylibPath =
+      '/Users/hengmengsroin/.gemini/antigravity-ide/brain/124ef2f0-1d61-4b71-b0d3-671001f9375b/scratch/libharfbuzz.dylib';
   final dylib = ffi.DynamicLibrary.open(dylibPath);
 
-  final blobCreate = dylib.lookupFunction<hb_blob_create_func, HbBlobCreate>('hb_blob_create');
-  final blobDestroy = dylib.lookupFunction<hb_blob_destroy_func, HbBlobDestroy>('hb_blob_destroy');
-  final faceCreate = dylib.lookupFunction<hb_face_create_func, HbFaceCreate>('hb_face_create');
-  final faceDestroy = dylib.lookupFunction<hb_face_destroy_func, HbFaceDestroy>('hb_face_destroy');
-  final fontCreate = dylib.lookupFunction<hb_font_create_func, HbFontCreate>('hb_font_create');
-  final fontDestroy = dylib.lookupFunction<hb_font_destroy_func, HbFontDestroy>('hb_font_destroy');
-  final otFontSetFuncs = dylib.lookupFunction<hb_ot_font_set_funcs_func, HbOtFontSetFuncs>('hb_ot_font_set_funcs');
-  final bufferCreate = dylib.lookupFunction<hb_buffer_create_func, HbBufferCreate>('hb_buffer_create');
-  final bufferDestroy = dylib.lookupFunction<hb_buffer_destroy_func, HbBufferDestroy>('hb_buffer_destroy');
-  final bufferAddUtf8 = dylib.lookupFunction<hb_buffer_add_utf8_func, HbBufferAddUtf8>('hb_buffer_add_utf8');
-  final bufferAddUtf16 = dylib.lookupFunction<hb_buffer_add_utf16_func, HbBufferAddUtf16>('hb_buffer_add_utf16');
-  final bufferSetDirection = dylib.lookupFunction<hb_buffer_set_direction_func, HbBufferSetDirection>('hb_buffer_set_direction');
-  final bufferSetScript = dylib.lookupFunction<hb_buffer_set_script_func, HbBufferSetScript>('hb_buffer_set_script');
-  final bufferSetLanguage = dylib.lookupFunction<hb_buffer_set_language_func, HbBufferSetLanguage>('hb_buffer_set_language');
-  final languageFromString = dylib.lookupFunction<hb_language_from_string_func, HbLanguageFromString>('hb_language_from_string');
-  final tagFromString = dylib.lookupFunction<hb_tag_from_string_func, HbTagFromString>('hb_tag_from_string');
-  final bufferSetClusterLevel = dylib.lookupFunction<hb_buffer_set_cluster_level_func, HbBufferSetClusterLevel>('hb_buffer_set_cluster_level');
-  final bufferGuessProperties = dylib.lookupFunction<hb_buffer_guess_segment_properties_func, HbBufferGuessSegmentProperties>('hb_buffer_guess_segment_properties');
+  final blobCreate =
+      dylib.lookupFunction<hb_blob_create_func, HbBlobCreate>('hb_blob_create');
+  final blobDestroy = dylib
+      .lookupFunction<hb_blob_destroy_func, HbBlobDestroy>('hb_blob_destroy');
+  final faceCreate =
+      dylib.lookupFunction<hb_face_create_func, HbFaceCreate>('hb_face_create');
+  final faceDestroy = dylib
+      .lookupFunction<hb_face_destroy_func, HbFaceDestroy>('hb_face_destroy');
+  final fontCreate =
+      dylib.lookupFunction<hb_font_create_func, HbFontCreate>('hb_font_create');
+  final fontDestroy = dylib
+      .lookupFunction<hb_font_destroy_func, HbFontDestroy>('hb_font_destroy');
+  final otFontSetFuncs =
+      dylib.lookupFunction<hb_ot_font_set_funcs_func, HbOtFontSetFuncs>(
+          'hb_ot_font_set_funcs');
+  final bufferCreate =
+      dylib.lookupFunction<hb_buffer_create_func, HbBufferCreate>(
+          'hb_buffer_create');
+  final bufferDestroy =
+      dylib.lookupFunction<hb_buffer_destroy_func, HbBufferDestroy>(
+          'hb_buffer_destroy');
+  final bufferAddUtf8 =
+      dylib.lookupFunction<hb_buffer_add_utf8_func, HbBufferAddUtf8>(
+          'hb_buffer_add_utf8');
+  final bufferAddUtf16 =
+      dylib.lookupFunction<hb_buffer_add_utf16_func, HbBufferAddUtf16>(
+          'hb_buffer_add_utf16');
+  final bufferSetDirection =
+      dylib.lookupFunction<hb_buffer_set_direction_func, HbBufferSetDirection>(
+          'hb_buffer_set_direction');
+  final bufferSetScript =
+      dylib.lookupFunction<hb_buffer_set_script_func, HbBufferSetScript>(
+          'hb_buffer_set_script');
+  final bufferSetLanguage =
+      dylib.lookupFunction<hb_buffer_set_language_func, HbBufferSetLanguage>(
+          'hb_buffer_set_language');
+  final languageFromString =
+      dylib.lookupFunction<hb_language_from_string_func, HbLanguageFromString>(
+          'hb_language_from_string');
+  final tagFromString =
+      dylib.lookupFunction<hb_tag_from_string_func, HbTagFromString>(
+          'hb_tag_from_string');
+  final bufferSetClusterLevel = dylib.lookupFunction<
+      hb_buffer_set_cluster_level_func,
+      HbBufferSetClusterLevel>('hb_buffer_set_cluster_level');
+  final bufferGuessProperties = dylib.lookupFunction<
+      hb_buffer_guess_segment_properties_func,
+      HbBufferGuessSegmentProperties>('hb_buffer_guess_segment_properties');
   final shape = dylib.lookupFunction<hb_shape_func, HbShape>('hb_shape');
-  final bufferGetGlyphInfos = dylib.lookupFunction<hb_buffer_get_glyph_infos_func, HbBufferGetGlyphInfos>('hb_buffer_get_glyph_infos');
-  final bufferGetGlyphPositions = dylib.lookupFunction<hb_buffer_get_glyph_positions_func, HbBufferGetGlyphPositions>('hb_buffer_get_glyph_positions');
+  final bufferGetGlyphInfos = dylib.lookupFunction<
+      hb_buffer_get_glyph_infos_func,
+      HbBufferGetGlyphInfos>('hb_buffer_get_glyph_infos');
+  final bufferGetGlyphPositions = dylib.lookupFunction<
+      hb_buffer_get_glyph_positions_func,
+      HbBufferGetGlyphPositions>('hb_buffer_get_glyph_positions');
 
-  final fontBytes = File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
+  final fontBytes =
+      File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
   final nativeBytes = calloc<ffi.Uint8>(fontBytes.length);
   nativeBytes.asTypedList(fontBytes.length).setAll(0, fontBytes);
-  final blob = blobCreate(nativeBytes.cast(), fontBytes.length, 1, ffi.nullptr, ffi.nullptr);
+  final blob = blobCreate(
+      nativeBytes.cast(), fontBytes.length, 1, ffi.nullptr, ffi.nullptr);
   final face = faceCreate(blob, 0);
   final font = fontCreate(face);
   otFontSetFuncs(font);
@@ -267,8 +311,12 @@ void main() {
       final lengthPtr = calloc<ffi.UnsignedInt>();
       final infos = bufferGetGlyphInfos(buffer, lengthPtr);
       final count = lengthPtr.value;
-      final clusters = [for (int i = 0; i < count; i++) '${infos[i].codepoint}@${infos[i].cluster}'];
-      print('  UTF-16 input (default cluster level 0): [${clusters.join(', ')}]');
+      final clusters = [
+        for (int i = 0; i < count; i++)
+          '${infos[i].codepoint}@${infos[i].cluster}'
+      ];
+      print(
+          '  UTF-16 input (default cluster level 0): [${clusters.join(', ')}]');
       calloc.free(lengthPtr);
       calloc.free(utf16Ptr);
       bufferDestroy(buffer);
@@ -285,8 +333,12 @@ void main() {
       final lengthPtr = calloc<ffi.UnsignedInt>();
       final infos = bufferGetGlyphInfos(buffer, lengthPtr);
       final count = lengthPtr.value;
-      final clusters = [for (int i = 0; i < count; i++) '${infos[i].codepoint}@${infos[i].cluster}'];
-      print('  UTF-8 input  (default cluster level 0): [${clusters.join(', ')}]');
+      final clusters = [
+        for (int i = 0; i < count; i++)
+          '${infos[i].codepoint}@${infos[i].cluster}'
+      ];
+      print(
+          '  UTF-8 input  (default cluster level 0): [${clusters.join(', ')}]');
       calloc.free(lengthPtr);
       calloc.free(nativeUtf8);
       bufferDestroy(buffer);

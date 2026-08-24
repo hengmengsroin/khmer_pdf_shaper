@@ -6,12 +6,16 @@ void main() {
   group('Part 2: Run Segmentation Tests', () {
     test('Newline normalization handles CR, LF, and CRLF', () {
       expect(KhmerRunSegmenter.normalizeNewlines('A\r\nB\rC\nD'), 'A\nB\nC\nD');
-      expect(KhmerRunSegmenter.splitParagraphs('សួស្តី\nកម្ពុជា'), ['សួស្តី', 'កម្ពុជា']);
-      expect(KhmerRunSegmenter.splitParagraphs('សួស្តី\r\nកម្ពុជា'), ['សួស្តី', 'កម្ពុជា']);
-      expect(KhmerRunSegmenter.splitParagraphs('សួស្តី\n\nកម្ពុជា'), ['សួស្តី', '', 'កម្ពុជា']);
+      expect(KhmerRunSegmenter.splitParagraphs('សួស្តី\nកម្ពុជា'),
+          ['សួស្តី', 'កម្ពុជា']);
+      expect(KhmerRunSegmenter.splitParagraphs('សួស្តី\r\nកម្ពុជា'),
+          ['សួស្តី', 'កម្ពុជា']);
+      expect(KhmerRunSegmenter.splitParagraphs('សួស្តី\n\nកម្ពុជា'),
+          ['សួស្តី', '', 'កម្ពុជា']);
     });
 
-    test('Segments "Invoice សួស្តី 123" into Latin, Space, Khmer, Space, Latin', () {
+    test('Segments "Invoice សួស្តី 123" into Latin, Space, Khmer, Space, Latin',
+        () {
       const text = 'Invoice សួស្តី 123';
       final tokens = KhmerRunSegmenter.segmentParagraph(text);
 
@@ -76,14 +80,16 @@ void main() {
       expect(spaceTokens[1].isBreakOpportunity, isTrue);
 
       // NBSP
-      final nbspTokens = KhmerRunSegmenter.segmentParagraph('សួស្តី\u00A0កម្ពុជា');
+      final nbspTokens =
+          KhmerRunSegmenter.segmentParagraph('សួស្តី\u00A0កម្ពុជា');
       expect(nbspTokens.length, 3);
       expect(nbspTokens[1].type, KhmerLayoutTokenType.nbsp);
       expect(nbspTokens[1].isVisible, isTrue);
       expect(nbspTokens[1].isBreakOpportunity, isFalse);
 
       // ZWSP
-      final zwspTokens = KhmerRunSegmenter.segmentParagraph('សួស្តី\u200Bកម្ពុជា');
+      final zwspTokens =
+          KhmerRunSegmenter.segmentParagraph('សួស្តី\u200Bកម្ពុជា');
       expect(zwspTokens.length, 3);
       expect(zwspTokens[1].type, KhmerLayoutTokenType.zwsp);
       expect(zwspTokens[1].isVisible, isFalse);

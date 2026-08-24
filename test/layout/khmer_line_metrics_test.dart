@@ -20,7 +20,9 @@ void main() {
       breaker = const KhmerLineBreaker(lineMetrics: metrics);
     });
 
-    test('Derives natural line height directly from Battambang hhea/OS2 metrics', () {
+    test(
+        'Derives natural line height directly from Battambang hhea/OS2 metrics',
+        () {
       expect(metrics.fontAscent, 2500);
       expect(metrics.fontDescent, -1200);
       expect(metrics.fontLineGap, 0);
@@ -51,11 +53,14 @@ void main() {
       expect(scaled1_5, closeTo(natural * 1.5, 0.0001));
 
       final baselineOffset1_5 = metrics.calculateBaselineOffset(fontSize, 1.5);
-      final expectedOffset = metrics.calculateAscent(fontSize) + (scaled1_5 - natural) / 2.0;
+      final expectedOffset =
+          metrics.calculateAscent(fontSize) + (scaled1_5 - natural) / 2.0;
       expect(baselineOffset1_5, closeTo(expectedOffset, 0.0001));
     });
 
-    test('Ensures sufficient vertical space to avoid clipping for ខ្ញុំ, សួស្តី, ប៉ា across font sizes', () {
+    test(
+        'Ensures sufficient vertical space to avoid clipping for ខ្ញុំ, សួស្តី, ប៉ា across font sizes',
+        () {
       final testWords = ['ខ្ញុំ', 'សួស្តី', 'ប៉ា'];
       final fontSizes = [10.0, 12.0, 18.0, 24.0, 36.0];
 

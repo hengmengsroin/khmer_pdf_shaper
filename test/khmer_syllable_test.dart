@@ -20,7 +20,8 @@ void main() {
         final norm = KhmerNormalizer.normalize(input);
         final syllables = KhmerSyllableParser.parse(norm);
 
-        expect(syllables.length, 1, reason: '$word should be exactly 1 syllable');
+        expect(syllables.length, 1,
+            reason: '$word should be exactly 1 syllable');
         expect(syllables[0].type, KhmerSyllableType.consonantSyllable);
         expect(syllables[0].start, 0);
         expect(syllables[0].end, norm.length);
@@ -36,14 +37,16 @@ void main() {
       expect(kraSyl[0].end, kra.length);
 
       // Base + 2 COENG: ង្គ្រ
-      final ngkro = KhmerNormalizer.normalize(KhmerCharStream.fromText('ង្គ្រ'));
+      final ngkro =
+          KhmerNormalizer.normalize(KhmerCharStream.fromText('ង្គ្រ'));
       final ngkroSyl = KhmerSyllableParser.parse(ngkro);
       expect(ngkroSyl.length, 1);
       expect(ngkroSyl[0].type, KhmerSyllableType.consonantSyllable);
       expect(ngkroSyl[0].end, ngkro.length);
 
       // Base + 3 COENG: ក្ក្ខ្គ (Base: Ka, Subscripts: Ka, Kha, Ko)
-      final tripleCoeng = KhmerNormalizer.normalize(KhmerCharStream.fromText('ក្ក្ខ្គ'));
+      final tripleCoeng =
+          KhmerNormalizer.normalize(KhmerCharStream.fromText('ក្ក្ខ្គ'));
       final tripleSyl = KhmerSyllableParser.parse(tripleCoeng);
       expect(tripleSyl.length, 1);
       expect(tripleSyl[0].type, KhmerSyllableType.consonantSyllable);
@@ -52,7 +55,8 @@ void main() {
 
     test('Identifies real Khmer words with correct syllable boundaries', () {
       // 1. "សួស្តី" -> Syllable 1: "សួ" (0..2), Syllable 2: "ស្តី" (2..6)
-      final suosdey = KhmerNormalizer.normalize(KhmerCharStream.fromText('សួស្តី'));
+      final suosdey =
+          KhmerNormalizer.normalize(KhmerCharStream.fromText('សួស្តី'));
       final suosdeySyl = KhmerSyllableParser.parse(suosdey);
       expect(suosdeySyl.length, 2);
       expect(suosdeySyl[0].type, KhmerSyllableType.consonantSyllable);
@@ -63,14 +67,16 @@ void main() {
       expect(suosdeySyl[1].end, 6);
 
       // 2. "ខ្ញុំ" -> 1 syllable (ខ + ្ + ញ + ុ + ំ)
-      final khnhom = KhmerNormalizer.normalize(KhmerCharStream.fromText('ខ្ញុំ'));
+      final khnhom =
+          KhmerNormalizer.normalize(KhmerCharStream.fromText('ខ្ញុំ'));
       final khnhomSyl = KhmerSyllableParser.parse(khnhom);
       expect(khnhomSyl.length, 1);
       expect(khnhomSyl[0].type, KhmerSyllableType.consonantSyllable);
       expect(khnhomSyl[0].end, 5);
 
       // 3. "កម្ពុជា" -> "ក" (0..1), "ម្ពុ" (1..5), "ជា" (5..7)
-      final kampuchea = KhmerNormalizer.normalize(KhmerCharStream.fromText('កម្ពុជា'));
+      final kampuchea =
+          KhmerNormalizer.normalize(KhmerCharStream.fromText('កម្ពុជា'));
       final kampucheaSyl = KhmerSyllableParser.parse(kampuchea);
       expect(kampucheaSyl.length, 3);
       expect(kampucheaSyl[0].start, 0);
@@ -81,7 +87,8 @@ void main() {
       expect(kampucheaSyl[2].end, 7);
 
       // 4. "សង្គ្រាម" -> "ស" (0..1), "ង្គ្រា" (1..7), "ម" (7..8)
-      final sangkream = KhmerNormalizer.normalize(KhmerCharStream.fromText('សង្គ្រាម'));
+      final sangkream =
+          KhmerNormalizer.normalize(KhmerCharStream.fromText('សង្គ្រាម'));
       final sangkreamSyl = KhmerSyllableParser.parse(sangkream);
       expect(sangkreamSyl.length, 3);
       expect(sangkreamSyl[0].start, 0);
@@ -101,8 +108,10 @@ void main() {
       }
     });
 
-    test('Identifies non-Khmer text, digits, and spaces as nonKhmerCluster', () {
-      final mixed = KhmerNormalizer.normalize(KhmerCharStream.fromText('A 123 !'));
+    test('Identifies non-Khmer text, digits, and spaces as nonKhmerCluster',
+        () {
+      final mixed =
+          KhmerNormalizer.normalize(KhmerCharStream.fromText('A 123 !'));
       final syls = KhmerSyllableParser.parse(mixed);
       for (final s in syls) {
         expect(s.type, KhmerSyllableType.nonKhmerCluster);

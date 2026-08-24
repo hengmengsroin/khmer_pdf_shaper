@@ -20,16 +20,21 @@ void main() {
       shaper = BattambangShaper.fromBytes(fontBytes);
     });
 
-    test('Generated PDF contains all mandatory Type0 and CIDFontType2 structures', () async {
+    test(
+        'Generated PDF contains all mandatory Type0 and CIDFontType2 structures',
+        () async {
       final doc = pw.Document();
       doc.addPage(
         pw.Page(
           pageFormat: PdfPageFormat.a4,
           build: (context) => pw.Column(
             children: [
-              KhmerText('ព្រះរាជាណាចក្រកម្ពុជា', style: const pw.TextStyle(fontSize: 20)),
-              KhmerText('Invoice សួស្តី 123', style: const pw.TextStyle(fontSize: 14)),
-              KhmerText('សង្គ្រាម និង សន្តិភាព', style: const pw.TextStyle(fontSize: 12)),
+              KhmerText('ព្រះរាជាណាចក្រកម្ពុជា',
+                  style: const pw.TextStyle(fontSize: 20)),
+              KhmerText('Invoice សួស្តី 123',
+                  style: const pw.TextStyle(fontSize: 14)),
+              KhmerText('សង្គ្រាម និង សន្តិភាព',
+                  style: const pw.TextStyle(fontSize: 12)),
             ],
           ),
         ),
@@ -73,7 +78,9 @@ void main() {
       expect(pdfString, contains('/W['));
     });
 
-    test('Structural invariant: CID != GID and multiple CIDs to single subset GID supported', () async {
+    test(
+        'Structural invariant: CID != GID and multiple CIDs to single subset GID supported',
+        () async {
       final doc = PdfDocument();
       final page = PdfPage(doc, pageFormat: const PdfPageFormat(500, 500));
       final g = page.getGraphics();
@@ -99,7 +106,8 @@ void main() {
         }
       }
       expect(foundCidDifferentFromGid, isTrue,
-          reason: 'CID space is independent from raw TrueType GID space (CID != GID)');
+          reason:
+              'CID space is independent from raw TrueType GID space (CID != GID)');
 
       // Verify font subsetting compiles cleanly
       final pdfBytes = await doc.save();

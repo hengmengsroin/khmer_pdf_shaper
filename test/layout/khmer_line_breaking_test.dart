@@ -18,7 +18,9 @@ void main() {
       breaker = const KhmerLineBreaker();
     });
 
-    test('SPACE wraps at space boundary and trims trailing visual whitespace for "សួស្តី កម្ពុជា"', () {
+    test(
+        'SPACE wraps at space boundary and trims trailing visual whitespace for "សួស្តី កម្ពុជា"',
+        () {
       const text = 'សួស្តី កម្ពុជា';
       const fontSize = 16.0;
 
@@ -44,7 +46,9 @@ void main() {
       expect(wrapped.lines[1].clusters.map((c) => c.text).join(), 'កម្ពុជា');
 
       // Visual width of line 0 excludes the trailing space
-      final sLine0Visual = breaker.layout(text: 'សួស្តី', shaper: shaper, fontSize: fontSize).width;
+      final sLine0Visual = breaker
+          .layout(text: 'សួស្តី', shaper: shaper, fontSize: fontSize)
+          .width;
       expect(wrapped.lines[0].visualWidth, closeTo(sLine0Visual, 0.001));
     });
 
@@ -80,7 +84,8 @@ void main() {
       }
     });
 
-    test('ZWSP provides invisible break opportunity for "សួស្តី\\u200Bកម្ពុជា"', () {
+    test('ZWSP provides invisible break opportunity for "សួស្តី\\u200Bកម្ពុជា"',
+        () {
       const text = 'សួស្តី\u200Bកម្ពុជា';
       const fontSize = 16.0;
 
@@ -100,7 +105,8 @@ void main() {
       );
 
       expect(wrapped.lines.length, 2);
-      expect(wrapped.lines[0].clusters.map((c) => c.text).join(), 'សួស្តី\u200B');
+      expect(
+          wrapped.lines[0].clusters.map((c) => c.text).join(), 'សួស្តី\u200B');
       expect(wrapped.lines[1].clusters.map((c) => c.text).join(), 'កម្ពុជា');
 
       // ZWSP has 0 width
@@ -110,7 +116,8 @@ void main() {
       expect(zwspCluster.isBreakOpportunity, isTrue);
     });
 
-    test('Wraps mixed script text "Invoice សួស្តី 123" without corrupting runs', () {
+    test('Wraps mixed script text "Invoice សួស្តី 123" without corrupting runs',
+        () {
       const text = 'Invoice សួស្តី 123';
       const fontSize = 14.0;
 
@@ -133,7 +140,9 @@ void main() {
       expect(wrapped.lines[1].clusters.map((c) => c.text).join(), 'សួស្តី 123');
     });
 
-    test('Cluster-safe fallback wrapping for unspaced Khmer "សួស្តីអ្នកទាំងអស់គ្នា"', () {
+    test(
+        'Cluster-safe fallback wrapping for unspaced Khmer "សួស្តីអ្នកទាំងអស់គ្នា"',
+        () {
       const text = 'សួស្តីអ្នកទាំងអស់គ្នា';
       const fontSize = 16.0;
 
@@ -164,11 +173,14 @@ void main() {
       }
 
       // Concatenating line texts reproduces the exact original string
-      final reconstructed = wrapped.lines.map((l) => l.clusters.map((c) => c.text).join()).join();
+      final reconstructed =
+          wrapped.lines.map((l) => l.clusters.map((c) => c.text).join()).join();
       expect(reconstructed, equals(text));
     });
 
-    test('Overlong single cluster does not cause infinite loop on narrow maxWidth', () {
+    test(
+        'Overlong single cluster does not cause infinite loop on narrow maxWidth',
+        () {
       const text = 'គ្រែ'; // A single complex cluster
       const fontSize = 24.0;
 

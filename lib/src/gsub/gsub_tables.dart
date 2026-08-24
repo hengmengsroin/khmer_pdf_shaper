@@ -38,11 +38,13 @@ class ShapingGlyph {
 }
 
 /// Signature for applying a nested lookup at a specific buffer position.
-typedef LookupApplier = bool Function(int lookupIndex, List<ShapingGlyph> buffer, int position);
+typedef LookupApplier = bool Function(
+    int lookupIndex, List<ShapingGlyph> buffer, int position);
 
 /// Abstract base class for GSUB subtables.
 abstract class GsubSubtable {
-  bool apply(List<ShapingGlyph> buffer, int position, LookupApplier applyLookup);
+  bool apply(
+      List<ShapingGlyph> buffer, int position, LookupApplier applyLookup);
 }
 
 /// GSUB Type 1: Single Substitution (Formats 1 & 2).
@@ -109,7 +111,8 @@ class SingleSubst implements GsubSubtable {
   }
 
   @override
-  bool apply(List<ShapingGlyph> buffer, int position, LookupApplier applyLookup) {
+  bool apply(
+      List<ShapingGlyph> buffer, int position, LookupApplier applyLookup) {
     if (position < 0 || position >= buffer.length) return false;
     final glyph = buffer[position];
     final newGid = substitute(glyph.glyphId);
@@ -171,7 +174,8 @@ class LigatureSubst implements GsubSubtable {
 
       final ligatures = <Ligature>[];
       for (final ligOffset in ligOffsets) {
-        final ligReader = subtableReader.slice(subtableStart + ligSetOffset + ligOffset);
+        final ligReader =
+            subtableReader.slice(subtableStart + ligSetOffset + ligOffset);
         final ligGlyphId = ligReader.readUint16();
         final compCount = ligReader.readUint16();
         // compCount is total glyphs in ligature; componentGlyphIds contains 2nd..Nth glyphs
@@ -194,7 +198,8 @@ class LigatureSubst implements GsubSubtable {
   }
 
   @override
-  bool apply(List<ShapingGlyph> buffer, int position, LookupApplier applyLookup) {
+  bool apply(
+      List<ShapingGlyph> buffer, int position, LookupApplier applyLookup) {
     if (position < 0 || position >= buffer.length) return false;
     final firstGid = buffer[position].glyphId;
     final covIdx = coverage.coverageIndex(firstGid);
@@ -241,7 +246,8 @@ class LigatureSubst implements GsubSubtable {
           isDefaultIgnorable: false,
         );
 
-        buffer.replaceRange(position, position + 1 + compCount, [replacementGlyph]);
+        buffer.replaceRange(
+            position, position + 1 + compCount, [replacementGlyph]);
         return true;
       }
     }
@@ -364,7 +370,8 @@ class ChainContextSubstFormat3 implements GsubSubtable {
     final lookLen = lookaheadCoverages.length;
     if (position + inpLen + lookLen > buffer.length) return false;
     for (int i = 0; i < lookLen; i++) {
-      if (!lookaheadCoverages[i].covers(buffer[position + inpLen + i].glyphId)) {
+      if (!lookaheadCoverages[i]
+          .covers(buffer[position + inpLen + i].glyphId)) {
         return false;
       }
     }
@@ -373,7 +380,8 @@ class ChainContextSubstFormat3 implements GsubSubtable {
   }
 
   @override
-  bool apply(List<ShapingGlyph> buffer, int position, LookupApplier applyLookup) {
+  bool apply(
+      List<ShapingGlyph> buffer, int position, LookupApplier applyLookup) {
     if (!matches(buffer, position)) return false;
 
     // Apply SubstLookupRecords in order to the matched input sequence

@@ -52,7 +52,9 @@ void main() {
       expect(registry.count, equals(2)); // CID 0 and CID 1
     });
 
-    test('Allocates distinct CIDs for same physical subsetGlyphId with different unicodeText', () {
+    test(
+        'Allocates distinct CIDs for same physical subsetGlyphId with different unicodeText',
+        () {
       // Physical subscript Ka (subset GID 4) appearing in "ក្ក" and "ង្ក"
       final codeA = registry.allocate(
         originalGlyphId: 295,

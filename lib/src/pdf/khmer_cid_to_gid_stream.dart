@@ -19,7 +19,9 @@ class KhmerCidToGidStream extends PdfObjectStream {
   @override
   void prepare() {
     final effectiveMaxCid = maxCid ??
-        (cidToSubsetGid.isEmpty ? 0 : cidToSubsetGid.keys.fold<int>(0, math.max));
+        (cidToSubsetGid.isEmpty
+            ? 0
+            : cidToSubsetGid.keys.fold<int>(0, math.max));
 
     for (int cid = 0; cid <= effectiveMaxCid; cid++) {
       final subsetGid = cidToSubsetGid[cid] ?? 0;

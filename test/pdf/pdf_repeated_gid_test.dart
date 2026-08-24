@@ -17,7 +17,9 @@ void main() {
       shaper = BattambangShaper.fromBytes(fontBytes);
     });
 
-    test('Same physical GID across different clusters gets distinct CIDs and shares 1 subset glyph', () async {
+    test(
+        'Same physical GID across different clusters gets distinct CIDs and shares 1 subset glyph',
+        () async {
       // In Battambang-Regular:
       // "ក្ក" produces [GID 53 (Ka), GID 295 (subscript Ka)] in cluster "ក្ក"
       // "ង្ក" produces [GID 57 (Ngo), GID 295 (subscript Ka)] in cluster "ង្ក"
@@ -68,7 +70,8 @@ void main() {
         run2.glyphs[0].glyphId,
         run2.glyphs[1].glyphId,
       };
-      expect(usedGids, equals({53, 295, 57})); // Exactly 3 physical glyphs in subset font!
+      expect(usedGids,
+          equals({53, 295, 57})); // Exactly 3 physical glyphs in subset font!
     });
   });
 }

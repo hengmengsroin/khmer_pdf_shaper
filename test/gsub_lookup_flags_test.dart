@@ -8,7 +8,8 @@ void main() {
     late GsubTable gsub;
 
     setUpAll(() {
-      final fontBytes = File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
+      final fontBytes =
+          File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();
       final font = OpenTypeFont.parse(fontBytes);
       gsub = GsubTable.parse(font.getTableReader('GSUB'));
     });
@@ -20,12 +21,15 @@ void main() {
         expect(
           flag,
           0,
-          reason: 'Lookup $i in Battambang-Regular.ttf must have LookupFlag 0, but was $flag',
+          reason:
+              'Lookup $i in Battambang-Regular.ttf must have LookupFlag 0, but was $flag',
         );
       }
     });
 
-    test('GDEF Decision: GDEF parsing is not required in v1 due to zero lookup flags', () {
+    test(
+        'GDEF Decision: GDEF parsing is not required in v1 due to zero lookup flags',
+        () {
       // Documenting invariant:
       // None of the lookups in Battambang-Regular.ttf rely on IgnoreBaseGlyphs,
       // IgnoreLigatures, IgnoreMarks, UseMarkFilteringSet, or MarkAttachmentType.
