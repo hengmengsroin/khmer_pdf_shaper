@@ -27,13 +27,20 @@ class KhmerReorderer {
 
       switch (syllable.type) {
         case KhmerSyllableType.brokenCluster:
+          // If broken cluster is adjacent to a previous syllable/joiner without whitespace,
+          // HarfBuzz merge_clusters merges it with the preceding cluster ID.
+          int brokenClusterId = result[sylStart].cluster;
+          if (sylStart > 0 && result[sylStart - 1].category != KhmerCategory.other) {
+            brokenClusterId = result[sylStart - 1].cluster;
+          }
+
           // Insert synthetic Dotted Circle U+25CC at the beginning of broken cluster
           final firstChar = result[sylStart];
           final dottedCircle = KhmerChar(
             codePoint: 0x25CC,
             sourceStart: firstChar.sourceStart,
             sourceEnd: firstChar.sourceEnd,
-            cluster: firstChar.cluster,
+            cluster: brokenClusterId,
             category: KhmerCategory.dottedCircle,
             isSynthetic: true,
             originalCodePoints: const [],
@@ -41,6 +48,10 @@ class KhmerReorderer {
           result.insert(sylStart, dottedCircle);
           sylEnd++;
           offsetAdjustment++;
+
+          for (int i = sylStart; i < sylEnd; i++) {
+            result[i].cluster = brokenClusterId;
+          }
 
           // Once dotted circle is inserted, broken cluster reorders as a consonant syllable
           _reorderConsonantSyllable(result, sylStart, sylEnd);

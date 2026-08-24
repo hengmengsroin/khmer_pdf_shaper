@@ -13,11 +13,15 @@ void main() {
       // 0x179A -> Ra
       expect(getKhmerCategory(0x179A), KhmerCategory.ra);
 
-      // 0x179B..0x17A2 -> Consonant
-      for (int cp = 0x179B; cp <= 0x17A2; cp++) {
+      // 0x179B..0x17A0, 0x17A2 -> Consonant
+      for (int cp = 0x179B; cp <= 0x17A0; cp++) {
         expect(getKhmerCategory(cp), KhmerCategory.consonant,
             reason: 'U+${cp.toRadixString(16).toUpperCase()} must be consonant');
       }
+      expect(getKhmerCategory(0x17A1), KhmerCategory.placeholder,
+          reason: 'U+17A1 (LA) is base-only consonant matching HarfBuzz OT_GB');
+      expect(getKhmerCategory(0x17A2), KhmerCategory.consonant,
+          reason: 'U+17A2 (QA) must be consonant');
     });
 
     test('All Khmer independent vowels match HarfBuzz category', () {

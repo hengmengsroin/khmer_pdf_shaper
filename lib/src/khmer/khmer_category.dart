@@ -49,7 +49,9 @@ KhmerCategory getKhmerCategory(int codePoint) {
     // Consonants
     if (codePoint >= 0x1780 && codePoint <= 0x1799) return KhmerCategory.consonant;
     if (codePoint == 0x179A) return KhmerCategory.ra;
-    if (codePoint >= 0x179B && codePoint <= 0x17A2) return KhmerCategory.consonant;
+    if (codePoint >= 0x179B && codePoint <= 0x17A0) return KhmerCategory.consonant;
+    if (codePoint == 0x17A1) return KhmerCategory.placeholder; // LA cannot be subjoined
+    if (codePoint == 0x17A2) return KhmerCategory.consonant;
 
     // Independent Vowels
     if (codePoint >= 0x17A3 && codePoint <= 0x17B3) return KhmerCategory.independentVowel;

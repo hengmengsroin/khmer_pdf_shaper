@@ -14,6 +14,7 @@ dependencies:
   pdf: ^3.11.3
   # Useful for character cluster manipulation
   characters: ^1.4.0
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -21,6 +22,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
-  # We expose the font as an asset so it can be loaded as bytes
+  # We expose the fonts as assets so they can be loaded as bytes
   assets:
     - assets/fonts/Anand_MuktaMalar.ttf
+    - assets/fonts/Battambang-Regular.ttf

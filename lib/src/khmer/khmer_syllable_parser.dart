@@ -1,3 +1,4 @@
+import 'khmer_category.dart';
 import 'khmer_char.dart';
 import 'khmer_syllable.dart';
 
@@ -282,6 +283,31 @@ class KhmerSyllableParser {
       p++;
     }
 
-    return syllables;
+    if (syllables.isEmpty) return syllables;
+
+    final resolvedSyllables = <KhmerSyllable>[];
+    for (int i = 0; i < syllables.length; i++) {
+      final s = syllables[i];
+      int start = s.start;
+      int end = s.end;
+
+      if (i + 1 < syllables.length) {
+        final nextS = syllables[i + 1];
+        if (nextS.end == nextS.start + 1 &&
+            nextS.start < chars.length &&
+            chars[nextS.start].category == KhmerCategory.zwj) {
+          final lastCharInSyl = chars[end - 1];
+          if (lastCharInSyl.category == KhmerCategory.coeng ||
+              lastCharInSyl.category == KhmerCategory.independentVowel) {
+            end = nextS.end;
+            i++;
+          }
+        }
+      }
+
+      resolvedSyllables.add(KhmerSyllable(type: s.type, start: start, end: end));
+    }
+
+    return resolvedSyllables;
   }
 }
