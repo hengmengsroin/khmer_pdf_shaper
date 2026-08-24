@@ -99,6 +99,12 @@ skip_gate() {
 }
 
 # ------------------------------------------------------------------------------
+# Dependency Resolution Check
+# ------------------------------------------------------------------------------
+flutter pub get >/dev/null 2>&1 || true
+(cd example && flutter pub get >/dev/null 2>&1 || true)
+
+# ------------------------------------------------------------------------------
 # GATE A — Static Analysis
 # ------------------------------------------------------------------------------
 run_gate "GATE A" "Static Analysis (flutter analyze)" "flutter analyze"
