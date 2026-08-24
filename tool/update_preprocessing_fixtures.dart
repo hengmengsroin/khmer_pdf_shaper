@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
 import 'dart:convert';
 import 'dart:io';
-import 'package:tamil_pdf_shaper/src/khmer/khmer_features.dart';
-import 'package:tamil_pdf_shaper/src/khmer/khmer_preprocessor.dart';
+import 'package:khmer_pdf_shaper/src/khmer/khmer_features.dart';
+import 'package:khmer_pdf_shaper/src/khmer/khmer_preprocessor.dart';
 
 void main() {
   final file = File('test/fixtures/khmer_preprocessing_fixtures.json');

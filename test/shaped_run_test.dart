@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/shaper/positioned_glyph.dart';
-import 'package:tamil_pdf_shaper/src/shaper/shaped_run.dart';
+import 'package:khmer_pdf_shaper/src/shaper/positioned_glyph.dart';
+import 'package:khmer_pdf_shaper/src/shaper/shaped_run.dart';
 
 void main() {
   group('Part 18: ShapedRun and PositionedGlyph Tests', () {

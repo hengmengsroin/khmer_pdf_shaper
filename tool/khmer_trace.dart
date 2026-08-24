@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
 import 'dart:convert';
-import 'package:tamil_pdf_shaper/khmer_pdf_shaper.dart';
+import 'package:khmer_pdf_shaper/src/khmer/khmer_internal.dart';
 
 void main(List<String> args) {
   if (args.isEmpty) {

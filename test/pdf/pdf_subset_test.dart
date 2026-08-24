@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pdf/pdf.dart';
-import 'package:tamil_pdf_shaper/src/pdf/truetype_gid_subsetter.dart';
+import 'package:khmer_pdf_shaper/src/pdf/truetype_gid_subsetter.dart';
 
 void main() {
   group('TrueType GID Subsetting Tests', () {

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/khmer_pdf_shaper.dart';
+import 'package:khmer_pdf_shaper/src/khmer/khmer_internal.dart';
 
 void main() {
   group('Part 8 & 9: Khmer Reordering & Cluster Merging Tests', () {

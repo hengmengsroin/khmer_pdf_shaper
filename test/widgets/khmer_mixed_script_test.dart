@@ -3,11 +3,11 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:tamil_pdf_shaper/src/layout/khmer_layout_model.dart';
-import 'package:tamil_pdf_shaper/src/layout/khmer_line_breaker.dart';
-import 'package:tamil_pdf_shaper/src/pdf/khmer_pdf_font.dart';
-import 'package:tamil_pdf_shaper/src/shaper/battambang_shaper.dart';
-import 'package:tamil_pdf_shaper/src/widgets/khmer_text.dart';
+import 'package:khmer_pdf_shaper/src/layout/khmer_layout_model.dart';
+import 'package:khmer_pdf_shaper/src/layout/khmer_line_breaker.dart';
+import 'package:khmer_pdf_shaper/src/pdf/khmer_pdf_font.dart';
+import 'package:khmer_pdf_shaper/src/shaper/battambang_shaper.dart';
+import 'package:khmer_pdf_shaper/src/widgets/khmer_text.dart';
 
 void main() {
   group('Part 8: Mixed-Script Paint & Baseline Architecture Tests', () {
@@ -140,11 +140,11 @@ void main() {
             return pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                KhmerText('Invoice សួស្តី 123', font: khmerFont),
+                KhmerText.internal('Invoice សួស្តី 123', font: khmerFont),
                 pw.SizedBox(height: 10),
-                KhmerText('Price: \$10 កម្ពុជា', font: khmerFont),
+                KhmerText.internal('Price: \$10 កម្ពុជា', font: khmerFont),
                 pw.SizedBox(height: 10),
-                KhmerText('ABCកម្ពុជា123', font: khmerFont),
+                KhmerText.internal('ABCកម្ពុជា123', font: khmerFont),
               ],
             );
           },

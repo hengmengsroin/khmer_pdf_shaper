@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/gsub/coverage_table.dart';
-import 'package:tamil_pdf_shaper/src/gsub/gsub_tables.dart';
+import 'package:khmer_pdf_shaper/src/gsub/coverage_table.dart';
+import 'package:khmer_pdf_shaper/src/gsub/gsub_tables.dart';
 
 void main() {
   group('Part 9: GSUB Type 6 Format 3 ChainContextSubst Tests', () {

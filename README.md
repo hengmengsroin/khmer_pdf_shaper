@@ -1,199 +1,181 @@
-# Tamil PDF Shaper
+# Khmer PDF Shaper
 
-A production-grade Flutter engine for rendering Tamil Unicode text correctly in PDF documents.
-
----
-
-## வணக்கம் (Hello)
-
-Rendering Indic languages like Tamil in standard PDF generators (like `package:pdf`) is historically difficult. Standard Unicode strings often break because PDF renderers lack complex text shaping engines (HarfBuzz, etc.) required to handle Tamil character composition and reordering.
-
-**Tamil PDF Shaper** solves this by:
-
-* Bundling a compatible Tamil font (Anand MuktaMalar)
-* Providing a shaping engine that converts Unicode Tamil text into correct glyph sequences for PDF rendering
-
-Built for Tamil developers and global Flutter users.
+A pure Dart package for rendering complex Khmer Unicode text correctly in PDF documents (`package:pdf`), featuring OpenType GSUB shaping, mixed-script layout, cluster-safe wrapping, TrueType glyph subsetting, and searchable/copyable `ToUnicode` PDF embedding.
 
 ---
 
-## 🚀 Features
+## 🎯 What Problem This Solves
 
-* 🔡 **Zero Configuration** – Font included and auto-loaded
-* ⚡ **High Performance** – Optimized StringBuffer-based conversion
-* 🛡️ **Safe Rendering** – Handles mixed English + Tamil text gracefully
-* 💙 **Flutter Native** – Designed specifically for Flutter PDF workflows
-* 🌍 **Unicode Aware** – Supports proper Tamil glyph shaping
+Khmer is an Indic-derived Brahmic script with complex rendering rules:
+- Subscript consonants (*Coeng* / ជើង) reorder or transform into distinct below-base/post-base glyph forms.
+- Pre-base vowels (e.g. `U+17C1` េ) must reorder visually to the left of base consonants.
+- Multi-part split vowels (e.g. `U+17C4` ោ) decompose into separate pre-base and post-base glyphs.
+- Above/below marks stack and reposition dynamically.
+
+Standard PDF generators like `package:pdf` lack an OpenType shaping engine. Passing raw Khmer Unicode to `pw.Text` results in broken glyph sequences, missing subscripts, un-reordered vowels, and illegible text.
+
+`khmer_pdf_shaper` solves this completely in pure Dart with **zero external native dependencies** (no `harfbuzz_ffi`, no `dart:ffi`, no `dart:io` in runtime code paths).
 
 ---
 
-## 📦 Installation
+## 🚀 Quick Start
 
-Add to your `pubspec.yaml`:
+Add `khmer_pdf_shaper` and `pdf` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  tamil_pdf_shaper: ^1.0.0
+  pdf: ^3.11.3
+  khmer_pdf_shaper: ^0.1.0
 ```
 
-Then run:
+Use `KhmerText` directly in place of `pw.Text`:
 
-```bash
-flutter pub get
+```dart
+import 'package:khmer_pdf_shaper/khmer_pdf_shaper.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+
+Future<Uint8List> generatePdf() async {
+  final pdf = pw.Document();
+
+  pdf.addPage(
+    pw.Page(
+      pageFormat: PdfPageFormat.a4,
+      build: (context) => pw.Center(
+        child: KhmerText(
+          'សួស្តី ពិភពលោក',
+          style: const pw.TextStyle(
+            fontSize: 24,
+            color: PdfColors.indigo900,
+          ),
+        ),
+      ),
+    ),
+  );
+
+  return await pdf.save();
+}
 ```
+
+No async font loaders, no asset initialization, and no manual font setup required. The bundled **Battambang-Regular** font is automatically configured and embedded.
 
 ---
 
-## 🧠 Usage
+## 💡 Features & Usage
 
-### 1. Load the Font
+### 1. Mixed Khmer + Latin / Numeric Text
 
-Load the Tamil font once inside your PDF generation logic.
+`KhmerText` automatically segments mixed text runs into Khmer and Latin/numeric clusters, measuring each with proper font metrics and aligning them along a unified baseline:
 
 ```dart
-import 'package:tamil_pdf_shaper/tamil_pdf_shaper.dart';
-
-final tamilFont = await TamilPdfFont.load();
+KhmerText(
+  'Invoice សួស្តី 123 — Price: \$10.50 កម្ពុជា',
+  style: pw.TextStyle(
+    fontSize: 14,
+    font: pw.Font.helveticaBold(), // Custom font for Latin/digits
+  ),
+)
 ```
 
----
+> **Note on `pw.TextStyle.font`:** `style.font` sets the font for non-Khmer runs (Latin letters, numbers, punctuation). Khmer runs always use the bundled Battambang font in v1.
 
-### 2. Apply Tamil Shaping
+### 2. Cluster-Safe Multi-Line Wrapping
 
-Use the `.toTamilPdf` extension on any string:
+Khmer words are traditionally written without spaces. `KhmerText` implements cluster-safe line breaking:
+- **Preferred break points:** Space (`U+0020`), Zero-Width Space (`U+200B`), and explicit newlines (`\n`).
+- **Fallback break points:** Safely breaks between shaping clusters when text exceeds container width.
+- **Integrity guarantee:** Never breaks inside a complex consonant-vowel-subscript cluster.
 
 ```dart
-pw.Text(
-  "தமிழ் வாழ்க".toTamilPdf,
-  style: pw.TextStyle(font: tamilFont, fontSize: 20),
+pw.Container(
+  width: 250,
+  child: KhmerText(
+    'ភាសាខ្មែរ គឺជាភាសាផ្លូវការរបស់ប្រទេសកម្ពុជា '
+    'ហើយត្រូវបានប្រើប្រាស់ដោយប្រជាជនខ្មែរទូទាំងពិភពលោក។',
+    style: const pw.TextStyle(fontSize: 12),
+    lineHeightFactor: 1.5,
+  ),
+)
+```
+
+### 3. Text Alignment
+
+Supports standard horizontal text alignments:
+
+```dart
+KhmerText('សួស្តី Left', textAlign: pw.TextAlign.left)
+KhmerText('សួស្តី Center', textAlign: pw.TextAlign.center)
+KhmerText('សួស្តី Right', textAlign: pw.TextAlign.right)
+```
+
+### 4. MultiPage Document Support
+
+`KhmerText` works seamlessly inside `pw.MultiPage` documents (headers, paragraphs, tables, lists):
+
+```dart
+pdf.addPage(
+  pw.MultiPage(
+    build: (context) => [
+      pw.Header(level: 0, text: 'Document Title'),
+      KhmerText('កថាខណ្ឌទីមួយ នៃឯកសារផ្លូវការ', style: const pw.TextStyle(fontSize: 14)),
+      pw.SizedBox(height: 10),
+      KhmerText('កថាខណ្ឌទីពីរ នៃឯកសារផ្លូវការ', style: const pw.TextStyle(fontSize: 14)),
+    ],
+  ),
 );
 ```
 
 ---
 
-## 🧾 Full Example
+## 🌐 Platform Compatibility
 
-```dart
-Future<Uint8List> generateInvoice(PdfPageFormat format) async {
-  final pdf = pw.Document();
-  final font = await TamilPdfFont.load();
-
-  pdf.addPage(pw.Page(
-    theme: pw.ThemeData.withFont(base: font),
-    build: (ctx) => pw.Column(
-      children: [
-        pw.Text("பெயர்: ஆனந்த்".toTamilPdf),
-        pw.Text("தேதி: 01/01/2024".toTamilPdf),
-      ],
-    ),
-  ));
-
-  return pdf.save();
-}
-```
+| Platform | Supported | Notes |
+| :--- | :---: | :--- |
+| **Flutter Mobile (iOS & Android)** | ✅ | Zero configuration |
+| **Flutter Desktop (macOS, Windows, Linux)** | ✅ | Zero configuration |
+| **Flutter Web** | ✅ | Pure Dart (no `dart:io` or `dart:ffi` runtime dependencies) |
+| **Dart CLI / Server Backend** | ✅ | Standalone PDF generation without Flutter engine |
 
 ---
 
-## 🛠️ How It Works
+## 📊 Feature Parity vs `pw.Text`
 
-Tamil PDF Shaper translates Unicode Tamil grapheme clusters into legacy-style glyph sequences required by the embedded font.
-
-Example:
-
-**கொ → ெ + க + ா**
-
-Without shaping, PDF engines render incorrect character order.
-This package ensures visually correct Tamil output inside PDFs.
-
----
-
-## 📸 Visual Demo
-
-<p align="center">
-  <img src="assets/images/before.png" width="300"><br>
-  <em>Before shaping – incorrect Tamil rendering</em>
-</p>
-
-<p align="center">
-  <img src="assets/images/after.png" width="300"><br>
-  <em>After shaping – correct Tamil glyph rendering</em>
-</p>
-
-<p align="center">
-  <img src="assets/images/inpdf.png" width="300"><br>
-  <em>Final rendered output inside PDF</em>
-</p>
+| Feature | `pw.Text` | `KhmerText` (v1) | Notes |
+| :--- | :---: | :---: | :--- |
+| `fontSize` | ✅ | ✅ | Fully supported (must be > 0) |
+| `color` | ✅ | ✅ | Fill color applied to all runs |
+| `font` (Latin / Numbers) | ✅ | ✅ | Configurable via `pw.TextStyle.font` |
+| `font` (Khmer) | ❌ | ✅ | Bundled Battambang-Regular automatically embedded |
+| `textAlign` (`left`, `center`, `right`) | ✅ | ✅ | Fully supported |
+| `textAlign` (`justify`) | ✅ | ⚠️ | Falls back to left alignment in v1 |
+| Cluster-safe wrapping | ❌ | ✅ | Wraps at Space, ZWSP, or cluster boundaries |
+| Explicit newlines (`\n`) | ✅ | ✅ | Preserved and split correctly |
+| Mixed Khmer / Latin / Numbers | ❌ | ✅ | Automatic segmentation & baseline alignment |
+| MultiPage container | ✅ | ✅ | Renders inside `pw.MultiPage` |
+| Page spanning (`SpanningWidget`) | ✅ | ❌ | Single widget instance does not break across page boundaries |
+| Searchable & Copyable PDF text | ❌ (broken) | ✅ | Complete `ToUnicode` CMap & CID mapping |
 
 ---
 
-## 📣 Credits
+## 🔍 Why `pw.Text` Alone Fails for Khmer
 
-* **Font:** Anand MuktaMalar (Open Source)
-* **Project:** Tamil PDF Shaper
-* **Repository:** [https://github.com/tharanitharan305/tamil_pdf_shaper](https://github.com/tharanitharan305/tamil_pdf_shaper)
+When rendering `សួស្តី` (`U+179F U+17BD U+179F U+17D2 U+178F U+17B8`):
+1. **Unshaped Subscripts:** `U+17D2` (Coeng) + `U+178F` (Ta) must be substituted with the subscript *Coeng Ta* glyph. `pw.Text` renders them as raw, disconnected characters.
+2. **Missing Mark Positioning:** Above vowels (e.g. `U+17B8` ី) and below marks must attach to the cluster base.
+3. **Missing PDF ToUnicode CMap:** Even if unshaped glyphs appear, PDF viewers cannot search or copy the original Unicode text without a conforming `ToUnicode` map.
 
-Developed for the global Tamil developer community.
-
----
-
-## 🤝 Open Source Contributions
-
-Tamil PDF Shaper is open source and welcomes contributions from developers worldwide.
-
-### How to Contribute
-
-1. ⭐ Star the repository
-2. Fork the project
-3. Create a feature branch:
-
-```bash
-git checkout -b feature/your-feature-name
-```
-
-4. Commit your changes
-5. Push to your fork
-6. Open a Pull Request
+`khmer_pdf_shaper` resolves all three by computing glyph indices via OpenType GSUB tables, calculating cluster advance metrics, and generating proper CID-keyed subsetted TrueType font structures.
 
 ---
 
-### Ways to Help
+## ⚠️ Known Limitations & Roadmap
 
-* 🐛 Fix bugs
-* ✨ Add new features
-* 📖 Improve documentation
-* 🧪 Add tests
-* 💡 Suggest ideas
-
-Every contribution helps grow the Tamil developer ecosystem 💙
-
----
-
-## ☕ Support the Project
-
-If this package helps you, consider supporting development:
-
-<p>
-  <a href="https://github.com/tharanitharan305/tamil_pdf_shaper">
-    <img src="https://img.shields.io/github/stars/tharanitharan305/tamil_pdf_shaper?style=social" />
-  </a>
-  &nbsp;&nbsp;
-  <a href="https://pub.dev/packages/tamil_pdf_shaper">
-    <img src="https://img.shields.io/pub/v/tamil_pdf_shaper.svg" />
-  </a>
-  &nbsp;&nbsp;
-  <a href="https://buymeacoffee.com/tharanitharan">
-    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="40"/>
-  </a>
-</p>
-
-Your support helps maintain and improve the project ❤️
+- **Font Support in v1:** Core v1 is optimized for the bundled **Battambang-Regular** font. Arbitrary custom Khmer fonts are not supported in the pure-Dart v1 core. Generic OpenType/HarfBuzz font support is planned for future extension packages.
+- **Text Direction:** Only Left-to-Right (LTR) reading direction is supported in v1. RTL text direction is not supported.
+- **Cross-Page Spanning:** A single `KhmerText` widget does not split across multiple pages. For long multi-page documents, break content into paragraphs inside `pw.MultiPage`.
 
 ---
 
 ## 📜 License
 
-This project is released under the MIT License.
-
----
-
-**Made with ❤️ for Tamil**
+This project is licensed under the MIT License.

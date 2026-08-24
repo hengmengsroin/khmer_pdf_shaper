@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/font/byte_reader.dart';
-import 'package:tamil_pdf_shaper/src/font/opentype_reader.dart';
+import 'package:khmer_pdf_shaper/src/font/byte_reader.dart';
+import 'package:khmer_pdf_shaper/src/font/opentype_reader.dart';
 
 void main() {
   group('Part 2: OpenType Table Directory Reader Tests', () {

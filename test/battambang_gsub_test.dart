@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/shaper/battambang_shaper.dart';
+import 'package:khmer_pdf_shaper/src/shaper/battambang_shaper.dart';
 
 void main() {
   group('Part 21: Battambang GSUB Targeted Cases Tests', () {

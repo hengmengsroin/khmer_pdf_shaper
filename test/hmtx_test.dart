@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/font/metrics_table.dart';
-import 'package:tamil_pdf_shaper/src/font/opentype_reader.dart';
+import 'package:khmer_pdf_shaper/src/font/metrics_table.dart';
+import 'package:khmer_pdf_shaper/src/font/opentype_reader.dart';
 
 void main() {
   group('Part 4: Metrics Table (head, hhea, maxp, hmtx) Tests', () {

@@ -1,20 +1,28 @@
-name: tamil_pdf_shaper
-description: A production-grade engine to render Tamil Unicode text correctly in Flutter PDF workflows. Includes embedded glyph mapping and font management.
-version: 1.0.2
-homepage: https://github.com/tharanitharan305/tamil_pdf_shaper
+name: khmer_pdf_shaper
+description: A pure Dart package for rendering complex Khmer Unicode text correctly in PDF documents using OpenType GSUB shaping, cluster-safe wrapping, and CID/ToUnicode font embedding.
+version: 0.1.0
+homepage: https://github.com/hengmengsroin/khmer_pdf_shaper
+repository: https://github.com/hengmengsroin/khmer_pdf_shaper
+issue_tracker: https://github.com/hengmengsroin/khmer_pdf_shaper/issues
+topics:
+  - khmer
+  - pdf
+  - font
+  - typography
+  - shaping
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
-  flutter: ">=3.3.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-  # Using the standard pdf package as the target consumer
+  # Standard pdf package for PDF document generation
   pdf: ^3.11.3
-  # Useful for character cluster manipulation
+  # Grapheme cluster utilities
   characters: ^1.4.0
+  # SHA-256 font binary integrity verification
   crypto: ^3.0.3
+  # Annotations such as @internal
+  meta: ^1.11.0
 
 dev_dependencies:
   flutter_test:
@@ -23,7 +31,5 @@ dev_dependencies:
   ffi: ^2.1.3
 
 flutter:
-  # We expose the fonts as assets so they can be loaded as bytes
   assets:
-    - assets/fonts/Anand_MuktaMalar.ttf
     - assets/fonts/Battambang-Regular.ttf

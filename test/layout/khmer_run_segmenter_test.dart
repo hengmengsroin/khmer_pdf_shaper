@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/layout/khmer_layout_token.dart';
-import 'package:tamil_pdf_shaper/src/layout/khmer_run_segmenter.dart';
+import 'package:khmer_pdf_shaper/src/layout/khmer_layout_token.dart';
+import 'package:khmer_pdf_shaper/src/layout/khmer_run_segmenter.dart';
 
 void main() {
   group('Part 2: Run Segmentation Tests', () {

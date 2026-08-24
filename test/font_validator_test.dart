@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/font/font_binary_validator.dart';
+import 'package:khmer_pdf_shaper/src/font/font_binary_validator.dart';
 
 void main() {
   group('Part 1: Font Binary Validation Tests', () {
@@ -36,15 +36,12 @@ void main() {
       );
     });
 
-    test('Rejects other font files (e.g. Anand_MuktaMalar.ttf)', () {
-      final otherFontFile = File('assets/fonts/Anand_MuktaMalar.ttf');
-      if (otherFontFile.existsSync()) {
-        final otherBytes = otherFontFile.readAsBytesSync();
-        expect(
-          () => FontBinaryValidator.verifySupportedFont(otherBytes),
-          throwsA(isA<UnsupportedFontException>()),
-        );
-      }
+    test('Rejects arbitrary non-Battambang font bytes', () {
+      final nonBattambang = Uint8List.fromList(List.generate(1000, (i) => i % 256));
+      expect(
+        () => FontBinaryValidator.verifySupportedFont(nonBattambang),
+        throwsA(isA<UnsupportedFontException>()),
+      );
     });
   });
 }

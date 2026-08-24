@@ -3,9 +3,9 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:tamil_pdf_shaper/src/pdf/khmer_font_cache.dart';
-import 'package:tamil_pdf_shaper/src/pdf/khmer_pdf_font.dart';
-import 'package:tamil_pdf_shaper/src/widgets/khmer_text.dart';
+import 'package:khmer_pdf_shaper/src/pdf/khmer_font_cache.dart';
+import 'package:khmer_pdf_shaper/src/pdf/khmer_pdf_font.dart';
+import 'package:khmer_pdf_shaper/src/widgets/khmer_text.dart';
 
 void main() {
   group('Part 7: KhmerText Widget Integration Tests', () {
@@ -30,7 +30,7 @@ void main() {
               children: [
                 pw.Text('English Header', style: const pw.TextStyle(fontSize: 16)),
                 pw.SizedBox(height: 10),
-                KhmerText(
+                KhmerText.internal(
                   'សួស្តី ព្រះរាជាណាចក្រកម្ពុជា',
                   font: khmerFont,
                   style: const pw.TextStyle(fontSize: 20),
@@ -39,7 +39,7 @@ void main() {
                 pw.Container(
                   padding: const pw.EdgeInsets.all(12),
                   color: PdfColors.grey200,
-                  child: KhmerText(
+                  child: KhmerText.internal(
                     'ខ្ញុំស្រឡាញ់ភាសាខ្មែរ',
                     font: khmerFont,
                     style: const pw.TextStyle(fontSize: 16, color: PdfColors.blue),
@@ -51,7 +51,7 @@ void main() {
                   child: pw.Row(
                     children: [
                       pw.Expanded(
-                        child: KhmerText(
+                        child: KhmerText.internal(
                           'Invoice សួស្តី 123',
                           font: khmerFont,
                           style: const pw.TextStyle(fontSize: 14),
@@ -82,13 +82,13 @@ void main() {
           build: (pw.Context context) {
             return [
               pw.Header(level: 0, text: 'MultiPage Document Test'),
-              KhmerText(
+              KhmerText.internal(
                 'កថាខណ្ឌទីមួយ នៃឯកសារផ្លូវការ',
                 font: khmerFont,
                 style: const pw.TextStyle(fontSize: 18),
               ),
               pw.SizedBox(height: 20),
-              KhmerText(
+              KhmerText.internal(
                 'កថាខណ្ឌទីពីរ នៃឯកសារផ្លូវការ\nបន្ទាត់ថ្មីមួយទៀត',
                 font: khmerFont,
                 style: const pw.TextStyle(fontSize: 14),
@@ -115,7 +115,7 @@ void main() {
                 pw.Container(
                   width: 300,
                   color: PdfColors.grey100,
-                  child: KhmerText(
+                  child: KhmerText.internal(
                     'សួស្តី Left',
                     font: khmerFont,
                     textAlign: pw.TextAlign.left,
@@ -125,7 +125,7 @@ void main() {
                 pw.Container(
                   width: 300,
                   color: PdfColors.grey100,
-                  child: KhmerText(
+                  child: KhmerText.internal(
                     'សួស្តី Center',
                     font: khmerFont,
                     textAlign: pw.TextAlign.center,
@@ -135,7 +135,7 @@ void main() {
                 pw.Container(
                   width: 300,
                   color: PdfColors.grey100,
-                  child: KhmerText(
+                  child: KhmerText.internal(
                     'សួស្តី Right',
                     font: khmerFont,
                     textAlign: pw.TextAlign.right,

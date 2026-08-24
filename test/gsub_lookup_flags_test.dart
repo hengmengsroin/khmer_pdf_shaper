@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/font/opentype_reader.dart';
-import 'package:tamil_pdf_shaper/src/gsub/gsub_evaluator.dart';
+import 'package:khmer_pdf_shaper/src/font/opentype_reader.dart';
+import 'package:khmer_pdf_shaper/src/gsub/gsub_evaluator.dart';
 
 void main() {
   group('Part 12 & 13: GSUB Lookup Flags & GDEF Decision Tests', () {

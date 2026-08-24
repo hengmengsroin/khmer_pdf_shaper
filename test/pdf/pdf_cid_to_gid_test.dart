@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pdf/pdf.dart';
-import 'package:tamil_pdf_shaper/src/pdf/khmer_cid_to_gid_stream.dart';
+import 'package:khmer_pdf_shaper/src/pdf/khmer_cid_to_gid_stream.dart';
 
 void main() {
   group('KhmerCidToGidStream Tests', () {

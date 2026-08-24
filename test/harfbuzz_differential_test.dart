@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/gsub/gsub_evaluator.dart';
-import 'package:tamil_pdf_shaper/src/gsub/gsub_tables.dart';
-import 'package:tamil_pdf_shaper/src/shaper/battambang_shaper.dart';
+import 'package:khmer_pdf_shaper/src/gsub/gsub_evaluator.dart';
+import 'package:khmer_pdf_shaper/src/gsub/gsub_tables.dart';
+import 'package:khmer_pdf_shaper/src/shaper/battambang_shaper.dart';
 
 class DiagnosticTraceLogger implements GsubTraceLogger {
   final stages = <String, List<int>>{};

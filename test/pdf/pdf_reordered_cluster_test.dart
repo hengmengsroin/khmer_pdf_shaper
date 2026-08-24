@@ -3,10 +3,10 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pdf/pdf.dart';
-import 'package:tamil_pdf_shaper/src/pdf/khmer_cid_registry.dart';
-import 'package:tamil_pdf_shaper/src/pdf/khmer_pdf_font.dart';
-import 'package:tamil_pdf_shaper/src/pdf/khmer_tounicode_cmap.dart';
-import 'package:tamil_pdf_shaper/src/shaper/battambang_shaper.dart';
+import 'package:khmer_pdf_shaper/src/pdf/khmer_cid_registry.dart';
+import 'package:khmer_pdf_shaper/src/pdf/khmer_pdf_font.dart';
+import 'package:khmer_pdf_shaper/src/pdf/khmer_tounicode_cmap.dart';
+import 'package:khmer_pdf_shaper/src/shaper/battambang_shaper.dart';
 
 void main() {
   group('Reordered-Cluster ToUnicode Ownership Regression Tests', () {

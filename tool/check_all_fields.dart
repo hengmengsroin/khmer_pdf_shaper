@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 import 'dart:convert';
 import 'dart:io';
-import 'package:tamil_pdf_shaper/src/shaper/battambang_shaper.dart';
+import 'package:khmer_pdf_shaper/src/shaper/battambang_shaper.dart';
 
 void main() {
   final fontBytes = File('assets/fonts/Battambang-Regular.ttf').readAsBytesSync();

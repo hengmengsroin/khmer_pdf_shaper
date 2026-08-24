@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/gsub/coverage_table.dart';
+import 'package:khmer_pdf_shaper/src/gsub/coverage_table.dart';
 
 void main() {
   group('Part 11: Coverage Table Tests', () {

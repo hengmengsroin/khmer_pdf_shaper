@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/pdf/khmer_cid_registry.dart';
+import 'package:khmer_pdf_shaper/src/pdf/khmer_cid_registry.dart';
 
 void main() {
   group('KhmerCidRegistry Tests', () {

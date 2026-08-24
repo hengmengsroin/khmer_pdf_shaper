@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tamil_pdf_shaper/src/layout/khmer_line_breaker.dart';
-import 'package:tamil_pdf_shaper/src/layout/khmer_line_metrics.dart';
-import 'package:tamil_pdf_shaper/src/shaper/battambang_shaper.dart';
+import 'package:khmer_pdf_shaper/src/layout/khmer_line_breaker.dart';
+import 'package:khmer_pdf_shaper/src/layout/khmer_line_metrics.dart';
+import 'package:khmer_pdf_shaper/src/shaper/battambang_shaper.dart';
 
 void main() {
   group('Part 4: Line Height and Vertical Metrics Tests', () {

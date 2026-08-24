@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pdf/pdf.dart';
 // ignore: implementation_imports
 import 'package:pdf/src/pdf/obj/object_stream.dart';
-import 'package:tamil_pdf_shaper/src/pdf/khmer_pdf_font.dart';
-import 'package:tamil_pdf_shaper/src/shaper/battambang_shaper.dart';
+import 'package:khmer_pdf_shaper/src/pdf/khmer_pdf_font.dart';
+import 'package:khmer_pdf_shaper/src/shaper/battambang_shaper.dart';
 
 void main() {
   group('PDF Positioned Text Drawing Tests', () {

@@ -2,7 +2,7 @@
 import 'dart:ffi' as ffi;
 import 'dart:io';
 import 'package:ffi/ffi.dart';
-import 'package:tamil_pdf_shaper/src/shaper/battambang_shaper.dart';
+import 'package:khmer_pdf_shaper/src/shaper/battambang_shaper.dart';
 
 // Native typedefs
 typedef hb_blob_create_func = ffi.Pointer<ffi.Opaque> Function(
